@@ -70,7 +70,9 @@ app.use((err: any, req: express.Request, res: express.Response, _next: express.N
     if (
         err.name === 'SequelizeForeignKeyConstraintError' ||
         err.parent?.code === '23503' ||
-        err.original?.code === '23503'
+        err.original?.code === '23503' ||
+        err.parent?.code === '23001' ||
+        err.original?.code === '23001'
     ) {
         return res.status(400).json({
             status: 'error',

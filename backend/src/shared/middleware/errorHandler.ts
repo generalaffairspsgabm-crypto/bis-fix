@@ -33,7 +33,9 @@ export const errorHandler = (err: any, req: Request, res: Response, _next: NextF
     if (
         err.name === 'SequelizeForeignKeyConstraintError' ||
         err.parent?.code === '23503' ||
-        err.original?.code === '23503'
+        err.original?.code === '23503' ||
+        err.parent?.code === '23001' ||
+        err.original?.code === '23001'
     ) {
         return res.status(409).json({
             status: 'error',
