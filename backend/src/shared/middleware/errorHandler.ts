@@ -29,6 +29,18 @@ export const errorHandler = (err: any, req: Request, res: Response, _next: NextF
         });
     }
 
+    // Handle Foreign Key constraint errors
+    if (
+        err.name === 'SequelizeForeignKeyConstraintError' ||
+        err.parent?.code === '23503' ||
+        err.original?.code === '23503'
+    ) {
+        return res.status(409).json({
+            status: 'error',
+            message: 'Tidak dapat menghapus atau mengubah data karena masih digunakan oleh data lain.'
+        });
+    }
+
     res.status(500).json({
         status: 'error',
         message: 'Internal Server Error',

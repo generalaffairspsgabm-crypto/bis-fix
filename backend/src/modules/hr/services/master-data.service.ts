@@ -82,7 +82,22 @@ class MasterDataService {
     async delete(model: ModelStatic<Model>, id: number) {
         const item = await model.findByPk(id);
         if (!item) return null;
-        await item.destroy();
+        try {
+            await item.destroy();
+        } catch (err: any) {
+            if (
+                err.name === 'SequelizeForeignKeyConstraintError' ||
+                err.parent?.code === '23503' ||
+                err.original?.code === '23503'
+            ) {
+                const error: any = new Error(
+                    `Tidak dapat menghapus data ${model.name} karena masih digunakan oleh data lain.`
+                );
+                error.statusCode = 409;
+                throw error;
+            }
+            throw err;
+        }
         await this.invalidateCache(model.name);
         return true;
     }

@@ -67,7 +67,11 @@ app.use((err: any, req: express.Request, res: express.Response, _next: express.N
     }
 
     // Handle Sequelize Foreign Key Errors
-    if (err.name === 'SequelizeForeignKeyConstraintError') {
+    if (
+        err.name === 'SequelizeForeignKeyConstraintError' ||
+        err.parent?.code === '23503' ||
+        err.original?.code === '23503'
+    ) {
         return res.status(400).json({
             status: 'error',
             message: 'Tidak dapat menghapus atau mengubah data karena masih digunakan oleh data lain.',

@@ -23,7 +23,11 @@ export const errorHandler = (err: any, req: Request, res: Response, _next: NextF
     }
 
     // Handle specific Foreign Key errors
-    if (err.name === 'SequelizeForeignKeyConstraintError') {
+    if (
+        err.name === 'SequelizeForeignKeyConstraintError' ||
+        err.parent?.code === '23503' ||
+        err.original?.code === '23503'
+    ) {
         statusCode = 400;
         message = 'Terjadi kesalahan pada data referensi (Foreign Key)';
 
