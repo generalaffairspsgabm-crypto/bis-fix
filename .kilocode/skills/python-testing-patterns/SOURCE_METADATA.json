@@ -1,0 +1,26 @@
+{
+  "id": "python-testing-patterns",
+  "upstream_path": "skills/python-testing-patterns",
+  "category": "development",
+  "description": "Implement comprehensive testing strategies with pytest, fixtures, mocking, and test-driven development. Use when writing Python tests, setting up test suites, or implementing testing best practices.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

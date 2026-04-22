@@ -1,0 +1,26 @@
+{
+  "id": "hugging-face-gradio",
+  "upstream_path": "skills/hugging-face-gradio",
+  "category": "ai-ml",
+  "description": "Build or edit Gradio apps, layouts, components, and chat interfaces in Python.",
+  "risk": "unknown",
+  "source": "https://github.com/huggingface/skills/tree/main/skills/huggingface-gradio",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

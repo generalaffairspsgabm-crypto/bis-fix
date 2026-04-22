@@ -1,0 +1,26 @@
+{
+  "id": "go-playwright",
+  "upstream_path": "skills/go-playwright",
+  "category": "test-automation",
+  "description": "Expert capability for robust, stealthy, and efficient browser automation using Playwright Go.",
+  "risk": "safe",
+  "source": "https://github.com/playwright-community/playwright-go",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

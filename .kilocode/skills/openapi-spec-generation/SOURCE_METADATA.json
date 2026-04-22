@@ -1,0 +1,26 @@
+{
+  "id": "openapi-spec-generation",
+  "upstream_path": "skills/openapi-spec-generation",
+  "category": "api-integration",
+  "description": "Generate and maintain OpenAPI 3.1 specifications from code, design-first specs, and validation patterns. Use when creating API documentation, generating SDKs, or ensuring API contract compliance.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "using-superpowers",
+  "upstream_path": "skills/using-superpowers",
+  "category": "meta",
+  "description": "Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

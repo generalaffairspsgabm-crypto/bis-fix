@@ -1,0 +1,26 @@
+{
+  "id": "xss-html-injection",
+  "upstream_path": "skills/xss-html-injection",
+  "category": "security",
+  "description": "Execute comprehensive client-side injection vulnerability assessments on web applications to identify XSS and HTML injection flaws, demonstrate exploitation techniques for session hijacking and credential theft, and validate input sanitization and output encoding mechanisms.",
+  "risk": "offensive",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

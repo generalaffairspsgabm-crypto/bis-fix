@@ -1,0 +1,26 @@
+{
+  "id": "constant-time-analysis",
+  "upstream_path": "skills/constant-time-analysis",
+  "category": "security",
+  "description": "Analyze cryptographic code to detect operations that leak secret data through execution timing variations.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

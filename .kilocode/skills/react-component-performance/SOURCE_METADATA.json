@@ -1,0 +1,26 @@
+{
+  "id": "react-component-performance",
+  "upstream_path": "skills/react-component-performance",
+  "category": "web-development",
+  "description": "Diagnose slow React components and suggest targeted performance fixes.",
+  "risk": "safe",
+  "source": "Dimillian/Skills (MIT)",
+  "date_added": "2026-03-25",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 3,
+    "rewritten_frontmatter": true
+  }
+}

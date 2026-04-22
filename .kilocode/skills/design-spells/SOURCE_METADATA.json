@@ -1,0 +1,26 @@
+{
+  "id": "design-spells",
+  "upstream_path": "skills/design-spells",
+  "category": "design",
+  "description": "Curated micro-interactions and design details that add \"magic\" and personality to websites and apps.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-07",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

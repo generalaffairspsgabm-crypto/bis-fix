@@ -1,0 +1,26 @@
+{
+  "id": "antigravity-design-expert",
+  "upstream_path": "skills/antigravity-design-expert",
+  "category": "design",
+  "description": "Core UI/UX engineering skill for building highly interactive, spatial, weightless, and glassmorphism-based web interfaces using GSAP and 3D CSS.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-07",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

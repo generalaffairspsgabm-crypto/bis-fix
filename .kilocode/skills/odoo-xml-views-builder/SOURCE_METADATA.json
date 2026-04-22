@@ -1,0 +1,26 @@
+{
+  "id": "odoo-xml-views-builder",
+  "upstream_path": "skills/odoo-xml-views-builder",
+  "category": "business",
+  "description": "Expert at building Odoo XML views: Form, List, Kanban, Search, Calendar, and Graph. Generates correct XML for Odoo 14-17 with proper visibility syntax.",
+  "risk": "safe",
+  "source": "self",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

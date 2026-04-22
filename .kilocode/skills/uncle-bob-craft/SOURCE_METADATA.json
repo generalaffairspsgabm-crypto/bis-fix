@@ -1,0 +1,26 @@
+{
+  "id": "uncle-bob-craft",
+  "upstream_path": "skills/uncle-bob-craft",
+  "category": "code-quality",
+  "description": "Use when performing code review, writing or refactoring code, or discussing architecture; complements clean-code and does not replace project linter/formatter.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-06",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 8,
+    "rewritten_frontmatter": true
+  }
+}

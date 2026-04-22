@@ -1,0 +1,26 @@
+{
+  "id": "ui-ux-pro-max",
+  "upstream_path": "skills/ui-ux-pro-max",
+  "category": "front-end",
+  "description": "Comprehensive design guide for web and mobile applications. Use when designing new UI components or pages, choosing color palettes and typography, or reviewing code for UX issues.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 27,
+    "rewritten_frontmatter": true
+  }
+}

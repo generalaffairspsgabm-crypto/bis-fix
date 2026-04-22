@@ -1,0 +1,26 @@
+{
+  "id": "sred-work-summary",
+  "upstream_path": "skills/sred-work-summary",
+  "category": "project-management",
+  "description": "Go back through the previous year of work and create a Notion doc that groups relevant links into projects that can then be documented as SRED projects.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

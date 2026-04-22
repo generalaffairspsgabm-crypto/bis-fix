@@ -1,0 +1,26 @@
+{
+  "id": "azure-storage-blob-java",
+  "upstream_path": "skills/azure-storage-blob-java",
+  "category": "cloud",
+  "description": "Build blob storage applications using the Azure Storage Blob SDK for Java.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

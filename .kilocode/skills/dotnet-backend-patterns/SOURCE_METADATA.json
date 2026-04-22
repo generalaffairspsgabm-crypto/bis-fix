@@ -1,0 +1,26 @@
+{
+  "id": "dotnet-backend-patterns",
+  "upstream_path": "skills/dotnet-backend-patterns",
+  "category": "backend",
+  "description": "Master C#/.NET patterns for building production-grade APIs, MCP servers, and enterprise backends with modern best practices (2024/2025).",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 6,
+    "rewritten_frontmatter": true
+  }
+}

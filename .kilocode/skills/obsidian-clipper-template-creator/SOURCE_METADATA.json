@@ -1,0 +1,26 @@
+{
+  "id": "obsidian-clipper-template-creator",
+  "upstream_path": "skills/obsidian-clipper-template-creator",
+  "category": "uncategorized",
+  "description": "Guide for creating templates for the Obsidian Web Clipper. Use when you want to create a new clipping template, understand available variables, or format clipped content.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 9,
+    "rewritten_frontmatter": true
+  }
+}

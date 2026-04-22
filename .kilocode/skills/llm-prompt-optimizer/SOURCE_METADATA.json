@@ -1,0 +1,26 @@
+{
+  "id": "llm-prompt-optimizer",
+  "upstream_path": "skills/llm-prompt-optimizer",
+  "category": "ai-ml",
+  "description": "Use when improving prompts for any LLM. Applies proven prompt engineering techniques to boost output quality, reduce hallucinations, and cut token usage.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-04",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

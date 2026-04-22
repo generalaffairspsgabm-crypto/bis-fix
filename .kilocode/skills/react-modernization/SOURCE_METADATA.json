@@ -1,0 +1,26 @@
+{
+  "id": "react-modernization",
+  "upstream_path": "skills/react-modernization",
+  "category": "web-development",
+  "description": "Master React version upgrades, class to hooks migration, concurrent features adoption, and codemods for automated transformation.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

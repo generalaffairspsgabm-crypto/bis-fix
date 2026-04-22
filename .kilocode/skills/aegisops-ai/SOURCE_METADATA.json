@@ -1,0 +1,26 @@
+{
+  "id": "aegisops-ai",
+  "upstream_path": "skills/aegisops-ai",
+  "category": "devops",
+  "description": "Autonomous DevSecOps & FinOps Guardrails. Orchestrates Gemini 3 Flash to audit Linux Kernel patches, Terraform cost drifts, and K8s compliance.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-24",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

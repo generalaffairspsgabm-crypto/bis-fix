@@ -1,0 +1,26 @@
+{
+  "id": "bug-hunter",
+  "upstream_path": "skills/bug-hunter",
+  "category": "development-and-testing",
+  "description": "Systematically finds and fixes bugs using proven debugging techniques. Traces from symptoms to root cause, implements fixes, and prevents regression.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-05",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

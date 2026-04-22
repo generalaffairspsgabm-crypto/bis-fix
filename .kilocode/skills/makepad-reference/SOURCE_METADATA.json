@@ -1,0 +1,26 @@
+{
+  "id": "makepad-reference",
+  "upstream_path": "skills/makepad-reference",
+  "category": "development",
+  "description": "This category provides reference materials for debugging, code quality, and advanced layout patterns.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

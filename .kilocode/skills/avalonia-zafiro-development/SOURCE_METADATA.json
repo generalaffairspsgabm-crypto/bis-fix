@@ -1,0 +1,26 @@
+{
+  "id": "avalonia-zafiro-development",
+  "upstream_path": "skills/avalonia-zafiro-development",
+  "category": "development",
+  "description": "Mandatory skills, conventions, and behavioral rules for Avalonia UI development using the Zafiro toolkit.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 6,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "oss-hunter",
+  "upstream_path": "skills/oss-hunter",
+  "category": "uncategorized",
+  "description": "Automatically hunt for high-impact OSS contribution opportunities in trending repositories.",
+  "risk": "safe",
+  "source": "https://github.com/jackjin1997/ClawForge",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

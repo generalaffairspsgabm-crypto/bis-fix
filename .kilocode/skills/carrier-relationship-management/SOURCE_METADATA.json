@@ -1,0 +1,26 @@
+{
+  "id": "carrier-relationship-management",
+  "upstream_path": "skills/carrier-relationship-management",
+  "category": "business",
+  "description": "Codified expertise for managing carrier portfolios, negotiating freight rates, tracking carrier performance, allocating freight, and maintaining strategic carrier relationships.",
+  "risk": "safe",
+  "source": "https://github.com/ai-evos/agent-skills",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 4,
+    "rewritten_frontmatter": true
+  }
+}

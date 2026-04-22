@@ -1,0 +1,26 @@
+{
+  "id": "makepad-skills",
+  "upstream_path": "skills/makepad-skills",
+  "category": "development",
+  "description": "Makepad UI development skills for Rust apps: setup, patterns, shaders, packaging, and troubleshooting.",
+  "risk": "safe",
+  "source": "https://github.com/ZhangHanDong/makepad-skills",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "fix-review",
+  "upstream_path": "skills/fix-review",
+  "category": "code-quality",
+  "description": "Verify fix commits address audit findings without new bugs",
+  "risk": "safe",
+  "source": "https://github.com/trailofbits/skills/tree/main/plugins/fix-review",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "seo-aeo-content-cluster",
+  "upstream_path": "skills/seo-aeo-content-cluster",
+  "category": "content",
+  "description": "Builds a topical authority map with a pillar page, prioritised cluster articles, content types, internal link map, and content gap analysis. Activate when the user wants to build a content cluster, topic map, or content strategy.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-04-01",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

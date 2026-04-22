@@ -1,0 +1,26 @@
+{
+  "id": "backend-architect",
+  "upstream_path": "skills/backend-architect",
+  "category": "backend",
+  "description": "Expert backend architect specializing in scalable API design, microservices architecture, and distributed systems.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "azure-communication-callautomation-java",
+  "upstream_path": "skills/azure-communication-callautomation-java",
+  "category": "cloud",
+  "description": "Build server-side call automation workflows including IVR systems, call routing, recording, and AI-powered interactions.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

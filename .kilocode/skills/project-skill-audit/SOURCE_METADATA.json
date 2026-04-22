@@ -1,0 +1,28 @@
+{
+  "id": "project-skill-audit",
+  "upstream_path": "skills/project-skill-audit",
+  "category": "uncategorized",
+  "description": "Audit a project and recommend the highest-value skills to add or update.",
+  "risk": "safe",
+  "source": "Dimillian/Skills (MIT)",
+  "date_added": "2026-03-25",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "blocked"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": [
+      "target_specific_home_path"
+    ]
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "hig-components-layout",
+  "upstream_path": "skills/hig-components-layout",
+  "category": "development",
+  "description": "Apple Human Interface Guidelines for layout and navigation components.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 13,
+    "rewritten_frontmatter": true
+  }
+}

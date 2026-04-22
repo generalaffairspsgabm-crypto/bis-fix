@@ -1,0 +1,26 @@
+{
+  "id": "gha-security-review",
+  "upstream_path": "skills/gha-security-review",
+  "category": "security",
+  "description": "Find exploitable vulnerabilities in GitHub Actions workflows. Every finding MUST include a concrete exploitation scenario — if you can't build the attack, don't report it.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-16",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

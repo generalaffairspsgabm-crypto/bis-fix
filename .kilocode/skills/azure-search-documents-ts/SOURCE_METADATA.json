@@ -1,0 +1,26 @@
+{
+  "id": "azure-search-documents-ts",
+  "upstream_path": "skills/azure-search-documents-ts",
+  "category": "cloud",
+  "description": "Build search applications with vector, hybrid, and semantic search capabilities.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "hugging-face-community-evals",
+  "upstream_path": "skills/hugging-face-community-evals",
+  "category": "ai-ml",
+  "description": "Run local evaluations for Hugging Face Hub models with inspect-ai or lighteval.",
+  "risk": "unknown",
+  "source": "https://github.com/huggingface/skills/tree/main/skills/huggingface-community-evals",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 6,
+    "rewritten_frontmatter": true
+  }
+}

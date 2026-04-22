@@ -1,0 +1,26 @@
+{
+  "id": "conductor-manage",
+  "upstream_path": "skills/conductor-manage",
+  "category": "workflow",
+  "description": "Manage track lifecycle: archive, restore, delete, rename, and cleanup",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

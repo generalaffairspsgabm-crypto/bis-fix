@@ -1,0 +1,26 @@
+{
+  "id": "prompt-engineering-patterns",
+  "upstream_path": "skills/prompt-engineering-patterns",
+  "category": "ai-ml",
+  "description": "Master advanced prompt engineering techniques to maximize LLM performance, reliability, and controllability.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 9,
+    "rewritten_frontmatter": true
+  }
+}

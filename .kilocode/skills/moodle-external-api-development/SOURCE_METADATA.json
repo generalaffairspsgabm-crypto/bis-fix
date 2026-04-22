@@ -1,0 +1,26 @@
+{
+  "id": "moodle-external-api-development",
+  "upstream_path": "skills/moodle-external-api-development",
+  "category": "api-integration",
+  "description": "This skill guides you through creating custom external web service APIs for Moodle LMS, following Moodle's external API framework and coding standards.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

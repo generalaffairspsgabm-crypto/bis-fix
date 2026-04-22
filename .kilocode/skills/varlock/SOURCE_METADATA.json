@@ -1,0 +1,28 @@
+{
+  "id": "varlock",
+  "upstream_path": "skills/varlock",
+  "category": "security",
+  "description": "Secure-by-default environment variable management for Claude Code sessions.",
+  "risk": "critical",
+  "source": "https://github.com/dmno-dev/varlock",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "blocked",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": [
+      "target_specific_home_path"
+    ]
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

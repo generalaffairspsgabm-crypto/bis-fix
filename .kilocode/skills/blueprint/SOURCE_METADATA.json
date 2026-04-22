@@ -1,0 +1,28 @@
+{
+  "id": "blueprint",
+  "upstream_path": "skills/blueprint",
+  "category": "planning",
+  "description": "Turn a one-line objective into a step-by-step construction plan any coding agent can execute cold. Each step has a self-contained context brief — a fresh agent in a new session can pick up any step without reading prior steps.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-10",
+  "plugin": {
+    "targets": {
+      "codex": "blocked",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": [
+      "target_specific_home_path"
+    ]
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

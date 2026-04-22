@@ -1,0 +1,26 @@
+{
+  "id": "hig-platforms",
+  "upstream_path": "skills/hig-platforms",
+  "category": "development",
+  "description": "Apple Human Interface Guidelines for platform-specific design.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 8,
+    "rewritten_frontmatter": true
+  }
+}

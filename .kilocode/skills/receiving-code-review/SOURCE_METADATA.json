@@ -1,0 +1,26 @@
+{
+  "id": "receiving-code-review",
+  "upstream_path": "skills/receiving-code-review",
+  "category": "workflow",
+  "description": "Code review requires technical evaluation, not emotional performance.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

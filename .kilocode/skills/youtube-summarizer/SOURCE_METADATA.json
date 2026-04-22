@@ -1,0 +1,26 @@
+{
+  "id": "youtube-summarizer",
+  "upstream_path": "skills/youtube-summarizer",
+  "category": "content",
+  "description": "Extract transcripts from YouTube videos and generate comprehensive, detailed summaries using intelligent analysis frameworks",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 5,
+    "rewritten_frontmatter": true
+  }
+}

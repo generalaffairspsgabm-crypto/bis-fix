@@ -1,0 +1,26 @@
+{
+  "id": "web-artifacts-builder",
+  "upstream_path": "skills/web-artifacts-builder",
+  "category": "web-development",
+  "description": "To build powerful frontend claude.ai artifacts, follow these steps:",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 5,
+    "rewritten_frontmatter": true
+  }
+}

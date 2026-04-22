@@ -1,0 +1,26 @@
+{
+  "id": "hig-components-dialogs",
+  "upstream_path": "skills/hig-components-dialogs",
+  "category": "development",
+  "description": "Apple HIG guidance for presentation components including alerts, action sheets, popovers, sheets, and digit entry views.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 6,
+    "rewritten_frontmatter": true
+  }
+}

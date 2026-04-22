@@ -1,0 +1,26 @@
+{
+  "id": "shadcn",
+  "upstream_path": "skills/shadcn",
+  "category": "framework",
+  "description": "Manages shadcn/ui components and projects, providing context, documentation, and usage patterns for building modern design systems.",
+  "risk": "safe",
+  "source": "https://github.com/shadcn-ui/ui/tree/main/skills/shadcn",
+  "date_added": "2026-03-07",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 13,
+    "rewritten_frontmatter": true
+  }
+}

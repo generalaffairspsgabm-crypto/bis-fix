@@ -1,0 +1,26 @@
+{
+  "id": "iconsax-library",
+  "upstream_path": "skills/iconsax-library",
+  "category": "web-development",
+  "description": "Extensive icon library and AI-driven icon generation skill for premium UI/UX design.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-07",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

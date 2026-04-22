@@ -1,0 +1,26 @@
+{
+  "id": "hig-patterns",
+  "upstream_path": "skills/hig-patterns",
+  "category": "development",
+  "description": "Apple Human Interface Guidelines interaction and UX patterns.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 26,
+    "rewritten_frontmatter": true
+  }
+}

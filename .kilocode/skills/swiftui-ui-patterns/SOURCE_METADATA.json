@@ -1,0 +1,26 @@
+{
+  "id": "swiftui-ui-patterns",
+  "upstream_path": "skills/swiftui-ui-patterns",
+  "category": "mobile",
+  "description": "Apply proven SwiftUI UI patterns for navigation, sheets, async state, and reusable screens.",
+  "risk": "safe",
+  "source": "Dimillian/Skills (MIT)",
+  "date_added": "2026-03-25",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 32,
+    "rewritten_frontmatter": true
+  }
+}

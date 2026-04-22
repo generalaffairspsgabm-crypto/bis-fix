@@ -1,0 +1,26 @@
+{
+  "id": "ddd-context-mapping",
+  "upstream_path": "skills/ddd-context-mapping",
+  "category": "architecture",
+  "description": "Map relationships between bounded contexts and define integration contracts using DDD context mapping patterns.",
+  "risk": "safe",
+  "source": "self",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "game-development",
+  "upstream_path": "skills/game-development",
+  "category": "game-development",
+  "description": "Game development orchestrator. Routes to platform-specific skills based on project needs.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 11,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "ux-flow",
+  "upstream_path": "skills/ux-flow",
+  "category": "design",
+  "description": "Design user flows and screen structure using StyleSeed UX patterns such as progressive disclosure, hub-and-spoke navigation, and information pyramids.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-04-08",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

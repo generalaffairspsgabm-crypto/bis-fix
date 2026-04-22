@@ -1,0 +1,29 @@
+{
+  "id": "notebooklm",
+  "upstream_path": "skills/notebooklm",
+  "category": "data-ai",
+  "description": "Interact with Google NotebookLM to query documentation with Gemini's source-grounded answers. Each question opens a fresh browser session, retrieves the answer exclusively from your uploaded documents, and closes.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "blocked",
+      "claude": "blocked"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": [
+      "target_specific_home_path",
+      "undeclared_runtime_dependency"
+    ]
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 21,
+    "rewritten_frontmatter": true
+  }
+}

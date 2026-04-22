@@ -1,0 +1,26 @@
+{
+  "id": "tdd-workflows-tdd-refactor",
+  "upstream_path": "skills/tdd-workflows-tdd-refactor",
+  "category": "testing",
+  "description": "Use when working with tdd workflows tdd refactor",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "spline-3d-integration",
+  "upstream_path": "skills/spline-3d-integration",
+  "category": "web-development",
+  "description": "Use when adding interactive 3D scenes from Spline.design to web projects, including React embedding and runtime control API.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-07",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 8,
+    "rewritten_frontmatter": true
+  }
+}

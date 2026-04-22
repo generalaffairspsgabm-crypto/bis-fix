@@ -1,0 +1,26 @@
+{
+  "id": "cc-skill-strategic-compact",
+  "upstream_path": "skills/cc-skill-strategic-compact",
+  "category": "meta",
+  "description": "Development skill from everything-claude-code",
+  "risk": "none",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

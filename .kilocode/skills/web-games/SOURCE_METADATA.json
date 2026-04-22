@@ -1,0 +1,26 @@
+{
+  "id": "web-games",
+  "upstream_path": "skills/game-development/web-games",
+  "category": "game-development",
+  "description": "Web browser game development principles. Framework selection, WebGPU, optimization, PWA.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

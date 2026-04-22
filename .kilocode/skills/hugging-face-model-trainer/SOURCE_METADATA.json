@@ -1,0 +1,26 @@
+{
+  "id": "hugging-face-model-trainer",
+  "upstream_path": "skills/hugging-face-model-trainer",
+  "category": "ai-ml",
+  "description": "Train or fine-tune TRL language models on Hugging Face Jobs, including SFT, DPO, GRPO, and GGUF export.",
+  "risk": "unknown",
+  "source": "https://github.com/huggingface/skills/tree/main/skills/huggingface-llm-trainer",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 18,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "hig-components-search",
+  "upstream_path": "skills/hig-components-search",
+  "category": "development",
+  "description": "Apple HIG guidance for navigation-related components including search fields, page controls, and path controls.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 4,
+    "rewritten_frontmatter": true
+  }
+}

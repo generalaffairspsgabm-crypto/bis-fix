@@ -1,0 +1,26 @@
+{
+  "id": "sexual-health-analyzer",
+  "upstream_path": "skills/sexual-health-analyzer",
+  "category": "health",
+  "description": "Sexual Health Analyzer",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

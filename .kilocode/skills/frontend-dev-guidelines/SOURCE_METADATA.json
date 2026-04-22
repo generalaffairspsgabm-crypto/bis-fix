@@ -1,0 +1,26 @@
+{
+  "id": "frontend-dev-guidelines",
+  "upstream_path": "skills/frontend-dev-guidelines",
+  "category": "front-end",
+  "description": "You are a senior frontend engineer operating under strict architectural and performance standards. Use when creating components or pages, adding new features, or fetching or mutating data.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 11,
+    "rewritten_frontmatter": true
+  }
+}

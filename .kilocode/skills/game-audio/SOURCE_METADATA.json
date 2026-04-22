@@ -1,0 +1,26 @@
+{
+  "id": "game-audio",
+  "upstream_path": "skills/game-development/game-audio",
+  "category": "game-development",
+  "description": "Game audio principles. Sound design, music integration, adaptive audio systems.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

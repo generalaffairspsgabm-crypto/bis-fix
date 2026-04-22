@@ -1,0 +1,26 @@
+{
+  "id": "ddd-tactical-patterns",
+  "upstream_path": "skills/ddd-tactical-patterns",
+  "category": "architecture",
+  "description": "Apply DDD tactical patterns in code using entities, value objects, aggregates, repositories, and domain events with explicit invariants.",
+  "risk": "safe",
+  "source": "self",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

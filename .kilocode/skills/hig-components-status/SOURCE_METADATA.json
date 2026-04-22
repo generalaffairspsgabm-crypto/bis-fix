@@ -1,0 +1,26 @@
+{
+  "id": "hig-components-status",
+  "upstream_path": "skills/hig-components-status",
+  "category": "development",
+  "description": "Apple HIG guidance for status and progress UI components including progress indicators, status bars, and activity rings.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 4,
+    "rewritten_frontmatter": true
+  }
+}

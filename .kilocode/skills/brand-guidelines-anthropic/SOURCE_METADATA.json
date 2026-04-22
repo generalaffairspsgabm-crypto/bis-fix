@@ -1,0 +1,26 @@
+{
+  "id": "brand-guidelines-anthropic",
+  "upstream_path": "skills/brand-guidelines-anthropic",
+  "category": "marketing",
+  "description": "To access Anthropic's official brand identity and style resources, use this skill.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

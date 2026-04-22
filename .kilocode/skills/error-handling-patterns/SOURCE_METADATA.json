@@ -1,0 +1,26 @@
+{
+  "id": "error-handling-patterns",
+  "upstream_path": "skills/error-handling-patterns",
+  "category": "development",
+  "description": "Build resilient applications with robust error handling strategies that gracefully handle failures and provide excellent debugging experiences.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

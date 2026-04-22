@@ -1,0 +1,26 @@
+{
+  "id": "differential-review",
+  "upstream_path": "skills/differential-review",
+  "category": "security",
+  "description": "Security-focused code review for PRs, commits, and diffs.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

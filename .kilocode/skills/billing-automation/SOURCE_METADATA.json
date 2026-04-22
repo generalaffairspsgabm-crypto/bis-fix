@@ -1,0 +1,26 @@
+{
+  "id": "billing-automation",
+  "upstream_path": "skills/billing-automation",
+  "category": "uncategorized",
+  "description": "Master automated billing systems including recurring billing, invoice generation, dunning management, proration, and tax calculation.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

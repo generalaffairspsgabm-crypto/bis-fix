@@ -1,0 +1,48 @@
+---
+name: firecrawl-scraper
+description: >-
+  Deep web scraping, screenshots, PDF parsing, and website crawling using Firecrawl API. Use when you need deep content extraction from web pages, page interaction is required (clicking, scrolling, etc.), or you want screenshots or PDF parsing.
+license: CC-BY-4.0
+metadata:
+  category: data
+  source:
+    repository: 'https://github.com/sickn33/antigravity-awesome-skills'
+    path: skills/firecrawl-scraper
+    license_path: LICENSE-CONTENT
+  original_metadata:
+    risk: 'unknown'
+    source: 'community'
+    date_added: '2026-02-27'
+---
+# firecrawl-scraper
+
+## Overview
+Deep web scraping, screenshots, PDF parsing, and website crawling using Firecrawl API
+
+## When to Use
+- When you need deep content extraction from web pages
+- When page interaction is required (clicking, scrolling, etc.)
+- When you want screenshots or PDF parsing
+- When batch scraping multiple URLs
+
+## Installation
+```bash
+npx skills add -g BenedictKing/firecrawl-scraper
+```
+
+## Step-by-Step Guide
+1. Install the skill using the command above
+2. Configure Firecrawl API key
+3. Use naturally in Claude Code conversations
+
+## Examples
+See [GitHub Repository](https://github.com/BenedictKing/firecrawl-scraper) for examples.
+
+## Best Practices
+- Configure API keys via environment variables
+
+## Troubleshooting
+See the GitHub repository for troubleshooting guides.
+
+## Related Skills
+- context7-auto-research, tavily-web, exa-search, codex-review

@@ -1,0 +1,26 @@
+{
+  "id": "privacy-by-design",
+  "upstream_path": "skills/privacy-by-design",
+  "category": "security",
+  "description": "Use when building apps that collect user data. Ensures privacy protections are built in from the start—data minimization, consent, encryption.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-23",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

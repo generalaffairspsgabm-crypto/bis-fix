@@ -1,0 +1,26 @@
+{
+  "id": "inventory-demand-planning",
+  "upstream_path": "skills/inventory-demand-planning",
+  "category": "business",
+  "description": "Codified expertise for demand forecasting, safety stock optimisation, replenishment planning, and promotional lift estimation at multi-location retailers.",
+  "risk": "safe",
+  "source": "https://github.com/ai-evos/agent-skills",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 4,
+    "rewritten_frontmatter": true
+  }
+}

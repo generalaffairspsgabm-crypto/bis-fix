@@ -1,0 +1,26 @@
+{
+  "id": "data-structure-protocol",
+  "upstream_path": "skills/data-structure-protocol",
+  "category": "data-science",
+  "description": "Give agents persistent structural memory of a codebase — navigate dependencies, track public APIs, and understand why connections exist without re-reading the whole repo.",
+  "risk": "safe",
+  "source": "https://github.com/k-kolomeitsev/data-structure-protocol",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

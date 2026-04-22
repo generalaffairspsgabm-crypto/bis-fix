@@ -1,0 +1,26 @@
+{
+  "id": "shopify-development",
+  "upstream_path": "skills/shopify-development",
+  "category": "api-integration",
+  "description": "Build Shopify apps, extensions, themes using GraphQL Admin API, Shopify CLI, Polaris UI, and Liquid.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 10,
+    "rewritten_frontmatter": true
+  }
+}

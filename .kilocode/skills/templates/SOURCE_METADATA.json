@@ -1,0 +1,26 @@
+{
+  "id": "templates",
+  "upstream_path": "skills/app-builder/templates",
+  "category": "app-builder",
+  "description": "Project scaffolding templates for new applications. Use when creating new projects from scratch. Contains 12 templates for various tech stacks.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 14,
+    "rewritten_frontmatter": true
+  }
+}

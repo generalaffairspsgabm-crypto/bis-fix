@@ -1,0 +1,26 @@
+{
+  "id": "claude-speed-reader",
+  "upstream_path": "skills/claude-speed-reader",
+  "category": "ai-ml",
+  "description": "-Speed read Claude's responses at 600+ WPM using RSVP with Spritz-style ORP highlighting",
+  "risk": "safe",
+  "source": "https://github.com/SeanZoR/claude-speed-reader",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "hugging-face-jobs",
+  "upstream_path": "skills/hugging-face-jobs",
+  "category": "ai-ml",
+  "description": "Run workloads on Hugging Face Jobs with managed CPUs, GPUs, TPUs, secrets, and Hub persistence.",
+  "risk": "unknown",
+  "source": "https://github.com/huggingface/skills/tree/main/skills/huggingface-jobs",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 9,
+    "rewritten_frontmatter": true
+  }
+}

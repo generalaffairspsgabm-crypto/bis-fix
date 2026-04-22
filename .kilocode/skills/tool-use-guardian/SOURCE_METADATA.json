@@ -1,0 +1,26 @@
+{
+  "id": "tool-use-guardian",
+  "upstream_path": "skills/tool-use-guardian",
+  "category": "reliability",
+  "description": "FREE — Intelligent tool-call reliability wrapper. Monitors, retries, fixes, and learns from tool failures. Auto-recovers from truncated JSON, timeouts, rate limits, and mid-chain failures.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-13",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

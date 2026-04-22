@@ -1,0 +1,26 @@
+{
+  "id": "python-pptx-generator",
+  "upstream_path": "skills/python-pptx-generator",
+  "category": "development",
+  "description": "Generate complete Python scripts that build polished PowerPoint decks with python-pptx and real slide content.",
+  "risk": "safe",
+  "source": "self",
+  "date_added": "2026-04-06",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

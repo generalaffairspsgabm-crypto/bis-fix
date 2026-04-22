@@ -1,0 +1,26 @@
+{
+  "id": "cost-optimization",
+  "upstream_path": "skills/cost-optimization",
+  "category": "cloud",
+  "description": "Strategies and patterns for optimizing cloud costs across AWS, Azure, and GCP.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

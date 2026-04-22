@@ -1,0 +1,26 @@
+{
+  "id": "ui-component",
+  "upstream_path": "skills/ui-component",
+  "category": "design",
+  "description": "Generate a new UI component that follows StyleSeed Toss conventions for structure, tokens, accessibility, and component ergonomics.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-04-08",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

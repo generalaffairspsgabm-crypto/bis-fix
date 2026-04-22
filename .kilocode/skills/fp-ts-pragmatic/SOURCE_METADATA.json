@@ -1,0 +1,26 @@
+{
+  "id": "fp-ts-pragmatic",
+  "upstream_path": "skills/fp-ts-pragmatic",
+  "category": "development",
+  "description": "A practical, jargon-free guide to fp-ts functional programming - the 80/20 approach that gets results without the academic overhead. Use when writing TypeScript with fp-ts library.",
+  "risk": "safe",
+  "source": "https://github.com/whatiskadudoing/fp-ts-skills",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

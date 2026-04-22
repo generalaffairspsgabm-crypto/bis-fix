@@ -1,0 +1,26 @@
+{
+  "id": "zod-validation-expert",
+  "upstream_path": "skills/zod-validation-expert",
+  "category": "framework",
+  "description": "Expert in Zod — TypeScript-first schema validation. Covers parsing, custom errors, refinements, type inference, and integration with React Hook Form, Next.js, and tRPC.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-05",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

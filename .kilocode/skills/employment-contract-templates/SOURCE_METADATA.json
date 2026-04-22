@@ -1,0 +1,26 @@
+{
+  "id": "employment-contract-templates",
+  "upstream_path": "skills/employment-contract-templates",
+  "category": "legal",
+  "description": "Templates and patterns for creating legally sound employment documentation including contracts, offer letters, and HR policies.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "saas-multi-tenant",
+  "upstream_path": "skills/saas-multi-tenant",
+  "category": "database",
+  "description": "Design and implement multi-tenant SaaS architectures with row-level security, tenant-scoped queries, shared-schema isolation, and safe cross-tenant admin patterns in PostgreSQL and TypeScript.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-28",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

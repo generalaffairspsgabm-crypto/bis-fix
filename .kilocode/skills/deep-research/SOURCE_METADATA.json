@@ -1,0 +1,26 @@
+{
+  "id": "deep-research",
+  "upstream_path": "skills/deep-research",
+  "category": "ai-ml",
+  "description": "Run autonomous research tasks that plan, search, read, and synthesize information into comprehensive reports.",
+  "risk": "safe",
+  "source": "https://github.com/sanjay3290/ai-skills/tree/main/skills/deep-research",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "daily-news-report",
+  "upstream_path": "skills/daily-news-report",
+  "category": "content",
+  "description": "Scrapes content based on a preset URL list, filters high-quality technical information, and generates daily Markdown reports.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 3,
+    "rewritten_frontmatter": true
+  }
+}

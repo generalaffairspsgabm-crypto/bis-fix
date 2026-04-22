@@ -1,0 +1,26 @@
+{
+  "id": "unsplash-integration",
+  "upstream_path": "skills/unsplash-integration",
+  "category": "api-integration",
+  "description": "Integration skill for searching and fetching high-quality, free-to-use professional photography from Unsplash.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-07",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "seek-and-analyze-video",
+  "upstream_path": "skills/seek-and-analyze-video",
+  "category": "data-ai",
+  "description": "Seek and analyze video content using Memories.ai Large Visual Memory Model for persistent video intelligence",
+  "risk": "safe",
+  "source": "https://github.com/kennyzheng-builds/seek-and-analyze-video",
+  "date_added": "2026-03-09",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

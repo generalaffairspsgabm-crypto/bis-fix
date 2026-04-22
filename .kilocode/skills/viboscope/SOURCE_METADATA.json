@@ -1,0 +1,26 @@
+{
+  "id": "viboscope",
+  "upstream_path": "skills/viboscope",
+  "category": "collaboration",
+  "description": "Psychological compatibility matching — find cofounders, collaborators, and friends through validated psychometrics",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-29",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "upgrading-expo",
+  "upstream_path": "skills/upgrading-expo",
+  "category": "mobile",
+  "description": "Upgrade Expo SDK versions",
+  "risk": "safe",
+  "source": "https://github.com/expo/skills/tree/main/plugins/upgrading-expo",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

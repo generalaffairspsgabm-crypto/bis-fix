@@ -1,0 +1,26 @@
+{
+  "id": "claude-win11-speckit-update-skill",
+  "upstream_path": "skills/claude-win11-speckit-update-skill",
+  "category": "ai-ml",
+  "description": "Windows 11 system management",
+  "risk": "safe",
+  "source": "https://github.com/NotMyself/claude-win11-speckit-update-skill",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

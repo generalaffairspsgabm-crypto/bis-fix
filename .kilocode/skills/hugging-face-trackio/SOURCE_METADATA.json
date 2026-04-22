@@ -1,0 +1,26 @@
+{
+  "id": "hugging-face-trackio",
+  "upstream_path": "skills/hugging-face-trackio",
+  "category": "ai-ml",
+  "description": "Track ML experiments with Trackio using Python logging, alerts, and CLI metric retrieval.",
+  "risk": "unknown",
+  "source": "https://github.com/huggingface/skills/tree/main/skills/huggingface-trackio",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 5,
+    "rewritten_frontmatter": true
+  }
+}

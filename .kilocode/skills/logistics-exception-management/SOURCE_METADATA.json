@@ -1,0 +1,26 @@
+{
+  "id": "logistics-exception-management",
+  "upstream_path": "skills/logistics-exception-management",
+  "category": "uncategorized",
+  "description": "Codified expertise for handling freight exceptions, shipment delays, damages, losses, and carrier disputes. Informed by logistics professionals with 15+ years operational experience.",
+  "risk": "safe",
+  "source": "https://github.com/ai-evos/agent-skills",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 4,
+    "rewritten_frontmatter": true
+  }
+}

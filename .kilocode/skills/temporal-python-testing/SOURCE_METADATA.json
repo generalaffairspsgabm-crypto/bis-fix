@@ -1,0 +1,26 @@
+{
+  "id": "temporal-python-testing",
+  "upstream_path": "skills/temporal-python-testing",
+  "category": "testing",
+  "description": "Comprehensive testing approaches for Temporal workflows using pytest, progressive disclosure resources for specific testing scenarios.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 5,
+    "rewritten_frontmatter": true
+  }
+}

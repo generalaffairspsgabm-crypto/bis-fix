@@ -1,0 +1,26 @@
+{
+  "id": "planning-with-files",
+  "upstream_path": "skills/planning-with-files",
+  "category": "planning",
+  "description": "Work like Manus: Use persistent markdown files as your \\\"working memory on disk.\\\"",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 8,
+    "rewritten_frontmatter": true
+  }
+}

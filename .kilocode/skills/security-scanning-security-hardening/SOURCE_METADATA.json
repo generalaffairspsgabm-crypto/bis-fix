@@ -1,0 +1,26 @@
+{
+  "id": "security-scanning-security-hardening",
+  "upstream_path": "skills/security-scanning-security-hardening",
+  "category": "security",
+  "description": "Coordinate multi-layer security scanning and hardening across application, infrastructure, and compliance controls.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

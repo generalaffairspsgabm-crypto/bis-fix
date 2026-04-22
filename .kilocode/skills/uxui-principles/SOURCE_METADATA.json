@@ -1,0 +1,26 @@
+{
+  "id": "uxui-principles",
+  "upstream_path": "skills/uxui-principles",
+  "category": "design",
+  "description": "Evaluate interfaces against 168 research-backed UX/UI principles, detect antipatterns, and inject UX context into AI coding sessions.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-04-03",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

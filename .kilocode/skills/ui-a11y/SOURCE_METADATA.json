@@ -1,0 +1,26 @@
+{
+  "id": "ui-a11y",
+  "upstream_path": "skills/ui-a11y",
+  "category": "design",
+  "description": "Audit a StyleSeed-based component or page for WCAG 2.2 AA issues and apply practical accessibility fixes where the code makes them safe.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-04-08",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "pipecat-friday-agent",
+  "upstream_path": "skills/pipecat-friday-agent",
+  "category": "voice-agents",
+  "description": "Build a low-latency, Iron Man-inspired tactical voice assistant (F.R.I.D.A.Y.) using Pipecat, Gemini, and OpenAI.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-10",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "saga-orchestration",
+  "upstream_path": "skills/saga-orchestration",
+  "category": "architecture",
+  "description": "Patterns for managing distributed transactions and long-running business processes.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

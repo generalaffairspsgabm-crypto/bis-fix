@@ -1,0 +1,26 @@
+{
+  "id": "devcontainer-setup",
+  "upstream_path": "skills/devcontainer-setup",
+  "category": "development",
+  "description": "Creates devcontainers with Claude Code, language-specific tooling (Python/Node/Rust/Go), and persistent volumes. Use when adding devcontainer support to a project, setting up isolated development environments, or configuring sandboxed Claude Code workspaces.",
+  "risk": "safe",
+  "source": "vibeship-spawner-skills (Apache 2.0)",
+  "date_added": "2026-03-06",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

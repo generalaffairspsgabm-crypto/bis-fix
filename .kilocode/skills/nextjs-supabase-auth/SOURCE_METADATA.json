@@ -1,0 +1,26 @@
+{
+  "id": "nextjs-supabase-auth",
+  "upstream_path": "skills/nextjs-supabase-auth",
+  "category": "uncategorized",
+  "description": "Expert integration of Supabase Auth with Next.js App Router",
+  "risk": "none",
+  "source": "vibeship-spawner-skills (Apache 2.0)",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

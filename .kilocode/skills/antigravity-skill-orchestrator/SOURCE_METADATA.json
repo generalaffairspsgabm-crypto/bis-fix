@@ -1,0 +1,26 @@
+{
+  "id": "antigravity-skill-orchestrator",
+  "upstream_path": "skills/antigravity-skill-orchestrator",
+  "category": "meta",
+  "description": "A meta-skill that understands task requirements, dynamically selects appropriate skills, tracks successful skill combinations using agent-memory-mcp, and prevents skill overuse for simple tasks.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-13",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

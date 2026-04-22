@@ -1,0 +1,26 @@
+{
+  "id": "x-twitter-scraper",
+  "upstream_path": "skills/x-twitter-scraper",
+  "category": "data",
+  "description": "X (Twitter) data platform skill — tweet search, user lookup, follower extraction, engagement metrics, giveaway draws, monitoring, webhooks, 19 extraction tools, MCP server.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-28",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

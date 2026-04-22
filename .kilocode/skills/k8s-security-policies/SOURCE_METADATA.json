@@ -1,0 +1,26 @@
+{
+  "id": "k8s-security-policies",
+  "upstream_path": "skills/k8s-security-policies",
+  "category": "devops",
+  "description": "Comprehensive guide for implementing NetworkPolicy, PodSecurityPolicy, RBAC, and Pod Security Standards in Kubernetes.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 3,
+    "rewritten_frontmatter": true
+  }
+}

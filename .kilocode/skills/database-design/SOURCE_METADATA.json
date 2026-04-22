@@ -1,0 +1,26 @@
+{
+  "id": "database-design",
+  "upstream_path": "skills/database-design",
+  "category": "database-processing",
+  "description": "Database design principles and decision-making. Schema design, indexing strategy, ORM selection, serverless databases.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 8,
+    "rewritten_frontmatter": true
+  }
+}

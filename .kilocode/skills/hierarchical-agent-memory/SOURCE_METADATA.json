@@ -1,0 +1,28 @@
+{
+  "id": "hierarchical-agent-memory",
+  "upstream_path": "skills/hierarchical-agent-memory",
+  "category": "memory",
+  "description": "Scoped CLAUDE.md memory system that reduces context token spend. Creates directory-level context files, tracks savings via dashboard, and routes agents to the right sub-context.",
+  "risk": "safe",
+  "source": "https://github.com/kromahlusenii-ops/ham",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "blocked",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": [
+      "target_specific_home_path"
+    ]
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

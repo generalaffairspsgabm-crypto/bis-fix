@@ -1,0 +1,26 @@
+{
+  "id": "k6-load-testing",
+  "upstream_path": "skills/k6-load-testing",
+  "category": "testing",
+  "description": "Comprehensive k6 load testing skill for API, browser, and scalability testing. Write realistic load scenarios, analyze results, and integrate with CI/CD.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-13",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "terraform-skill",
+  "upstream_path": "skills/terraform-skill",
+  "category": "devops",
+  "description": "Terraform infrastructure as code best practices",
+  "risk": "safe",
+  "source": "https://github.com/antonbabenko/terraform-skill",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "skill-rails-upgrade",
+  "upstream_path": "skills/skill-rails-upgrade",
+  "category": "meta",
+  "description": "Analyze Rails apps and provide upgrade assessments",
+  "risk": "safe",
+  "source": "https://github.com/robzolkos/skill-rails-upgrade",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

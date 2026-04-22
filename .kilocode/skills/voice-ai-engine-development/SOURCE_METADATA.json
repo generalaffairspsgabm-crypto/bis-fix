@@ -1,0 +1,26 @@
+{
+  "id": "voice-ai-engine-development",
+  "upstream_path": "skills/voice-ai-engine-development",
+  "category": "ai-ml",
+  "description": "Build real-time conversational AI voice engines using async worker pipelines, streaming transcription, LLM agents, and TTS synthesis with interrupt handling and multi-provider support",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 9,
+    "rewritten_frontmatter": true
+  }
+}

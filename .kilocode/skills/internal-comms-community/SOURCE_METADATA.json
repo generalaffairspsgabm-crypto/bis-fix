@@ -1,0 +1,26 @@
+{
+  "id": "internal-comms-community",
+  "upstream_path": "skills/internal-comms-community",
+  "category": "content",
+  "description": "To write internal communications, use this skill for:",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "writing-skills",
+  "upstream_path": "skills/writing-skills",
+  "category": "meta",
+  "description": "Use when creating, updating, or improving agent skills.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 21,
+    "rewritten_frontmatter": true
+  }
+}

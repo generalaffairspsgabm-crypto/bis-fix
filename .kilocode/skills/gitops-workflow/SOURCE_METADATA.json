@@ -1,0 +1,26 @@
+{
+  "id": "gitops-workflow",
+  "upstream_path": "skills/gitops-workflow",
+  "category": "devops",
+  "description": "Complete guide to implementing GitOps workflows with ArgoCD and Flux for automated Kubernetes deployments.",
+  "risk": "critical",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 3,
+    "rewritten_frontmatter": true
+  }
+}

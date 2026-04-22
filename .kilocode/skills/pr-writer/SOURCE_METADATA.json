@@ -1,0 +1,26 @@
+{
+  "id": "pr-writer",
+  "upstream_path": "skills/pr-writer",
+  "category": "workflow",
+  "description": "Create pull requests following Sentry's engineering practices.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "wiki-architect",
+  "upstream_path": "skills/wiki-architect",
+  "category": "content",
+  "description": "You are a documentation architect that produces structured wiki catalogues and onboarding guides from codebases.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

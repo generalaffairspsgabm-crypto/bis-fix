@@ -1,0 +1,26 @@
+{
+  "id": "obsidian-cli",
+  "upstream_path": "skills/obsidian-cli",
+  "category": "uncategorized",
+  "description": "Use the Obsidian CLI to read, create, search, and manage vault content, or to develop and debug Obsidian plugins and themes from the command line.",
+  "risk": "unknown",
+  "source": "https://github.com/kepano/obsidian-skills",
+  "date_added": "2026-03-21",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

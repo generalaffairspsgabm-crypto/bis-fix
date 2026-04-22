@@ -1,0 +1,26 @@
+{
+  "id": "github",
+  "upstream_path": "skills/github",
+  "category": "uncategorized",
+  "description": "Use the `gh` CLI for issues, pull requests, Actions runs, and GitHub API queries.",
+  "risk": "safe",
+  "source": "Dimillian/Skills (MIT)",
+  "date_added": "2026-03-25",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 2,
+    "rewritten_frontmatter": true
+  }
+}

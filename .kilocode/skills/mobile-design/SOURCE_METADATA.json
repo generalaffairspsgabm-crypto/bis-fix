@@ -1,0 +1,26 @@
+{
+  "id": "mobile-design",
+  "upstream_path": "skills/mobile-design",
+  "category": "mobile",
+  "description": "(Mobile-First · Touch-First · Platform-Respectful)",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 14,
+    "rewritten_frontmatter": true
+  }
+}

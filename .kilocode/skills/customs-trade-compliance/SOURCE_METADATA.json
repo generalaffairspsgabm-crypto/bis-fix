@@ -1,0 +1,26 @@
+{
+  "id": "customs-trade-compliance",
+  "upstream_path": "skills/customs-trade-compliance",
+  "category": "legal",
+  "description": "Codified expertise for customs documentation, tariff classification, duty optimisation, restricted party screening, and regulatory compliance across multiple jurisdictions.",
+  "risk": "safe",
+  "source": "https://github.com/ai-evos/agent-skills",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 4,
+    "rewritten_frontmatter": true
+  }
+}

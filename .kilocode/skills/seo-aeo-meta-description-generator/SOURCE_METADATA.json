@@ -1,0 +1,26 @@
+{
+  "id": "seo-aeo-meta-description-generator",
+  "upstream_path": "skills/seo-aeo-meta-description-generator",
+  "category": "uncategorized",
+  "description": "Writes 3 title tag variants and 3 meta description variants per page with SERP preview, OG tags, and Twitter Card tags. Activate when the user wants to write meta tags, title tags, or social sharing tags for any page.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-04-01",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

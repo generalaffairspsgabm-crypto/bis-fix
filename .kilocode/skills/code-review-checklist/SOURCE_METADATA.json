@@ -1,0 +1,26 @@
+{
+  "id": "code-review-checklist",
+  "upstream_path": "skills/code-review-checklist",
+  "category": "code-quality",
+  "description": "Comprehensive checklist for conducting thorough code reviews covering functionality, security, performance, and maintainability",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

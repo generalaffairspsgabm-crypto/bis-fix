@@ -1,0 +1,26 @@
+{
+  "id": "bash-scripting",
+  "upstream_path": "skills/bash-scripting",
+  "category": "granular-workflow-bundle",
+  "description": "Bash scripting workflow for creating production-ready shell scripts with defensive patterns, error handling, and testing.",
+  "risk": "safe",
+  "source": "personal",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "diary",
+  "upstream_path": "skills/diary",
+  "category": "meta",
+  "description": "Unified Diary System: A context-preserving automated logger for multi-project development.",
+  "risk": "safe",
+  "source": "self",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "blocked",
+      "claude": "blocked"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": [
+      "undeclared_runtime_dependency"
+    ]
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 12,
+    "rewritten_frontmatter": true
+  }
+}

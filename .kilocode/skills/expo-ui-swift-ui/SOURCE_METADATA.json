@@ -1,0 +1,26 @@
+{
+  "id": "expo-ui-swift-ui",
+  "upstream_path": "skills/expo-ui-swift-ui",
+  "category": "mobile",
+  "description": "expo-ui-swift-ui",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

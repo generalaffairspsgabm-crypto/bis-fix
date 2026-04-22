@@ -1,0 +1,26 @@
+{
+  "id": "bdistill-knowledge-extraction",
+  "upstream_path": "skills/bdistill-knowledge-extraction",
+  "category": "ai-research",
+  "description": "Extract structured domain knowledge from AI models in-session or from local open-source models via Ollama. No API key needed.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-20",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

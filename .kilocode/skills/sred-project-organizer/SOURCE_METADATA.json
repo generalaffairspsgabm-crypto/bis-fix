@@ -1,0 +1,26 @@
+{
+  "id": "sred-project-organizer",
+  "upstream_path": "skills/sred-project-organizer",
+  "category": "project-management",
+  "description": "Take a list of projects and their related documentation, and organize them into the SRED format for submission.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": null,
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

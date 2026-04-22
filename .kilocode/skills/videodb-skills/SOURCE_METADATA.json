@@ -1,0 +1,26 @@
+{
+  "id": "videodb-skills",
+  "upstream_path": "skills/videodb-skills",
+  "category": "media",
+  "description": "Upload, stream, search, edit, transcribe, and generate AI video and audio using the VideoDB SDK.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

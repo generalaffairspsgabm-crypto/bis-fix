@@ -1,0 +1,26 @@
+{
+  "id": "clarvia-aeo-check",
+  "upstream_path": "skills/clarvia-aeo-check",
+  "category": "tool-quality",
+  "description": "Score any MCP server, API, or CLI for agent-readiness using Clarvia AEO (Agent Experience Optimization). Search 15,400+ indexed tools before adding them to your workflow.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-03-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "slack-gif-creator",
+  "upstream_path": "skills/slack-gif-creator",
+  "category": "uncategorized",
+  "description": "A toolkit providing utilities and knowledge for creating animated GIFs optimized for Slack.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "blocked",
+      "claude": "blocked"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": [
+      "undeclared_runtime_dependency"
+    ]
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 7,
+    "rewritten_frontmatter": true
+  }
+}

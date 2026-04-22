@@ -1,0 +1,26 @@
+{
+  "id": "content-creator",
+  "upstream_path": "skills/content-creator",
+  "category": "marketing",
+  "description": "Professional-grade brand voice analysis, SEO optimization, and platform-specific content frameworks.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 7,
+    "rewritten_frontmatter": true
+  }
+}

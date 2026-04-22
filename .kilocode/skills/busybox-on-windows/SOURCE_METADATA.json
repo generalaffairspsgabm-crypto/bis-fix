@@ -1,0 +1,26 @@
+{
+  "id": "busybox-on-windows",
+  "upstream_path": "skills/busybox-on-windows",
+  "category": "development",
+  "description": "How to use a Win32 build of BusyBox to run many of the standard UNIX command line tools on Windows.",
+  "risk": "safe",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

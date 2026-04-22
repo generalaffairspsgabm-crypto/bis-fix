@@ -1,0 +1,26 @@
+{
+  "id": "frontend-slides",
+  "upstream_path": "skills/frontend-slides",
+  "category": "presentation-processing",
+  "description": "Create stunning, animation-rich HTML presentations from scratch or by converting PowerPoint files.",
+  "risk": "safe",
+  "source": "https://github.com/zarazhangrui/frontend-slides",
+  "date_added": "2026-03-07",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 6,
+    "rewritten_frontmatter": true
+  }
+}

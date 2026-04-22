@@ -1,0 +1,26 @@
+{
+  "id": "skill-seekers",
+  "upstream_path": "skills/skill-seekers",
+  "category": "meta",
+  "description": "-Automatically convert documentation websites, GitHub repositories, and PDFs into Claude AI skills in minutes.",
+  "risk": "safe",
+  "source": "https://github.com/yusufkaraaslan/Skill_Seekers",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}

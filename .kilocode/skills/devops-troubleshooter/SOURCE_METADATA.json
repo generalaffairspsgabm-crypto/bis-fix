@@ -1,0 +1,26 @@
+{
+  "id": "devops-troubleshooter",
+  "upstream_path": "skills/devops-troubleshooter",
+  "category": "devops",
+  "description": "Expert DevOps troubleshooter specializing in rapid incident response, advanced debugging, and modern observability.",
+  "risk": "unknown",
+  "source": "community",
+  "date_added": "2026-02-27",
+  "plugin": {
+    "targets": {
+      "codex": "supported",
+      "claude": "supported"
+    },
+    "setup": {
+      "type": "none",
+      "summary": "",
+      "docs": null
+    },
+    "reasons": []
+  },
+  "conversion": {
+    "mode": "skip",
+    "copied_files": 1,
+    "rewritten_frontmatter": true
+  }
+}
