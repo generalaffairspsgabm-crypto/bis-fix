@@ -31,7 +31,9 @@
       "mcp__plugin_playwright_playwright__browser_snapshot",
       "mcp__plugin_playwright_playwright__browser_fill_form",
       "mcp__plugin_playwright_playwright__browser_click",
-      "mcp__plugin_playwright_playwright__browser_console_messages"
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{\"nik\":\"1234567890123456\",\"password\":\"password123\"}')",
+      "Bash(curl -s -X DELETE http://localhost:3000/api/hr/master/divisi/1 -H \"Authorization: Bearer $\\(curl -s -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{\"nik\":\"1234567890123456\",\"password\":\"password123\"}')"
     ]
   }
 }

@@ -85,10 +85,11 @@ class MasterDataService {
         try {
             await item.destroy();
         } catch (err: any) {
+            const code = err.parent?.code || err.original?.code;
             if (
                 err.name === 'SequelizeForeignKeyConstraintError' ||
-                err.parent?.code === '23503' ||
-                err.original?.code === '23503'
+                code === '23503' ||
+                code === '23001'
             ) {
                 const error: any = new Error(
                     `Tidak dapat menghapus data ${model.name} karena masih digunakan oleh data lain.`
