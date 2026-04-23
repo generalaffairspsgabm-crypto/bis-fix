@@ -74,10 +74,18 @@ app.use((err: any, req: express.Request, res: express.Response, _next: express.N
         err.parent?.code === '23001' ||
         err.original?.code === '23001'
     ) {
-        return res.status(400).json({
+        return res.status(409).json({
             status: 'error',
             message: 'Tidak dapat menghapus atau mengubah data karena masih digunakan oleh data lain.',
             error: env.nodeEnv === 'development' ? err.message : undefined,
+        });
+    }
+
+    // Handle errors with custom statusCode (e.g. from service layer)
+    if (err.statusCode) {
+        return res.status(err.statusCode).json({
+            status: 'error',
+            message: err.message,
         });
     }
 
