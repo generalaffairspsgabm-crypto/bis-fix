@@ -1,19 +1,31 @@
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import UserProfileDropdown from '../auth/UserProfileDropdown';
 import { useAuthStore } from '../../stores/authStore';
 
+const MODULE_HEADERS: Record<string, { title: string; links: { label: string; href: string }[] }> = {
+    hr: { title: 'Human Resources', links: [{ label: 'Direktori', href: '#' }, { label: 'Organisasi', href: '#' }] },
+    inventory: { title: 'Inventory Management', links: [{ label: 'Stok', href: '#' }, { label: 'Laporan', href: '#' }] },
+    settings: { title: 'Pengaturan Sistem', links: [{ label: 'Konfigurasi', href: '#' }] },
+};
+
 const Header = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { user } = useAuthStore();
+
+    const activeModule = location.pathname.startsWith('/inventory') ? 'inventory'
+        : location.pathname.startsWith('/settings') ? 'settings' : 'hr';
+    const config = MODULE_HEADERS[activeModule];
 
     return (
         <header className="h-20 border-b border-[#e7ebf3] dark:border-[#2a3447] bg-white dark:bg-[#161e2e] flex items-center justify-between px-8 sticky top-0 z-10 shrink-0 shadow-sm/5">
             <div className="flex items-center gap-4">
-                <h2 className="text-xl font-extrabold text-[#0d121b] dark:text-white tracking-tight">Profil Karyawan</h2>
+                <h2 className="text-xl font-extrabold text-[#0d121b] dark:text-white tracking-tight">{config.title}</h2>
                 <nav className="hidden lg:flex items-center gap-8 ml-10">
-                    <a className="text-[13px] font-bold text-[#4c669a] hover:text-primary transition-all uppercase tracking-widest" href="#">Direktori</a>
-                    <a className="text-[13px] font-bold text-[#4c669a] hover:text-primary transition-all uppercase tracking-widest" href="#">Organisasi</a>
+                    {config.links.map(link => (
+                        <a key={link.label} className="text-[13px] font-bold text-[#4c669a] hover:text-primary transition-all uppercase tracking-widest" href={link.href}>{link.label}</a>
+                    ))}
                 </nav>
             </div>
             <div className="flex items-center gap-6">

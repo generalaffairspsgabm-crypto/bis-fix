@@ -42,6 +42,12 @@ const InvUomPage = lazy(() => import('./pages/inventory/masterdata/UomPage'));
 const InvProdukPage = lazy(() => import('./pages/inventory/masterdata/ProdukPage'));
 const InvGudangPage = lazy(() => import('./pages/inventory/masterdata/GudangPage'));
 
+// Inventory Stock Pages
+const StokPage = lazy(() => import('./pages/inventory/stok/StokPage'));
+const TransaksiFormPage = lazy(() => import('./pages/inventory/stok/TransaksiFormPage'));
+const TransaksiListPage = lazy(() => import('./pages/inventory/stok/TransaksiListPage'));
+const KartuStokPage = lazy(() => import('./pages/inventory/stok/KartuStokPage'));
+
 function App() {
     return (
         <Suspense fallback={<LoadingSpinner />}>
@@ -184,6 +190,20 @@ function App() {
                         } />
                         <Route path="master-data/gudang" element={
                             <PermissionGuard resource={RESOURCES.INVENTORY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><InvGudangPage /></PermissionGuard>
+                        } />
+
+                        {/* Stock Management Routes */}
+                        <Route path="stok" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.READ} redirectTo="/403"><StokPage /></PermissionGuard>
+                        } />
+                        <Route path="transaksi" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.READ} redirectTo="/403"><TransaksiListPage /></PermissionGuard>
+                        } />
+                        <Route path="transaksi/baru" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.CREATE} redirectTo="/403"><TransaksiFormPage /></PermissionGuard>
+                        } />
+                        <Route path="kartu-stok" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.READ} redirectTo="/403"><KartuStokPage /></PermissionGuard>
                         } />
                     </Route>
 

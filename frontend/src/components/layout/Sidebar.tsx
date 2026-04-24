@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { usePermission } from '../../hooks/usePermission';
@@ -17,9 +17,25 @@ interface NavItem {
     subItems?: NavItem[];
 }
 
+type ActiveModule = 'hr' | 'inventory' | 'settings';
+
+const MODULE_CONFIG: Record<ActiveModule, { title: string; subtitle: string; icon: string; color: string }> = {
+    hr: { title: 'Human Resources', subtitle: 'Manajemen SDM', icon: 'groups', color: 'bg-primary' },
+    inventory: { title: 'Inventory', subtitle: 'Manajemen Inventaris', icon: 'inventory_2', color: 'bg-orange-500' },
+    settings: { title: 'Pengaturan', subtitle: 'Konfigurasi Sistem', icon: 'settings', color: 'bg-slate-600' },
+};
+
 const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
-    const [openMenus, setOpenMenus] = useState<string[]>(['Master Data', 'Manajemen Karyawan', 'Inventory', 'Pengaturan']);
+    const location = useLocation();
     const { can } = usePermission();
+
+    const activeModule: ActiveModule = useMemo(() => {
+        if (location.pathname.startsWith('/inventory')) return 'inventory';
+        if (location.pathname.startsWith('/settings')) return 'settings';
+        return 'hr';
+    }, [location.pathname]);
+
+    const [openMenus, setOpenMenus] = useState<string[]>(['Master Data', 'Manajemen Karyawan', 'Master Data Inventory', 'Manajemen Stok', 'Pengaturan']);
 
     const toggleMenu = (name: string) => {
         setOpenMenus(prev =>
@@ -27,103 +43,132 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         );
     };
 
-    const navItems = useMemo(() => {
-        const items: NavItem[] = [
-            {
-                name: 'Halaman Utama',
-                path: '/welcome',
-                icon: 'dashboard_customize',
-            },
-            {
-                name: 'Dashboard',
-                path: '/dashboard',
-                icon: 'dashboard',
-                permission: { resource: RESOURCES.DASHBOARD, action: ACTIONS.READ }
-            },
-            {
-                name: 'Master Data',
-                icon: 'database',
-                // path: '/hr/master-data', // Main item might not have path if it has subitems in this design? Kept original.
-                permission: { resource: RESOURCES.MASTER_DATA, action: ACTIONS.READ },
-                subItems: [
-                    { name: 'Divisi', path: '/hr/master-data/divisi', icon: 'domain' },
-                    { name: 'Departemen', path: '/hr/master-data/department', icon: 'groups' },
-                    { name: 'Posisi Jabatan', path: '/hr/master-data/posisi-jabatan', icon: 'badge' },
-                    { name: 'Kategori Pangkat', path: '/hr/master-data/kategori-pangkat', icon: 'military_tech' },
-                    { name: 'Golongan', path: '/hr/master-data/golongan', icon: 'stars' },
-                    { name: 'Sub Golongan', path: '/hr/master-data/sub-golongan', icon: 'hotel_class' },
-                    { name: 'Jenis Hubungan', path: '/hr/master-data/jenis-hubungan-kerja', icon: 'handshake' },
-                    { name: 'Tag', path: '/hr/master-data/tag', icon: 'label' },
-                    { name: 'Lokasi Kerja', path: '/hr/master-data/lokasi-kerja', icon: 'location_on' },
-                    { name: 'Status Karyawan', path: '/hr/master-data/status-karyawan', icon: 'verified_user' },
-                ]
-            },
-            {
-                name: 'Inventory',
-                icon: 'inventory_2',
-                permission: { resource: RESOURCES.INVENTORY_MASTER_DATA, action: ACTIONS.READ },
-                subItems: [
-                    { name: 'Kategori', path: '/inventory/master-data/kategori', icon: 'category' },
-                    { name: 'Sub Kategori', path: '/inventory/master-data/sub-kategori', icon: 'account_tree' },
-                    { name: 'Brand', path: '/inventory/master-data/brand', icon: 'branding_watermark' },
-                    { name: 'UOM', path: '/inventory/master-data/uom', icon: 'straighten' },
-                    { name: 'Produk', path: '/inventory/master-data/produk', icon: 'shopping_bag' },
-                    { name: 'Gudang', path: '/inventory/master-data/gudang', icon: 'warehouse' },
-                ]
-            },
-            {
-                name: 'Manajemen Karyawan',
-                icon: 'groups',
-                permission: { resource: RESOURCES.EMPLOYEES, action: ACTIONS.READ },
-                subItems: [
-                    {
-                        name: 'Karyawan',
-                        path: '/hr/employees',
-                        icon: 'person',
-                        permission: { resource: RESOURCES.EMPLOYEES, action: ACTIONS.READ }
-                    }
-                ]
-            },
-            {
-                name: 'Absensi & Cuti',
-                path: '/hr/attendance',
-                icon: 'calendar_month',
-                // permission: { resource: 'attendance', action: 'read' } // TODO: Define attendance permissions
-            },
-            {
-                name: 'Riwayat Aktivitas',
-                path: '/hr/audit-logs',
-                icon: 'history',
-                permission: { resource: RESOURCES.AUDIT_LOGS, action: ACTIONS.READ }
-            },
-            {
-                name: 'Pengaturan',
-                icon: 'settings',
-                // path: '/settings',
-                subItems: [
-                    {
-                        name: 'Manajemen User',
-                        path: '/settings/users',
-                        icon: 'manage_accounts',
-                        permission: { resource: RESOURCES.USERS, action: ACTIONS.READ }
-                    },
-                    {
-                        name: 'Role & Akses',
-                        path: '/settings/roles',
-                        icon: 'admin_panel_settings',
-                        permission: { resource: RESOURCES.ROLES, action: ACTIONS.READ }
-                    }
-                ]
-            }
-        ];
+    const hrNavItems: NavItem[] = [
+        {
+            name: 'Halaman Utama',
+            path: '/welcome',
+            icon: 'home',
+        },
+        {
+            name: 'Dashboard',
+            path: '/dashboard',
+            icon: 'dashboard',
+            permission: { resource: RESOURCES.DASHBOARD, action: ACTIONS.READ }
+        },
+        {
+            name: 'Master Data',
+            icon: 'database',
+            permission: { resource: RESOURCES.MASTER_DATA, action: ACTIONS.READ },
+            subItems: [
+                { name: 'Divisi', path: '/hr/master-data/divisi', icon: 'domain' },
+                { name: 'Departemen', path: '/hr/master-data/department', icon: 'groups' },
+                { name: 'Posisi Jabatan', path: '/hr/master-data/posisi-jabatan', icon: 'badge' },
+                { name: 'Kategori Pangkat', path: '/hr/master-data/kategori-pangkat', icon: 'military_tech' },
+                { name: 'Golongan', path: '/hr/master-data/golongan', icon: 'stars' },
+                { name: 'Sub Golongan', path: '/hr/master-data/sub-golongan', icon: 'hotel_class' },
+                { name: 'Jenis Hubungan', path: '/hr/master-data/jenis-hubungan-kerja', icon: 'handshake' },
+                { name: 'Tag', path: '/hr/master-data/tag', icon: 'label' },
+                { name: 'Lokasi Kerja', path: '/hr/master-data/lokasi-kerja', icon: 'location_on' },
+                { name: 'Status Karyawan', path: '/hr/master-data/status-karyawan', icon: 'verified_user' },
+            ]
+        },
+        {
+            name: 'Manajemen Karyawan',
+            icon: 'groups',
+            permission: { resource: RESOURCES.EMPLOYEES, action: ACTIONS.READ },
+            subItems: [
+                {
+                    name: 'Karyawan',
+                    path: '/hr/employees',
+                    icon: 'person',
+                    permission: { resource: RESOURCES.EMPLOYEES, action: ACTIONS.READ }
+                }
+            ]
+        },
+        {
+            name: 'Absensi & Cuti',
+            path: '/hr/attendance',
+            icon: 'calendar_month',
+        },
+        {
+            name: 'Riwayat Aktivitas',
+            path: '/hr/audit-logs',
+            icon: 'history',
+            permission: { resource: RESOURCES.AUDIT_LOGS, action: ACTIONS.READ }
+        },
+    ];
 
-        // Filter items based on permissions
+    const inventoryNavItems: NavItem[] = [
+        {
+            name: 'Halaman Utama',
+            path: '/welcome',
+            icon: 'home',
+        },
+        {
+            name: 'Master Data Inventory',
+            icon: 'database',
+            permission: { resource: RESOURCES.INVENTORY_MASTER_DATA, action: ACTIONS.READ },
+            subItems: [
+                { name: 'Kategori', path: '/inventory/master-data/kategori', icon: 'category' },
+                { name: 'Sub Kategori', path: '/inventory/master-data/sub-kategori', icon: 'account_tree' },
+                { name: 'Brand', path: '/inventory/master-data/brand', icon: 'branding_watermark' },
+                { name: 'UOM', path: '/inventory/master-data/uom', icon: 'straighten' },
+                { name: 'Produk', path: '/inventory/master-data/produk', icon: 'shopping_bag' },
+                { name: 'Gudang', path: '/inventory/master-data/gudang', icon: 'warehouse' },
+            ]
+        },
+        {
+            name: 'Manajemen Stok',
+            icon: 'inventory',
+            permission: { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.READ },
+            subItems: [
+                { name: 'Stok Inventaris', path: '/inventory/stok', icon: 'shelves' },
+                { name: 'Transaksi Stok', path: '/inventory/transaksi', icon: 'swap_horiz' },
+                { name: 'Kartu Stok', path: '/inventory/kartu-stok', icon: 'receipt_long' },
+            ]
+        },
+    ];
+
+    const settingsNavItems: NavItem[] = [
+        {
+            name: 'Halaman Utama',
+            path: '/welcome',
+            icon: 'home',
+        },
+        {
+            name: 'Pengaturan',
+            icon: 'settings',
+            subItems: [
+                {
+                    name: 'Manajemen User',
+                    path: '/settings/users',
+                    icon: 'manage_accounts',
+                    permission: { resource: RESOURCES.USERS, action: ACTIONS.READ }
+                },
+                {
+                    name: 'Role & Akses',
+                    path: '/settings/roles',
+                    icon: 'admin_panel_settings',
+                    permission: { resource: RESOURCES.ROLES, action: ACTIONS.READ }
+                }
+            ]
+        }
+    ];
+
+    const navItems = useMemo(() => {
+        const itemsMap: Record<ActiveModule, NavItem[]> = {
+            hr: hrNavItems,
+            inventory: inventoryNavItems,
+            settings: settingsNavItems,
+        };
+
+        const items = itemsMap[activeModule];
+
         return items.filter(item => {
             if (item.permission && !can(item.permission.resource, item.permission.action)) {
                 return false;
             }
 
-            // Filter subItems if they exist
             if (item.subItems) {
                 const visibleSubItems = item.subItems.filter(sub => {
                     if (sub.permission) {
@@ -133,14 +178,15 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
                 });
 
                 if (visibleSubItems.length === 0) return false;
-
-                // Mutation via filter return new object usually preferred, but for now reassignment to local copy or mutation
                 item.subItems = visibleSubItems;
             }
 
             return true;
         });
-    }, [can]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [can, activeModule]);
+
+    const moduleConfig = MODULE_CONFIG[activeModule];
 
     return (
         <aside className={clsx(
@@ -151,19 +197,19 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
                 {/* Logo Section */}
                 {!collapsed && (
                     <div className="flex items-center gap-3">
-                        <div className="size-10 bg-primary rounded-lg flex items-center justify-center text-white shrink-0">
-                            <span className="material-symbols-outlined text-2xl">corporate_fare</span>
+                        <div className={clsx("size-10 rounded-lg flex items-center justify-center text-white shrink-0", moduleConfig.color)}>
+                            <span className="material-symbols-outlined text-2xl">{moduleConfig.icon}</span>
                         </div>
                         <div className="flex flex-col overflow-hidden">
-                            <h1 className="text-[#0d121b] dark:text-white text-base font-bold leading-none truncate">PSG HRMS</h1>
-                            <p className="text-[#4c669a] text-xs font-normal mt-1 truncate">Enterprise System</p>
+                            <h1 className="text-[#0d121b] dark:text-white text-base font-bold leading-none truncate">{moduleConfig.title}</h1>
+                            <p className="text-[#4c669a] text-xs font-normal mt-1 truncate">{moduleConfig.subtitle}</p>
                         </div>
                     </div>
                 )}
                 {collapsed && (
                     <div className="flex justify-center">
-                        <div className="size-10 bg-primary rounded-lg flex items-center justify-center text-white shrink-0">
-                            <span className="material-symbols-outlined text-2xl">corporate_fare</span>
+                        <div className={clsx("size-10 rounded-lg flex items-center justify-center text-white shrink-0", moduleConfig.color)}>
+                            <span className="material-symbols-outlined text-2xl">{moduleConfig.icon}</span>
                         </div>
                     </div>
                 )}

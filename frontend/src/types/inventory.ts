@@ -29,3 +29,133 @@ export interface InvGudang extends MasterData {
     penanggung_jawab?: { id: number; nama_lengkap: string };
     department?: { id: number; nama: string };
 }
+
+// === Stock Management Types ===
+
+export interface InvStok {
+    id: number;
+    produk_id: number;
+    gudang_id: number;
+    uom_id: number;
+    jumlah: number;
+    created_at: string;
+    updated_at: string;
+    produk?: InvProduk;
+    gudang?: InvGudang;
+    uom?: InvUom;
+}
+
+export type TransaksiTipe = 'Masuk' | 'Keluar' | 'Adjustment';
+export type TransaksiSubTipe = 'Supplier' | 'Transfer Masuk' | 'Retur Karyawan' | 'Ke Karyawan' | 'Transfer Gudang' | 'Disposal' | 'Opname';
+export type SerialNumberStatus = 'Tersedia' | 'Digunakan' | 'Rusak' | 'Disposed';
+
+export interface InvTransaksi {
+    id: number;
+    code: string;
+    tipe: TransaksiTipe;
+    sub_tipe: TransaksiSubTipe;
+    tanggal: string;
+    gudang_id: number;
+    gudang_tujuan_id?: number | null;
+    karyawan_id?: number | null;
+    supplier_nama?: string | null;
+    no_referensi?: string | null;
+    catatan?: string | null;
+    created_by: number;
+    created_at: string;
+    updated_at: string;
+    gudang?: { id: number; code: string; nama: string };
+    gudang_tujuan?: { id: number; code: string; nama: string } | null;
+    karyawan?: { id: number; nama_lengkap: string; nomor_induk_karyawan?: string } | null;
+    creator?: { id: number; nama: string };
+    details?: InvTransaksiDetail[];
+}
+
+export interface InvTransaksiDetail {
+    id: number;
+    transaksi_id: number;
+    produk_id: number;
+    uom_id: number;
+    jumlah: number;
+    catatan?: string | null;
+    created_at: string;
+    updated_at: string;
+    produk?: { id: number; code: string; nama: string; has_serial_number: boolean };
+    uom?: { id: number; nama: string };
+    transaksi?: InvTransaksi;
+}
+
+export interface InvSerialNumber {
+    id: number;
+    produk_id: number;
+    serial_number: string;
+    gudang_id?: number | null;
+    karyawan_id?: number | null;
+    status: SerialNumberStatus;
+    transaksi_masuk_id: number;
+    transaksi_terakhir_id: number;
+    created_at: string;
+    updated_at: string;
+    produk?: { id: number; code: string; nama: string };
+    gudang?: { id: number; code: string; nama: string } | null;
+    karyawan?: { id: number; nama_lengkap: string; nomor_induk_karyawan?: string } | null;
+}
+
+export interface TransaksiDetailPayload {
+    produk_id: number;
+    uom_id: number;
+    jumlah: number;
+    catatan?: string;
+    serial_numbers?: string[];
+}
+
+export interface TransaksiPayload {
+    tipe: TransaksiTipe;
+    sub_tipe: TransaksiSubTipe;
+    tanggal: string;
+    gudang_id: number;
+    gudang_tujuan_id?: number | null;
+    karyawan_id?: number | null;
+    supplier_nama?: string | null;
+    no_referensi?: string | null;
+    catatan?: string | null;
+    details: TransaksiDetailPayload[];
+}
+
+export interface StokFilter {
+    gudang_id?: number;
+    produk_id?: number;
+    search?: string;
+    page?: number;
+    limit?: number;
+}
+
+export interface TransaksiFilter {
+    tipe?: TransaksiTipe;
+    sub_tipe?: TransaksiSubTipe;
+    gudang_id?: number;
+    tanggal_dari?: string;
+    tanggal_sampai?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+}
+
+export interface SerialNumberFilter {
+    produk_id?: number;
+    gudang_id?: number;
+    karyawan_id?: number;
+    status?: SerialNumberStatus;
+    search?: string;
+    page?: number;
+    limit?: number;
+}
+
+export interface KartuStokFilter {
+    produk_id: number;
+    gudang_id?: number;
+    dari?: string;
+    sampai?: string;
+    page?: number;
+    limit?: number;
+}
