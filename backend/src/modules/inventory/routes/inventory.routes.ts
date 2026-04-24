@@ -3,6 +3,10 @@ import { validateInventoryMasterData } from '../../../shared/middleware/validate
 import { validateInventoryStok } from '../../../shared/middleware/validateInventoryStok';
 import masterDataController from '../controllers/master-data.controller';
 import stokController from '../controllers/stok.controller';
+import dashboardController from '../controllers/dashboard.controller';
+import exportController from '../controllers/export.controller';
+import employeeAssetController from '../controllers/employee-asset.controller';
+import labelController from '../controllers/label.controller';
 import { checkPermission } from '../../../shared/middleware/permission.middleware';
 import { authenticate } from '../../../shared/middleware/auth.middleware';
 import { RESOURCES, ACTIONS } from '../../../shared/constants/permissions';
@@ -100,6 +104,104 @@ router.get(
     '/kartu-stok',
     checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
     (req, res, next) => stokController.getKartuStok(req, res, next)
+);
+
+// === Dashboard Routes ===
+
+router.get(
+    '/dashboard/stats',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => dashboardController.getStats(req, res, next)
+);
+
+router.get(
+    '/dashboard/stock-by-warehouse',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => dashboardController.getStockByWarehouse(req, res, next)
+);
+
+router.get(
+    '/dashboard/category-breakdown',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => dashboardController.getCategoryBreakdown(req, res, next)
+);
+
+router.get(
+    '/dashboard/recent-transactions',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => dashboardController.getRecentTransactions(req, res, next)
+);
+
+router.get(
+    '/dashboard/low-stock',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => dashboardController.getLowStockItems(req, res, next)
+);
+
+// === Export Routes ===
+
+router.get(
+    '/export/stok/excel',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportStokExcel(req, res, next)
+);
+
+router.get(
+    '/export/stok/pdf',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportStokPDF(req, res, next)
+);
+
+// === Employee Asset Routes ===
+
+router.get(
+    '/employee/:employeeId/assets',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => employeeAssetController.getAssets(req, res, next)
+);
+
+router.get(
+    '/employee/:employeeId/asset-history',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => employeeAssetController.getHistory(req, res, next)
+);
+
+router.get(
+    '/employee/:employeeId/berita-acara',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => employeeAssetController.downloadBeritaAcara(req, res, next)
+);
+
+router.get(
+    '/employee/:employeeId/berita-acara/:transaksiId',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => employeeAssetController.downloadBeritaAcara(req, res, next)
+);
+
+// === Label & QR Code Routes ===
+
+router.get(
+    '/label/produk/:id/qr',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => labelController.getProductQR(req, res, next)
+);
+
+router.get(
+    '/label/serial-number/:id/qr',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => labelController.getSerialNumberQR(req, res, next)
+);
+
+router.post(
+    '/label/print',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => labelController.printLabels(req, res, next)
+);
+
+router.get(
+    '/label/lookup',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => labelController.lookupQR(req, res, next)
 );
 
 export default router;

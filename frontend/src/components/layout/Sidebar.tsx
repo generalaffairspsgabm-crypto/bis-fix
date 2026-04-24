@@ -105,6 +105,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             icon: 'home',
         },
         {
+            name: 'Dashboard',
+            path: '/inventory/dashboard',
+            icon: 'dashboard',
+            permission: { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.READ },
+        },
+        {
             name: 'Master Data Inventory',
             icon: 'database',
             permission: { resource: RESOURCES.INVENTORY_MASTER_DATA, action: ACTIONS.READ },
@@ -125,6 +131,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
                 { name: 'Stok Inventaris', path: '/inventory/stok', icon: 'shelves' },
                 { name: 'Transaksi Stok', path: '/inventory/transaksi', icon: 'swap_horiz' },
                 { name: 'Kartu Stok', path: '/inventory/kartu-stok', icon: 'receipt_long' },
+                { name: 'Label & QR Code', path: '/inventory/label', icon: 'qr_code_2' },
             ]
         },
     ];

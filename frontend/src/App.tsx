@@ -48,6 +48,10 @@ const TransaksiFormPage = lazy(() => import('./pages/inventory/stok/TransaksiFor
 const TransaksiListPage = lazy(() => import('./pages/inventory/stok/TransaksiListPage'));
 const KartuStokPage = lazy(() => import('./pages/inventory/stok/KartuStokPage'));
 
+// Inventory Dashboard & Label Pages
+const InventoryDashboardPage = lazy(() => import('./pages/inventory/DashboardPage'));
+const LabelPage = lazy(() => import('./pages/inventory/stok/LabelPage'));
+
 function App() {
     return (
         <Suspense fallback={<LoadingSpinner />}>
@@ -172,7 +176,10 @@ function App() {
 
                     {/* Inventory Routes */}
                     <Route path="inventory">
-                        <Route index element={<Navigate to="master-data/kategori" replace />} />
+                        <Route index element={<Navigate to="dashboard" replace />} />
+                        <Route path="dashboard" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.READ} redirectTo="/403"><InventoryDashboardPage /></PermissionGuard>
+                        } />
                         <Route path="master-data/kategori" element={
                             <PermissionGuard resource={RESOURCES.INVENTORY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><InvKategoriPage /></PermissionGuard>
                         } />
@@ -204,6 +211,9 @@ function App() {
                         } />
                         <Route path="kartu-stok" element={
                             <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.READ} redirectTo="/403"><KartuStokPage /></PermissionGuard>
+                        } />
+                        <Route path="label" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.READ} redirectTo="/403"><LabelPage /></PermissionGuard>
                         } />
                     </Route>
 

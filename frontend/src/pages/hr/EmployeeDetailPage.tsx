@@ -14,6 +14,7 @@ import { EmployeeQRCode } from '../../components/hr/EmployeeQRCode';
 
 
 import EntityHistoryTimeline from '../../components/hr/EntityHistoryTimeline';
+import EmployeeAssetsTab from '../../components/inventory/EmployeeAssetsTab';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { usePermission } from '../../hooks/usePermission';
 import { RESOURCES, ACTIONS } from '../../types/permission';
@@ -405,6 +406,9 @@ const EmployeeDetailPage: React.FC = () => {
                     )}
                     {activeTab === 'documents' && (
                         <EmployeeDocumentsSection employeeId={employee.id} />
+                    )}
+                    {activeTab === 'assets' && (
+                        <EmployeeAssetsTab employeeId={employee.id} />
                     )}
                     {activeTab === 'history' && employee.id && (
                         <EntityHistoryTimeline entityType="employees" entityId={employee.id} />
