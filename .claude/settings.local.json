@@ -56,7 +56,10 @@
       "Bash(tasklist)",
       "Bash(taskkill *)",
       "Bash(cmd *)",
-      "Bash(python -c \"import json,sys; data=json.load\\(sys.stdin\\); text=data[0]['text']; print\\(text[:8000]\\)\")"
+      "Bash(python -c \"import json,sys; data=json.load\\(sys.stdin\\); text=data[0]['text']; print\\(text[:8000]\\)\")",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__evaluate_script",
+      "mcp__plugin_playwright_playwright__browser_press_key",
+      "mcp__plugin_playwright_playwright__browser_select_option"
     ]
   }
 }
