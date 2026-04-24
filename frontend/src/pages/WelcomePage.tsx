@@ -142,7 +142,9 @@ const WelcomePage = () => {
                         </div>
 
                         {/* Placeholder for other modules */}
-                        <div className="module-card group flex flex-col bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer hover:shadow-xl hover:border-primary/30 transition-all opacity-70">
+                        <div
+                            onClick={() => navigate('/inventory')}
+                            className="module-card group flex flex-col bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer hover:shadow-xl hover:border-primary/30 transition-all">
                             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-orange-50 dark:bg-orange-900/20 text-orange-600 group-hover:scale-110 transition-transform">
                                 <span className="material-symbols-outlined text-[32px]">inventory_2</span>
                             </div>
@@ -154,7 +156,7 @@ const WelcomePage = () => {
                             </div>
                             <div className="mt-auto flex items-center justify-between">
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600 bg-orange-50 dark:bg-orange-900/20 px-2 py-1 rounded">
-                                    Coming Soon
+                                    Active
                                 </span>
                                 <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">
                                     arrow_forward

@@ -34,6 +34,14 @@ const LokasiKerjaPage = lazy(() => import('./pages/hr/masterdata/LokasiKerjaPage
 const StatusKaryawanPage = lazy(() => import('./pages/hr/masterdata/StatusKaryawanPage'));
 const AuditLogPage = lazy(() => import('./pages/hr/AuditLogPage'));
 
+// Inventory Master Data Pages
+const InvKategoriPage = lazy(() => import('./pages/inventory/masterdata/KategoriPage'));
+const InvSubKategoriPage = lazy(() => import('./pages/inventory/masterdata/SubKategoriPage'));
+const InvBrandPage = lazy(() => import('./pages/inventory/masterdata/BrandPage'));
+const InvUomPage = lazy(() => import('./pages/inventory/masterdata/UomPage'));
+const InvProdukPage = lazy(() => import('./pages/inventory/masterdata/ProdukPage'));
+const InvGudangPage = lazy(() => import('./pages/inventory/masterdata/GudangPage'));
+
 function App() {
     return (
         <Suspense fallback={<LoadingSpinner />}>
@@ -153,6 +161,29 @@ function App() {
                             <PermissionGuard resource={RESOURCES.AUDIT_LOGS} action={ACTIONS.READ} redirectTo="/403">
                                 <AuditLogPage />
                             </PermissionGuard>
+                        } />
+                    </Route>
+
+                    {/* Inventory Routes */}
+                    <Route path="inventory">
+                        <Route index element={<Navigate to="master-data/kategori" replace />} />
+                        <Route path="master-data/kategori" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><InvKategoriPage /></PermissionGuard>
+                        } />
+                        <Route path="master-data/sub-kategori" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><InvSubKategoriPage /></PermissionGuard>
+                        } />
+                        <Route path="master-data/brand" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><InvBrandPage /></PermissionGuard>
+                        } />
+                        <Route path="master-data/uom" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><InvUomPage /></PermissionGuard>
+                        } />
+                        <Route path="master-data/produk" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><InvProdukPage /></PermissionGuard>
+                        } />
+                        <Route path="master-data/gudang" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><InvGudangPage /></PermissionGuard>
                         } />
                     </Route>
 

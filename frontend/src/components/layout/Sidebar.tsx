@@ -18,7 +18,7 @@ interface NavItem {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
-    const [openMenus, setOpenMenus] = useState<string[]>(['Master Data', 'Manajemen Karyawan', 'Pengaturan']);
+    const [openMenus, setOpenMenus] = useState<string[]>(['Master Data', 'Manajemen Karyawan', 'Inventory', 'Pengaturan']);
     const { can } = usePermission();
 
     const toggleMenu = (name: string) => {
@@ -56,6 +56,19 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
                     { name: 'Tag', path: '/hr/master-data/tag', icon: 'label' },
                     { name: 'Lokasi Kerja', path: '/hr/master-data/lokasi-kerja', icon: 'location_on' },
                     { name: 'Status Karyawan', path: '/hr/master-data/status-karyawan', icon: 'verified_user' },
+                ]
+            },
+            {
+                name: 'Inventory',
+                icon: 'inventory_2',
+                permission: { resource: RESOURCES.INVENTORY_MASTER_DATA, action: ACTIONS.READ },
+                subItems: [
+                    { name: 'Kategori', path: '/inventory/master-data/kategori', icon: 'category' },
+                    { name: 'Sub Kategori', path: '/inventory/master-data/sub-kategori', icon: 'account_tree' },
+                    { name: 'Brand', path: '/inventory/master-data/brand', icon: 'branding_watermark' },
+                    { name: 'UOM', path: '/inventory/master-data/uom', icon: 'straighten' },
+                    { name: 'Produk', path: '/inventory/master-data/produk', icon: 'shopping_bag' },
+                    { name: 'Gudang', path: '/inventory/master-data/gudang', icon: 'warehouse' },
                 ]
             },
             {

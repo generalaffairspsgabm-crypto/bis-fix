@@ -7,7 +7,8 @@ export const RESOURCES = {
     IMPORT: 'import',
     EXPORT: 'export',
     ROLES: 'roles',
-    USERS: 'users'
+    USERS: 'users',
+    INVENTORY_MASTER_DATA: 'inventory_master_data',
 } as const;
 
 export const ACTIONS = {
