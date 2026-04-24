@@ -39,6 +39,11 @@ export const getEntityName = (entityType: string, data: any): string => {
     if (entityType === 'posisi_jabatan') return data.nama_posisi || data.nama;
     if (entityType === 'lokasi_kerja') return data.nama_lokasi || data.nama;
 
+    // Inventory
+    if (entityType.startsWith('inv_')) {
+        return data.code ? `${data.nama || ''} (${data.code})`.trim() : (data.nama || `#${data.id}`);
+    }
+
     // Default fallback
     return data.nama || data.name || data.title || `#${data.id}`;
 };

@@ -19,6 +19,8 @@ export interface InvUom extends MasterData {}
 export interface InvProduk extends MasterData {
     brand_id: number;
     has_serial_number: boolean;
+    stok_minimum?: number | null;
+    gambar?: string | null;
     brand?: InvBrand;
 }
 
@@ -46,8 +48,16 @@ export interface InvStok {
 }
 
 export type TransaksiTipe = 'Masuk' | 'Keluar' | 'Adjustment';
-export type TransaksiSubTipe = 'Supplier' | 'Transfer Masuk' | 'Retur Karyawan' | 'Ke Karyawan' | 'Transfer Gudang' | 'Disposal' | 'Opname';
+export type TransaksiSubTipe = 'Supplier' | 'Transfer Masuk' | 'Retur Karyawan' | 'Ke Karyawan' | 'Transfer Gudang' | 'Disposal' | 'Opname' | 'Ke Gedung/Mess' | 'Rusak/Terbuang';
 export type SerialNumberStatus = 'Tersedia' | 'Digunakan' | 'Rusak' | 'Disposed';
+
+export interface TransaksiDokumen {
+    nama: string;
+    path: string;
+    size: number;
+    mimetype: string;
+    uploaded_at: string;
+}
 
 export interface InvTransaksi {
     id: number;
@@ -61,6 +71,7 @@ export interface InvTransaksi {
     supplier_nama?: string | null;
     no_referensi?: string | null;
     catatan?: string | null;
+    dokumen?: TransaksiDokumen[] | null;
     created_by: number;
     created_at: string;
     updated_at: string;

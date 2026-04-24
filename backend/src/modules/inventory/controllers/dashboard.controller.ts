@@ -41,8 +41,17 @@ class DashboardController {
 
     async getLowStockItems(req: Request, res: Response, next: NextFunction) {
         try {
-            const threshold = req.query.threshold ? Number(req.query.threshold) : 5;
-            const data = await dashboardService.getLowStockItems(threshold);
+            const data = await dashboardService.getLowStockItems();
+            res.json({ status: 'success', data });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getItemVelocity(req: Request, res: Response, next: NextFunction) {
+        try {
+            const days = req.query.days ? Number(req.query.days) : 90;
+            const data = await dashboardService.getItemVelocity(days);
             res.json({ status: 'success', data });
         } catch (error) {
             next(error);

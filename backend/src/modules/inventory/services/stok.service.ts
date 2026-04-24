@@ -11,6 +11,7 @@ import InvUom from '../models/Uom';
 import InvBrand from '../models/Brand';
 import Employee from '../../hr/models/Employee';
 import User from '../../auth/models/User';
+import notificationService from '../../../shared/services/notification.service';
 
 const CODE_PREFIX_MAP: Record<string, string> = {
     'Masuk': 'STM',
@@ -177,11 +178,14 @@ class StokService {
             // For transfer: create paired transaction
             if (payload.sub_tipe === 'Transfer Masuk' && payload.gudang_tujuan_id) {
                 await this.createPairedTransferKeluar(payload, transaksi, userId, t);
-            } else if (payload.sub_tipe === 'Transfer Gudang' && payload.gudang_tujuan_id) {
+            } else if ((payload.sub_tipe === 'Transfer Gudang' || payload.sub_tipe === 'Ke Gedung/Mess') && payload.gudang_tujuan_id) {
                 await this.createPairedTransferMasuk(payload, transaksi, userId, t);
             }
 
             await t.commit();
+
+            const affectedProdukIds = payload.details.map(d => d.produk_id);
+            notificationService.checkLowStockAndNotify(affectedProdukIds).catch(() => {});
 
             return this.getTransaksiDetail(transaksi.id);
         } catch (error) {
@@ -260,7 +264,10 @@ class StokService {
                 } else if (payload.sub_tipe === 'Disposal') {
                     updateData.gudang_id = null;
                     updateData.status = 'Disposed';
-                } else if (payload.sub_tipe === 'Transfer Gudang') {
+                } else if (payload.sub_tipe === 'Rusak/Terbuang') {
+                    updateData.gudang_id = null;
+                    updateData.status = 'Rusak';
+                } else if (payload.sub_tipe === 'Transfer Gudang' || payload.sub_tipe === 'Ke Gedung/Mess') {
                     updateData.gudang_id = payload.gudang_tujuan_id;
                 }
 

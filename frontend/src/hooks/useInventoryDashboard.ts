@@ -30,9 +30,16 @@ export const useRecentInventoryTransactions = (limit = 10) => {
     });
 };
 
-export const useLowStockItems = (threshold = 5) => {
+export const useLowStockItems = () => {
     return useQuery({
-        queryKey: ['inventoryDashboard', 'lowStock', threshold],
-        queryFn: () => inventoryDashboardService.getLowStockItems(threshold),
+        queryKey: ['inventoryDashboard', 'lowStock'],
+        queryFn: () => inventoryDashboardService.getLowStockItems(),
+    });
+};
+
+export const useItemVelocity = (days = 90) => {
+    return useQuery({
+        queryKey: ['inventoryDashboard', 'itemVelocity', days],
+        queryFn: () => inventoryDashboardService.getItemVelocity(days),
     });
 };

@@ -164,6 +164,22 @@ class InventoryMasterDataController {
             next(error);
         }
     }
+
+    async uploadPhoto(req: Request, res: Response, next: NextFunction) {
+        try {
+            const produk = await (models as any).InvProduk.findByPk(Number(req.params.id));
+            if (!produk) return res.status(404).json({ message: 'Produk tidak ditemukan' });
+
+            if (!req.file) return res.status(400).json({ message: 'File gambar harus diupload' });
+
+            const gambarPath = `/uploads/inventory/photos/${req.file.filename}`;
+            await produk.update({ gambar: gambarPath });
+
+            res.json({ status: 'success', data: { gambar: gambarPath } });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new InventoryMasterDataController();

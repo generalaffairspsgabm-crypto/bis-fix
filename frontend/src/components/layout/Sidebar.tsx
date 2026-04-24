@@ -134,6 +134,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
                 { name: 'Label & QR Code', path: '/inventory/label', icon: 'qr_code_2' },
             ]
         },
+        {
+            name: 'Import Data',
+            path: '/inventory/import',
+            icon: 'upload_file',
+            permission: { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.CREATE },
+        },
     ];
 
     const settingsNavItems: NavItem[] = [

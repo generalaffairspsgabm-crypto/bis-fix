@@ -51,6 +51,7 @@ const KartuStokPage = lazy(() => import('./pages/inventory/stok/KartuStokPage'))
 // Inventory Dashboard & Label Pages
 const InventoryDashboardPage = lazy(() => import('./pages/inventory/DashboardPage'));
 const LabelPage = lazy(() => import('./pages/inventory/stok/LabelPage'));
+const InventoryImportPage = lazy(() => import('./pages/inventory/ImportPage'));
 
 function App() {
     return (
@@ -214,6 +215,9 @@ function App() {
                         } />
                         <Route path="label" element={
                             <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.READ} redirectTo="/403"><LabelPage /></PermissionGuard>
+                        } />
+                        <Route path="import" element={
+                            <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.CREATE} redirectTo="/403"><InventoryImportPage /></PermissionGuard>
                         } />
                     </Route>
 

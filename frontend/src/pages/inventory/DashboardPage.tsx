@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import StatCard from '../../components/dashboard/StatCard';
-import { useInventoryStats, useStockByWarehouse, useCategoryBreakdown, useRecentInventoryTransactions, useLowStockItems } from '../../hooks/useInventoryDashboard';
+import { useInventoryStats, useStockByWarehouse, useCategoryBreakdown, useRecentInventoryTransactions, useLowStockItems, useItemVelocity } from '../../hooks/useInventoryDashboard';
+import type { ItemVelocityItem } from '../../services/api/inventory-dashboard.service';
 import inventoryDashboardService from '../../services/api/inventory-dashboard.service';
 import { InvTransaksi, InvStok } from '../../types/inventory';
 
@@ -13,13 +14,22 @@ const TIPE_COLORS: Record<string, string> = {
     'Adjustment': 'bg-yellow-100 text-yellow-800',
 };
 
+const VELOCITY_TABS = [
+    { key: 'fast', label: 'Fast Moving', color: 'text-green-600', icon: 'trending_up' },
+    { key: 'slow', label: 'Slow Moving', color: 'text-yellow-600', icon: 'trending_flat' },
+    { key: 'dead', label: 'Dead Stock', color: 'text-red-600', icon: 'trending_down' },
+] as const;
+
 const InventoryDashboardPage = () => {
     const { data: statsData, isLoading: statsLoading } = useInventoryStats();
     const { data: warehouseData } = useStockByWarehouse();
     const { data: categoryData } = useCategoryBreakdown();
     const { data: recentData } = useRecentInventoryTransactions(10);
-    const { data: lowStockData } = useLowStockItems(5);
+    const { data: lowStockData } = useLowStockItems();
     const [exporting, setExporting] = useState<string | null>(null);
+    const [velocityDays, setVelocityDays] = useState(90);
+    const [velocityTab, setVelocityTab] = useState<'fast' | 'slow' | 'dead'>('fast');
+    const { data: velocityData } = useItemVelocity(velocityDays);
 
     const stats = statsData?.data;
 
@@ -169,17 +179,19 @@ const InventoryDashboardPage = () => {
                                 <tr className="bg-gray-50 dark:bg-gray-800">
                                     <th className="text-left px-4 py-2.5 font-medium text-gray-500">Produk</th>
                                     <th className="text-left px-4 py-2.5 font-medium text-gray-500">Gudang</th>
+                                    <th className="text-right px-4 py-2.5 font-medium text-gray-500">Min</th>
                                     <th className="text-right px-4 py-2.5 font-medium text-gray-500">Jumlah</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {!lowStockData?.data?.length ? (
-                                    <tr><td colSpan={3} className="px-4 py-8 text-center text-gray-400">Tidak ada stok rendah</td></tr>
+                                    <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400">Tidak ada stok rendah</td></tr>
                                 ) : (
                                     lowStockData.data.map((item: InvStok) => (
                                         <tr key={item.id} className="border-b border-gray-50 dark:border-gray-800">
                                             <td className="px-4 py-2.5">{item.produk?.nama} <span className="text-gray-400 text-xs">({item.produk?.code})</span></td>
                                             <td className="px-4 py-2.5 text-gray-600 dark:text-gray-300">{item.gudang?.nama}</td>
+                                            <td className="px-4 py-2.5 text-right text-gray-500">{(item.produk as any)?.stok_minimum ?? 5}</td>
                                             <td className="px-4 py-2.5 text-right font-semibold text-red-600">{item.jumlah}</td>
                                         </tr>
                                     ))
@@ -187,6 +199,82 @@ const InventoryDashboardPage = () => {
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            {/* Item Velocity Analysis */}
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                    <div>
+                        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Analisis Pergerakan Barang</h3>
+                        {velocityData?.data && (
+                            <p className="text-xs text-gray-500 mt-0.5">
+                                Fast: {velocityData.data.summary.fast} &middot; Slow: {velocityData.data.summary.slow} &middot; Dead: {velocityData.data.summary.dead}
+                            </p>
+                        )}
+                    </div>
+                    <select
+                        value={velocityDays}
+                        onChange={(e) => setVelocityDays(Number(e.target.value))}
+                        className="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+                    >
+                        <option value={30}>30 Hari</option>
+                        <option value={60}>60 Hari</option>
+                        <option value={90}>90 Hari</option>
+                    </select>
+                </div>
+                <div className="border-b border-gray-100 dark:border-gray-800 flex">
+                    {VELOCITY_TABS.map((tab) => (
+                        <button
+                            key={tab.key}
+                            onClick={() => setVelocityTab(tab.key)}
+                            className={`flex items-center gap-1.5 px-5 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                                velocityTab === tab.key
+                                    ? `${tab.color} border-current`
+                                    : 'text-gray-500 border-transparent hover:text-gray-700'
+                            }`}
+                        >
+                            <span className="material-symbols-outlined text-[16px]">{tab.icon}</span>
+                            {tab.label}
+                            {velocityData?.data && (
+                                <span className="ml-1 text-xs bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded-full">
+                                    {velocityData.data.summary[tab.key]}
+                                </span>
+                            )}
+                        </button>
+                    ))}
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                        <thead>
+                            <tr className="bg-gray-50 dark:bg-gray-800">
+                                <th className="text-left px-4 py-2.5 font-medium text-gray-500">Kode</th>
+                                <th className="text-left px-4 py-2.5 font-medium text-gray-500">Produk</th>
+                                <th className="text-right px-4 py-2.5 font-medium text-gray-500">Jml Transaksi</th>
+                                <th className="text-right px-4 py-2.5 font-medium text-gray-500">Total Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {(() => {
+                                const items: ItemVelocityItem[] = velocityTab === 'fast'
+                                    ? velocityData?.data?.fast_moving || []
+                                    : velocityTab === 'slow'
+                                    ? velocityData?.data?.slow_moving || []
+                                    : velocityData?.data?.dead_stock || [];
+                                if (!items.length) return (
+                                    <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400">Tidak ada data</td></tr>
+                                );
+                                return items.map((item) => (
+                                    <tr key={item.produk_id} className="border-b border-gray-50 dark:border-gray-800">
+                                        <td className="px-4 py-2.5 font-mono text-xs">{item.produk_code}</td>
+                                        <td className="px-4 py-2.5">{item.produk_nama}</td>
+                                        <td className="px-4 py-2.5 text-right">{item.trx_count}</td>
+                                        <td className="px-4 py-2.5 text-right font-semibold">{item.total_qty}</td>
+                                    </tr>
+                                ));
+                            })()}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

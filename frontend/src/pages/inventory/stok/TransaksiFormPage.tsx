@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { AxiosError } from 'axios';
@@ -6,6 +6,7 @@ import { useCreateTransaksi } from '../../../hooks/useInventoryStok';
 import { useInvGudangList, useInvProdukList, useInvUomList } from '../../../hooks/useInventoryMasterData';
 import { TransaksiPayload, TransaksiTipe, TransaksiSubTipe, TransaksiDetailPayload } from '../../../types/inventory';
 import Button from '../../../components/common/Button';
+import inventoryStokService from '../../../services/api/inventory-stok.service';
 
 const SUB_TIPE_MAP: Record<TransaksiTipe, { value: TransaksiSubTipe; label: string }[]> = {
     'Masuk': [
@@ -15,8 +16,10 @@ const SUB_TIPE_MAP: Record<TransaksiTipe, { value: TransaksiSubTipe; label: stri
     ],
     'Keluar': [
         { value: 'Ke Karyawan', label: 'Ke Karyawan' },
+        { value: 'Ke Gedung/Mess', label: 'Ke Gedung/Mess' },
         { value: 'Transfer Gudang', label: 'Transfer Gudang' },
-        { value: 'Disposal', label: 'Disposal / Rusak' },
+        { value: 'Disposal', label: 'Disposal' },
+        { value: 'Rusak/Terbuang', label: 'Rusak / Terbuang' },
     ],
     'Adjustment': [
         { value: 'Opname', label: 'Stock Opname' },
@@ -44,6 +47,8 @@ const TransaksiFormPage = () => {
     const [supplierNama, setSupplierNama] = useState('');
     const [noReferensi, setNoReferensi] = useState('');
     const [catatan, setCatatan] = useState('');
+    const [dokumenFiles, setDokumenFiles] = useState<File[]>([]);
+    const dokumenInputRef = useRef<HTMLInputElement>(null);
 
     const [details, setDetails] = useState<DetailRow[]>([
         { _key: '1', produk_id: 0, uom_id: 0, jumlah: 1, catatan: '', serial_numbers: [] },
@@ -72,7 +77,7 @@ const TransaksiFormPage = () => {
         setDetails(prev => prev.map(d => d._key === key ? { ...d, serial_numbers: sns } : d));
     };
 
-    const showGudangTujuan = subTipe === 'Transfer Masuk' || subTipe === 'Transfer Gudang';
+    const showGudangTujuan = subTipe === 'Transfer Masuk' || subTipe === 'Transfer Gudang' || subTipe === 'Ke Gedung/Mess';
     const showKaryawan = subTipe === 'Ke Karyawan' || subTipe === 'Retur Karyawan';
     const showSupplier = subTipe === 'Supplier';
 
@@ -103,7 +108,14 @@ const TransaksiFormPage = () => {
         };
 
         createMutation.mutate(payload, {
-            onSuccess: () => {
+            onSuccess: async (result) => {
+                if (dokumenFiles.length > 0 && result.data?.id) {
+                    try {
+                        await inventoryStokService.uploadDokumen(result.data.id, dokumenFiles);
+                    } catch {
+                        toast.error('Transaksi berhasil, tapi gagal upload dokumen');
+                    }
+                }
                 toast.success('Transaksi berhasil dibuat');
                 navigate('/inventory/transaksi');
             },
@@ -287,6 +299,50 @@ const TransaksiFormPage = () => {
                             );
                         })}
                     </div>
+                </div>
+
+                {/* Dokumen Lampiran */}
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 space-y-4">
+                    <h2 className="text-base font-semibold text-gray-900 dark:text-white">Dokumen Lampiran</h2>
+                    <p className="text-xs text-gray-500">Upload surat jalan, invoice, atau dokumen pendukung lainnya (maks 5 file, 5MB per file)</p>
+
+                    <input ref={dokumenInputRef} type="file" accept="image/*,.pdf" multiple className="hidden"
+                        onChange={(e) => {
+                            const files = Array.from(e.target.files || []);
+                            const total = dokumenFiles.length + files.length;
+                            if (total > 5) { toast.error('Maksimal 5 dokumen'); return; }
+                            setDokumenFiles(prev => [...prev, ...files]);
+                            if (dokumenInputRef.current) dokumenInputRef.current.value = '';
+                        }}
+                    />
+
+                    {dokumenFiles.length > 0 && (
+                        <div className="space-y-2">
+                            {dokumenFiles.map((f, i) => (
+                                <div key={i} className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 rounded-lg px-3 py-2">
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-[18px] text-gray-400">
+                                            {f.type.startsWith('image/') ? 'image' : 'description'}
+                                        </span>
+                                        <span className="text-sm text-gray-700 dark:text-gray-200 truncate max-w-[300px]">{f.name}</span>
+                                        <span className="text-xs text-gray-400">{(f.size / 1024).toFixed(0)} KB</span>
+                                    </div>
+                                    <button type="button" onClick={() => setDokumenFiles(prev => prev.filter((_, idx) => idx !== i))}
+                                        className="text-red-400 hover:text-red-600">
+                                        <span className="material-symbols-outlined text-[18px]">close</span>
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {dokumenFiles.length < 5 && (
+                        <button type="button" onClick={() => dokumenInputRef.current?.click()}
+                            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 hover:text-gray-700">
+                            <span className="material-symbols-outlined text-[18px]">upload_file</span>
+                            Tambah Dokumen
+                        </button>
+                    )}
                 </div>
 
                 {/* Actions */}

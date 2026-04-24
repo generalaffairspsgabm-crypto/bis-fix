@@ -20,7 +20,7 @@ const transaksiDetailAdjustmentSchema = z.object({
 
 const transaksiSchema = z.object({
     tipe: z.enum(['Masuk', 'Keluar', 'Adjustment'], { message: 'Tipe transaksi tidak valid' }),
-    sub_tipe: z.enum(['Supplier', 'Transfer Masuk', 'Retur Karyawan', 'Ke Karyawan', 'Transfer Gudang', 'Disposal', 'Opname'], { message: 'Sub tipe tidak valid' }),
+    sub_tipe: z.enum(['Supplier', 'Transfer Masuk', 'Retur Karyawan', 'Ke Karyawan', 'Transfer Gudang', 'Disposal', 'Opname', 'Ke Gedung/Mess', 'Rusak/Terbuang'], { message: 'Sub tipe tidak valid' }),
     tanggal: z.string().min(1, 'Tanggal harus diisi'),
     gudang_id: z.number().int().positive('Gudang harus dipilih'),
     gudang_tujuan_id: z.number().int().positive().optional().nullable(),
@@ -33,7 +33,7 @@ const transaksiSchema = z.object({
     if (data.sub_tipe === 'Supplier' && !data.supplier_nama) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Nama supplier harus diisi', path: ['supplier_nama'] });
     }
-    if ((data.sub_tipe === 'Transfer Masuk' || data.sub_tipe === 'Transfer Gudang') && !data.gudang_tujuan_id) {
+    if ((data.sub_tipe === 'Transfer Masuk' || data.sub_tipe === 'Transfer Gudang' || data.sub_tipe === 'Ke Gedung/Mess') && !data.gudang_tujuan_id) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Gudang tujuan harus dipilih', path: ['gudang_tujuan_id'] });
     }
     if ((data.sub_tipe === 'Ke Karyawan' || data.sub_tipe === 'Retur Karyawan') && !data.karyawan_id) {

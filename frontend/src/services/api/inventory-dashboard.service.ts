@@ -39,8 +39,30 @@ const getRecentTransactions = async (limit = 10) => {
     return response.data;
 };
 
-const getLowStockItems = async (threshold = 5) => {
-    const response = await client.get('/inventory/dashboard/low-stock', { params: { threshold } });
+const getLowStockItems = async () => {
+    const response = await client.get('/inventory/dashboard/low-stock');
+    return response.data;
+};
+
+export interface ItemVelocityItem {
+    produk_id: number;
+    produk_code: string;
+    produk_nama: string;
+    trx_count: number;
+    total_qty: number;
+    classification: 'Fast Moving' | 'Slow Moving' | 'Dead Stock';
+}
+
+export interface ItemVelocityData {
+    period_days: number;
+    fast_moving: ItemVelocityItem[];
+    slow_moving: ItemVelocityItem[];
+    dead_stock: ItemVelocityItem[];
+    summary: { fast: number; slow: number; dead: number };
+}
+
+const getItemVelocity = async (days = 90): Promise<{ status: string; data: ItemVelocityData }> => {
+    const response = await client.get('/inventory/dashboard/item-velocity', { params: { days } });
     return response.data;
 };
 
@@ -60,6 +82,7 @@ const inventoryDashboardService = {
     getCategoryBreakdown,
     getRecentTransactions,
     getLowStockItems,
+    getItemVelocity,
     exportStokExcel,
     exportStokPDF,
 };

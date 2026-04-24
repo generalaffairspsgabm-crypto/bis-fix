@@ -6,6 +6,7 @@ import {
     InvTransaksiDetail,
     InvSerialNumber,
     TransaksiPayload,
+    TransaksiDokumen,
     StokFilter,
     TransaksiFilter,
     SerialNumberFilter,
@@ -42,6 +43,15 @@ const getKartuStok = async (params: KartuStokFilter): Promise<PaginatedResponse<
     return response.data;
 };
 
+const uploadDokumen = async (transaksiId: number, files: File[]): Promise<{ status: string; data: { dokumen: TransaksiDokumen[] } }> => {
+    const formData = new FormData();
+    files.forEach(f => formData.append('dokumen', f));
+    const response = await client.post(`/inventory/transaksi/${transaksiId}/dokumen`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+};
+
 const inventoryStokService = {
     getStok,
     getSerialNumbers,
@@ -49,6 +59,7 @@ const inventoryStokService = {
     getTransaksiList,
     getTransaksiDetail,
     getKartuStok,
+    uploadDokumen,
 };
 
 export default inventoryStokService;

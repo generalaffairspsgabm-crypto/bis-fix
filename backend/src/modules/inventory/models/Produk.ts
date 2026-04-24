@@ -8,6 +8,8 @@ export class InvProduk extends Model {
     public nama!: string;
     public brand_id!: number;
     public has_serial_number!: boolean;
+    public stok_minimum!: number | null;
+    public gambar!: string | null;
     public keterangan!: string | null;
     public status!: 'Aktif' | 'Tidak Aktif';
 
@@ -48,6 +50,15 @@ InvProduk.init({
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+    },
+    stok_minimum: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 5,
+    },
+    gambar: {
+        type: DataTypes.STRING(500),
+        allowNull: true,
     },
     keterangan: {
         type: DataTypes.TEXT,

@@ -36,6 +36,8 @@ app.get('/', (req, res) => {
 app.use('/api/hr', hrRoutes);
 import inventoryRoutes from './modules/inventory/routes/inventory.routes';
 app.use('/api/inventory', inventoryRoutes);
+import notificationRoutes from './shared/routes/notification.routes';
+app.use('/api/notifications', notificationRoutes);
 import authRoutes from './modules/auth/routes/auth.routes';
 import roleRoutes from './modules/auth/routes/role.routes';
 import userRoutes from './modules/auth/routes/user.routes';

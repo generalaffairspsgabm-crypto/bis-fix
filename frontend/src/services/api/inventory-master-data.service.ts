@@ -48,6 +48,15 @@ const restore = async <T = MasterData>(model: string, id: number): Promise<{ sta
     return response.data;
 };
 
+const uploadPhoto = async (id: number, file: File): Promise<{ status: string; data: { gambar: string } }> => {
+    const formData = new FormData();
+    formData.append('gambar', file);
+    const response = await client.put(`/inventory/master/produk/${id}/photo`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+};
+
 const inventoryMasterDataService = {
     getAll,
     getOne,
@@ -55,6 +64,7 @@ const inventoryMasterDataService = {
     update,
     delete: deleteItem,
     restore,
+    uploadPhoto,
 };
 
 export default inventoryMasterDataService;

@@ -22,12 +22,15 @@ import {
     StatusKaryawan
 } from '../../modules/hr/models';
 
+import {
+    InvKategori, InvSubKategori, InvBrand, InvUom,
+    InvProduk, InvGudang, InvTransaksi
+} from '../../modules/inventory/models';
+
 const MODEL_MAP: Record<string, any> = {
     'employees': Employee,
     'divisi': Divisi,
     'department': Department,
-    // Master data routing uses param 'model', usually strictly lowercase. 
-    // We map common ones.
     'posisi-jabatan': PosisiJabatan,
     'kategori-pangkat': KategoriPangkat,
     'golongan': Golongan,
@@ -35,7 +38,14 @@ const MODEL_MAP: Record<string, any> = {
     'jenis-hubungan-kerja': JenisHubunganKerja,
     'tag': Tag,
     'lokasi-kerja': LokasiKerja,
-    'status-karyawan': StatusKaryawan
+    'status-karyawan': StatusKaryawan,
+    'inv_kategori': InvKategori,
+    'inv_sub-kategori': InvSubKategori,
+    'inv_brand': InvBrand,
+    'inv_uom': InvUom,
+    'inv_produk': InvProduk,
+    'inv_gudang': InvGudang,
+    'inv_transaksi': InvTransaksi,
 };
 
 export const auditLogger = (entityType: string) => {

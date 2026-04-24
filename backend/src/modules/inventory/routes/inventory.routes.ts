@@ -5,6 +5,7 @@ import masterDataController from '../controllers/master-data.controller';
 import stokController from '../controllers/stok.controller';
 import dashboardController from '../controllers/dashboard.controller';
 import exportController from '../controllers/export.controller';
+import importController from '../controllers/import.controller';
 import employeeAssetController from '../controllers/employee-asset.controller';
 import labelController from '../controllers/label.controller';
 import { checkPermission } from '../../../shared/middleware/permission.middleware';
@@ -12,6 +13,7 @@ import { authenticate } from '../../../shared/middleware/auth.middleware';
 import { RESOURCES, ACTIONS } from '../../../shared/constants/permissions';
 import { cacheMiddleware } from '../../../shared/middleware/cache.middleware';
 import { auditLogger } from '../../../shared/middleware/auditLog.middleware';
+import { uploadProductPhoto, uploadTransaksiDocuments, uploadExcelFile } from '../../../shared/middleware/upload.middleware';
 
 const router = Router();
 
@@ -66,6 +68,13 @@ router.post(
     (req, res, next) => masterDataController.restore(req, res, next)
 );
 
+router.put(
+    '/master/produk/:id/photo',
+    checkPermission(RESOURCES.INVENTORY_MASTER_DATA, ACTIONS.UPDATE),
+    uploadProductPhoto,
+    (req, res, next) => masterDataController.uploadPhoto(req, res, next)
+);
+
 // === Stok Routes ===
 
 router.get(
@@ -106,6 +115,13 @@ router.get(
     (req, res, next) => stokController.getKartuStok(req, res, next)
 );
 
+router.post(
+    '/transaksi/:id/dokumen',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.UPDATE),
+    uploadTransaksiDocuments,
+    (req, res, next) => stokController.uploadDokumen(req, res, next)
+);
+
 // === Dashboard Routes ===
 
 router.get(
@@ -136,6 +152,39 @@ router.get(
     '/dashboard/low-stock',
     checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
     (req, res, next) => dashboardController.getLowStockItems(req, res, next)
+);
+
+router.get(
+    '/dashboard/item-velocity',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => dashboardController.getItemVelocity(req, res, next)
+);
+
+// === Import Routes ===
+
+router.post(
+    '/import/preview',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.CREATE),
+    uploadExcelFile.single('file'),
+    (req, res, next) => importController.uploadAndPreview(req, res, next)
+);
+
+router.post(
+    '/import/produk',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.CREATE),
+    (req, res, next) => importController.importProduk(req, res, next)
+);
+
+router.post(
+    '/import/stok-masuk',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.CREATE),
+    (req, res, next) => importController.importStokMasuk(req, res, next)
+);
+
+router.post(
+    '/import/error-report',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => importController.downloadErrorReport(req, res, next)
 );
 
 // === Export Routes ===

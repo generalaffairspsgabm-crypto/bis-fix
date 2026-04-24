@@ -12,7 +12,7 @@ import Input from '../common/Input';
 interface FieldConfig {
     name: string;
     label: string;
-    type: 'text' | 'textarea' | 'select' | 'toggle' | 'color';
+    type: 'text' | 'textarea' | 'select' | 'toggle' | 'color' | 'number';
     required?: boolean;
     options?: { label: string; value: string | number }[];
     placeholder?: string;
@@ -135,6 +135,16 @@ const MasterDataForm: React.FC<MasterDataFormProps> = ({
                             />
                             <span className="text-xs text-gray-500">Pilih warna untuk {field.label}</span>
                         </div>
+                    )}
+
+                    {field.type === 'number' && (
+                        <Input
+                            type="number"
+                            {...register(field.name, { required: field.required ? `${field.label} harus diisi` : false, valueAsNumber: true })}
+                            placeholder={field.placeholder}
+                            disabled={field.disabled}
+                            error={errors[field.name]?.message as string}
+                        />
                     )}
 
                     {field.type === 'toggle' && (

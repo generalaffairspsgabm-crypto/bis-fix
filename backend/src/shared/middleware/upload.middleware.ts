@@ -122,3 +122,50 @@ export const uploadMultipleDocuments = multer({
     fileFilter: documentFileFilter
 }).array('documents', 10);
 
+// Product Photo Upload
+const productPhotoDir = path.join(process.cwd(), 'uploads/inventory/photos');
+if (!fs.existsSync(productPhotoDir)) {
+    fs.mkdirSync(productPhotoDir, { recursive: true });
+}
+
+const productPhotoStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, productPhotoDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname).toLowerCase();
+        cb(null, `produk-${uniqueSuffix}${ext}`);
+    }
+});
+
+export const uploadProductPhoto = multer({
+    storage: productPhotoStorage,
+    limits: { fileSize: 2 * 1024 * 1024 },
+    fileFilter: fileFilter,
+}).single('gambar');
+
+// Transaction Document Upload
+const transaksiDocDir = path.join(process.cwd(), 'uploads/inventory/dokumen');
+if (!fs.existsSync(transaksiDocDir)) {
+    fs.mkdirSync(transaksiDocDir, { recursive: true });
+}
+
+const transaksiDocStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, transaksiDocDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname).toLowerCase();
+        const cleanName = file.originalname.replace(/[^a-zA-Z0-9.]/g, '-');
+        cb(null, `trx-${uniqueSuffix}-${cleanName}`);
+    }
+});
+
+export const uploadTransaksiDocuments = multer({
+    storage: transaksiDocStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: documentFileFilter,
+}).array('dokumen', 5);
+
