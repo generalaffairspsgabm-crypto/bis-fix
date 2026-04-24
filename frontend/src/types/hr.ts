@@ -1,10 +1,12 @@
 export interface MasterData {
     id: number;
+    code: string;
     nama: string;
     keterangan?: string;
     status: 'Aktif' | 'Tidak Aktif';
     createdAt: string;
     updatedAt: string;
+    deletedAt?: string | null;
 }
 
 export interface Divisi extends MasterData {

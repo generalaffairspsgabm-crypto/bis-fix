@@ -142,7 +142,21 @@ class MasterDataController {
             const success = await masterDataService.delete(model, Number(req.params.id));
             if (!success) return res.status(404).json({ message: 'Item not found' });
 
-            res.json({ status: 'success', message: 'Item deleted successfully' });
+            res.json({ status: 'success', message: 'Item archived successfully' });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async restore(req: Request, res: Response, next: NextFunction) {
+        try {
+            const model = this.getModel(req.params.model);
+            if (!model) return res.status(404).json({ message: 'Resource not found' });
+
+            const data = await masterDataService.restore(model, Number(req.params.id));
+            if (!data) return res.status(404).json({ message: 'Item not found' });
+
+            res.json({ status: 'success', data });
         } catch (error) {
             next(error);
         }

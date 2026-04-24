@@ -39,6 +39,7 @@ const GolonganPage: React.FC = () => {
 
     const columns: Column<Golongan>[] = [
         { header: 'No', accessor: (_, index) => (page - 1) * 10 + index + 1, className: 'w-16' },
+        { header: 'Code', accessor: 'code' },
         { header: 'Nama Golongan', accessor: 'nama' },
         { header: 'Keterangan', accessor: 'keterangan' },
         { header: 'Status', accessor: 'status' },

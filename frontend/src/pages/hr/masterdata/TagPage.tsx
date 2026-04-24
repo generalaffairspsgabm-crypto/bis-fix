@@ -37,6 +37,7 @@ const TagPage: React.FC = () => {
 
     const columns: Column<Tag>[] = [
         { header: 'No', accessor: (_, index) => (page - 1) * 10 + index + 1, className: 'w-16' },
+        { header: 'Code', accessor: 'code' },
         { header: 'Nama Tag', accessor: 'nama' },
         {
             header: 'Warna',

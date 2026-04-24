@@ -810,6 +810,13 @@ router.delete(
     (req, res, next) => masterDataController.delete(req, res, next)
 );
 
+router.post(
+    '/master/:model/:id/restore',
+    checkPermission(RESOURCES.MASTER_DATA, ACTIONS.DELETE),
+    dynamicAuditLogger,
+    (req, res, next) => masterDataController.restore(req, res, next)
+);
+
 
 // QR Code Routes
 import qrcodeController from '../controllers/qrcode.controller';

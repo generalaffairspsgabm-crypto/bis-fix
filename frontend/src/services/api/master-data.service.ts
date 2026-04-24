@@ -43,12 +43,18 @@ const deleteItem = async (model: string, id: number): Promise<{ status: string; 
     return response.data;
 };
 
+const restore = async <T = MasterData>(model: string, id: number): Promise<{ status: string; data: T }> => {
+    const response = await client.post<{ status: string; data: T }>(`/hr/master/${model}/${id}/restore`);
+    return response.data;
+};
+
 const masterDataService = {
     getAll,
     getOne,
     create,
     update,
     delete: deleteItem,
+    restore,
 };
 
 export default masterDataService;

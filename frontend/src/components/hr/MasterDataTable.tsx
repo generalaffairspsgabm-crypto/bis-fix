@@ -27,7 +27,7 @@ interface MasterDataTableProps<T> {
     transparent?: boolean;
 }
 
-const MasterDataTable = <T extends { id: number | string; status?: string; nama?: string; name?: string }>({
+const MasterDataTable = <T extends { id: number | string; code?: string; status?: string; nama?: string; name?: string }>({
     columns,
     data,
     isLoading,
@@ -96,6 +96,11 @@ const MasterDataTable = <T extends { id: number | string; status?: string; nama?
                                                     {itemName}
                                                 </h4>
                                             </div>
+                                            {item.code && (
+                                                <span className="text-[10px] font-mono text-gray-500 dark:text-gray-400 ml-7">
+                                                    {item.code}
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
                                     <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-bold ring-1 ring-inset uppercase tracking-wider shrink-0 ${status === 'Aktif' || status === 'true'

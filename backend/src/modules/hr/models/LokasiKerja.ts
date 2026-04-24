@@ -3,6 +3,7 @@ import sequelize from '../../../config/database';
 
 export class LokasiKerja extends Model {
     public id!: number;
+    public code!: string;
     public nama!: string;
     public alamat!: string | null;
     public keterangan!: string | null;
@@ -10,6 +11,7 @@ export class LokasiKerja extends Model {
 
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
+    public readonly deleted_at!: Date | null;
 }
 
 LokasiKerja.init({
@@ -17,6 +19,11 @@ LokasiKerja.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+    },
+    code: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        unique: true,
     },
     nama: {
         type: DataTypes.STRING(100),
@@ -42,8 +49,10 @@ LokasiKerja.init({
     sequelize,
     tableName: 'lokasi_kerja',
     timestamps: true,
+    paranoid: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
 });
 
 export default LokasiKerja;

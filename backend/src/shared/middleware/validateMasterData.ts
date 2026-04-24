@@ -62,7 +62,8 @@ export const validateMasterData = (req: Request, res: Response, next: NextFuncti
 
     try {
         const validatedData = schema.parse(req.body);
-        req.body = validatedData; // Replace body with validated/transformed data
+        req.body = validatedData;
+        delete req.body.code;
         next();
     } catch (error: any) {
         if (error instanceof z.ZodError) {

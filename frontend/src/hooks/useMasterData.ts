@@ -49,6 +49,16 @@ export const useDeleteMasterData = (modelName: string) => {
     });
 };
 
+export const useRestoreMasterData = (modelName: string) => {
+    const queryClient = useQueryClient();
+    return useMutation<{ status: string; data: MasterData }, AxiosError<{ message: string }>, number>({
+        mutationFn: (id: number) => masterDataService.restore(modelName, id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['masterData', modelName] });
+        },
+    });
+};
+
 // Specific Hooks
 export const useDivisiList = (filters?: FilterParams) => useMasterDataList<Divisi>('divisi', filters);
 export const useDepartmentList = (filters?: FilterParams) => useMasterDataList<Department>('department', filters);

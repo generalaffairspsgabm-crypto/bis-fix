@@ -51,6 +51,7 @@ const DivisiPage = () => {
     // Columns
     const columns: Column<Divisi>[] = [
         { header: 'No', accessor: (_, index) => (page - 1) * 10 + index + 1, className: 'w-16' },
+        { header: 'Code', accessor: 'code' },
         { header: 'Nama Divisi', accessor: 'nama' },
         { header: 'Keterangan', accessor: 'keterangan' },
         {

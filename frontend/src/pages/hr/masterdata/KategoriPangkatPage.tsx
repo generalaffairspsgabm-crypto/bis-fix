@@ -37,6 +37,7 @@ const KategoriPangkatPage: React.FC = () => {
 
     const columns: Column<KategoriPangkat>[] = [
         { header: 'No', accessor: (_, index) => (page - 1) * 10 + index + 1, className: 'w-16' },
+        { header: 'Code', accessor: 'code' },
         { header: 'Nama Kategori', accessor: 'nama' },
         { header: 'Keterangan', accessor: 'keterangan' },
         { header: 'Status', accessor: 'status' },

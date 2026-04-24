@@ -1,12 +1,43 @@
 import { Model, ModelStatic, Op } from 'sequelize';
 import cacheService from '../../../shared/services/cache.service';
 
-class MasterDataService {
-    async findAllWithFilter(model: ModelStatic<Model>, filters: any, include: any[] = []) {
-        // Caching for filtered list is tricky because of many combinations.
-        // For now, only cache raw findAll. If filters are used, bypass cache or use complex keys.
-        // Plan focused on "findAll" method being cached (likely for dropdowns).
+const CODE_PREFIX_MAP: Record<string, string> = {
+    'Divisi': 'DIV',
+    'Department': 'DEP',
+    'PosisiJabatan': 'POS',
+    'KategoriPangkat': 'KAT',
+    'Golongan': 'GOL',
+    'SubGolongan': 'SUB',
+    'JenisHubunganKerja': 'JHK',
+    'Tag': 'TAG',
+    'LokasiKerja': 'LOK',
+    'StatusKaryawan': 'STK',
+};
 
+class MasterDataService {
+    async generateCode(model: ModelStatic<Model>): Promise<string> {
+        const prefix = CODE_PREFIX_MAP[model.name];
+        if (!prefix) throw new Error(`No code prefix configured for model ${model.name}`);
+
+        const lastRecord = await model.findOne({
+            where: {
+                code: { [Op.like]: `${prefix}-%` }
+            },
+            order: [['code', 'DESC']],
+            paranoid: false,
+        });
+
+        let nextNumber = 1;
+        if (lastRecord) {
+            const lastCode = (lastRecord as any).code as string;
+            const lastNumber = parseInt(lastCode.split('-')[1], 10);
+            if (!isNaN(lastNumber)) nextNumber = lastNumber + 1;
+        }
+
+        return `${prefix}-${String(nextNumber).padStart(4, '0')}`;
+    }
+
+    async findAllWithFilter(model: ModelStatic<Model>, filters: any, include: any[] = []) {
         const { status, search, page = 1, limit = 10 } = filters;
         const offset = (Number(page) - 1) * Number(limit);
         const where: any = {};
@@ -20,7 +51,10 @@ class MasterDataService {
         }
 
         if (search) {
-            where.nama = { [Op.like]: `%${search}%` };
+            where[Op.or] = [
+                { nama: { [Op.like]: `%${search}%` } },
+                { code: { [Op.like]: `%${search}%` } },
+            ];
         }
 
         const { count, rows } = await model.findAndCountAll({
@@ -46,7 +80,7 @@ class MasterDataService {
 
         return await cacheService.remember(
             cacheKey,
-            3600, // 1 hour TTL
+            3600,
             async () => await model.findAll()
         );
     }
@@ -56,17 +90,14 @@ class MasterDataService {
     }
 
     async invalidateCache(modelName: string) {
-        // Invalidate internal service cache
         await cacheService.delPattern(`master_data:${modelName}:*`);
-
-        // Invalidate API response cache (middleware)
-        // Matches keys like: cache:/api/hr/master/department?page=1...
-        // We use lowercase modelName because URLs are typically lowercase
         await cacheService.delPattern(`cache:/api/hr/master/${modelName.toLowerCase()}*`);
     }
 
     async create(model: ModelStatic<Model>, data: any) {
-        const result = await model.create(data);
+        delete data.code;
+        const code = await this.generateCode(model);
+        const result = await model.create({ ...data, code });
         await this.invalidateCache(model.name);
         return result;
     }
@@ -74,6 +105,7 @@ class MasterDataService {
     async update(model: ModelStatic<Model>, id: number, data: any) {
         const item = await model.findByPk(id);
         if (!item) return null;
+        delete data.code;
         const result = await item.update(data);
         await this.invalidateCache(model.name);
         return result;
@@ -101,6 +133,14 @@ class MasterDataService {
         }
         await this.invalidateCache(model.name);
         return true;
+    }
+
+    async restore(model: ModelStatic<Model>, id: number) {
+        const item = await model.findByPk(id, { paranoid: false });
+        if (!item) return null;
+        await (item as any).restore();
+        await this.invalidateCache(model.name);
+        return item;
     }
 }
 

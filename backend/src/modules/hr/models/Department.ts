@@ -3,18 +3,19 @@ import sequelize from '../../../config/database';
 
 export class Department extends Model {
     public id!: number;
+    public code!: string;
     public nama!: string;
     public divisi_id!: number;
     public manager_id!: number | null;
     public keterangan!: string | null;
     public status!: 'Aktif' | 'Tidak Aktif';
 
-    // Associations
-    public divisi?: any; // Will be typed properly after association
+    public divisi?: any;
     public manager?: any;
 
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
+    public readonly deleted_at!: Date | null;
 }
 
 Department.init({
@@ -22,6 +23,11 @@ Department.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+    },
+    code: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        unique: true,
     },
     nama: {
         type: DataTypes.STRING(100),
@@ -59,8 +65,10 @@ Department.init({
     sequelize,
     tableName: 'department',
     timestamps: true,
+    paranoid: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
 });
 
 export default Department;

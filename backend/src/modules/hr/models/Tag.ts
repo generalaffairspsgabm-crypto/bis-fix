@@ -3,6 +3,7 @@ import sequelize from '../../../config/database';
 
 export class Tag extends Model {
     public id!: number;
+    public code!: string;
     public nama!: string;
     public warna_tag!: string;
     public keterangan!: string | null;
@@ -10,6 +11,7 @@ export class Tag extends Model {
 
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
+    public readonly deleted_at!: Date | null;
 }
 
 Tag.init({
@@ -17,6 +19,11 @@ Tag.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+    },
+    code: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        unique: true,
     },
     nama: {
         type: DataTypes.STRING(100),
@@ -49,8 +56,10 @@ Tag.init({
     sequelize,
     tableName: 'tag',
     timestamps: true,
+    paranoid: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
 });
 
 export default Tag;

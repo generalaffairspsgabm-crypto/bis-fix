@@ -3,12 +3,14 @@ import sequelize from '../../../config/database';
 
 export class KategoriPangkat extends Model {
     public id!: number;
+    public code!: string;
     public nama!: string;
     public keterangan!: string | null;
     public status!: 'Aktif' | 'Tidak Aktif';
 
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
+    public readonly deleted_at!: Date | null;
 }
 
 KategoriPangkat.init({
@@ -16,6 +18,11 @@ KategoriPangkat.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+    },
+    code: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        unique: true,
     },
     nama: {
         type: DataTypes.STRING(100),
@@ -37,8 +44,10 @@ KategoriPangkat.init({
     sequelize,
     tableName: 'kategori_pangkat',
     timestamps: true,
+    paranoid: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
 });
 
 export default KategoriPangkat;

@@ -41,6 +41,7 @@ const PosisiJabatanPage: React.FC = () => {
 
     const columns: Column<PosisiJabatan>[] = [
         { header: 'No', accessor: (_, index) => (page - 1) * 10 + index + 1, className: 'w-16' },
+        { header: 'Code', accessor: 'code' },
         { header: 'Nama Posisi', accessor: 'nama' },
         {
             header: 'Department',

@@ -37,6 +37,7 @@ const StatusKaryawanPage: React.FC = () => {
 
     const columns: Column<StatusKaryawan>[] = [
         { header: 'No', accessor: (_, index) => (page - 1) * 10 + index + 1, className: 'w-16' },
+        { header: 'Code', accessor: 'code' },
         { header: 'Status Karyawan', accessor: 'nama' },
         { header: 'Keterangan', accessor: 'keterangan' },
         { header: 'Status', accessor: 'status' },
