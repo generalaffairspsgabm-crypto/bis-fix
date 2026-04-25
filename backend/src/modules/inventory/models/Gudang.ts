@@ -8,12 +8,14 @@ export class InvGudang extends Model {
     public nama!: string;
     public penanggung_jawab_id!: number | null;
     public department_id!: number | null;
+    public lokasi_kerja_id!: number | null;
     public lokasi!: string | null;
     public keterangan!: string | null;
     public status!: 'Aktif' | 'Tidak Aktif';
 
     public penanggung_jawab?: any;
     public department?: any;
+    public lokasi_kerja?: any;
 
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
@@ -51,6 +53,14 @@ InvGudang.init({
         allowNull: true,
         references: {
             model: 'department',
+            key: 'id',
+        },
+    },
+    lokasi_kerja_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'lokasi_kerja',
             key: 'id',
         },
     },

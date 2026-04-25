@@ -95,12 +95,12 @@ class InventoryDashboardService {
                     }],
                 }],
             }],
-            group: [Sequelize.col('produk.brand.sub_kategori.kategori.type')],
+            group: [Sequelize.col('produk.brand.sub_kategori.kategori.nama')],
             raw: true,
         });
 
         return (data as any[]).map((item: any) => ({
-            type: item['produk.brand.sub_kategori.kategori.type'] || 'Unknown',
+            type: item['produk.brand.sub_kategori.kategori.nama'] || 'Unknown',
             total_stok: parseInt(item.total_stok, 10),
         }));
     }

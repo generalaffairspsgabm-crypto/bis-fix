@@ -3,6 +3,7 @@ import { toast } from 'react-hot-toast';
 import { AxiosError } from 'axios';
 import { useInvGudangList, useCreateInventoryMasterData, useUpdateInventoryMasterData, useDeleteInventoryMasterData } from '../../../hooks/useInventoryMasterData';
 import { useEmployeeList } from '../../../hooks/useEmployee';
+import { useLokasiKerjaList } from '../../../hooks/useMasterData';
 import MasterDataTable, { Column } from '../../../components/hr/MasterDataTable';
 import MasterDataForm from '../../../components/hr/MasterDataForm';
 import LayoutSwitcher from '../../../components/layout/LayoutSwitcher';
@@ -29,6 +30,7 @@ const GudangPage = () => {
 
     const { data, isLoading } = useInvGudangList({ page, limit: 10, search, status });
     const { data: employeeData } = useEmployeeList();
+    const { data: lokasiKerjaData } = useLokasiKerjaList({ limit: 100, status: 'Aktif' });
     const createMutation = useCreateInventoryMasterData<InvGudang>('gudang');
     const updateMutation = useUpdateInventoryMasterData<InvGudang>('gudang');
     const deleteMutation = useDeleteInventoryMasterData('gudang');
@@ -39,6 +41,7 @@ const GudangPage = () => {
         { header: 'Nama Gudang', accessor: 'nama' },
         { header: 'Penanggung Jawab', accessor: (item: InvGudang) => item.penanggung_jawab?.nama_lengkap || '-' },
         { header: 'Department', accessor: (item: InvGudang) => item.department?.nama || '-' },
+        { header: 'Lokasi Kerja', accessor: (item: InvGudang) => item.lokasi_kerja?.nama || '-' },
         { header: 'Lokasi', accessor: (item: InvGudang) => item.lokasi || '-' },
         { header: 'Status', accessor: 'status' },
     ];
@@ -51,6 +54,13 @@ const GudangPage = () => {
             type: 'select' as const,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             options: employeeData?.data.map((e: any) => ({ label: e.nama_lengkap, value: e.id })) || []
+        },
+        {
+            name: 'lokasi_kerja_id',
+            label: 'Lokasi Kerja',
+            type: 'select' as const,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            options: lokasiKerjaData?.data.map((l: any) => ({ label: l.nama, value: l.id })) || []
         },
         { name: 'lokasi', label: 'Lokasi', type: 'textarea' as const },
         { name: 'keterangan', label: 'Keterangan', type: 'textarea' as const, autoTitleCase: true },
@@ -65,6 +75,7 @@ const GudangPage = () => {
         const payload = {
             ...formData,
             penanggung_jawab_id: formData.penanggung_jawab_id ? Number(formData.penanggung_jawab_id) : null,
+            lokasi_kerja_id: formData.lokasi_kerja_id ? Number(formData.lokasi_kerja_id) : null,
         };
         if (modalMode === 'create') {
             createMutation.mutate(payload, {

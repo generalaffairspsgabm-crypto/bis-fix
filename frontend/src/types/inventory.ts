@@ -1,11 +1,10 @@
 import { MasterData } from './hr';
 
-export interface InvKategori extends MasterData {
-    type: 'Fixed Asset' | 'Consumable';
-}
+export interface InvKategori extends MasterData {}
 
 export interface InvSubKategori extends MasterData {
     kategori_id: number;
+    prefix_tag?: string;
     kategori?: InvKategori;
 }
 
@@ -19,6 +18,7 @@ export interface InvUom extends MasterData {}
 export interface InvProduk extends MasterData {
     brand_id: number;
     has_serial_number: boolean;
+    has_tag_number: boolean;
     stok_minimum?: number | null;
     gambar?: string | null;
     brand?: InvBrand;
@@ -27,9 +27,11 @@ export interface InvProduk extends MasterData {
 export interface InvGudang extends MasterData {
     penanggung_jawab_id?: number | null;
     department_id?: number | null;
+    lokasi_kerja_id?: number | null;
     lokasi?: string;
     penanggung_jawab?: { id: number; nama_lengkap: string };
     department?: { id: number; nama: string };
+    lokasi_kerja?: { id: number; nama: string; kode_site?: string };
 }
 
 // === Stock Management Types ===
@@ -99,7 +101,8 @@ export interface InvTransaksiDetail {
 export interface InvSerialNumber {
     id: number;
     produk_id: number;
-    serial_number: string;
+    serial_number: string | null;
+    tag_number?: string | null;
     gudang_id?: number | null;
     karyawan_id?: number | null;
     status: SerialNumberStatus;

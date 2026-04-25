@@ -5,6 +5,7 @@ export class LokasiKerja extends Model {
     public id!: number;
     public code!: string;
     public nama!: string;
+    public kode_site!: string | null;
     public alamat!: string | null;
     public keterangan!: string | null;
     public status!: 'Aktif' | 'Tidak Aktif';
@@ -31,6 +32,10 @@ LokasiKerja.init({
         validate: {
             notEmpty: { msg: 'Nama lokasi kerja tidak boleh kosong' },
         },
+    },
+    kode_site: {
+        type: DataTypes.STRING(50),
+        allowNull: true,
     },
     alamat: {
         type: DataTypes.TEXT,

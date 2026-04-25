@@ -14,6 +14,19 @@ const CODE_PREFIX_MAP: Record<string, string> = {
     'StatusKaryawan': 'STK',
 };
 
+const MODEL_SLUG_MAP: Record<string, string> = {
+    'Divisi': 'divisi',
+    'Department': 'department',
+    'PosisiJabatan': 'posisi-jabatan',
+    'KategoriPangkat': 'kategori-pangkat',
+    'Golongan': 'golongan',
+    'SubGolongan': 'sub-golongan',
+    'JenisHubunganKerja': 'jenis-hubungan-kerja',
+    'Tag': 'tag',
+    'LokasiKerja': 'lokasi-kerja',
+    'StatusKaryawan': 'status-karyawan',
+};
+
 class MasterDataService {
     async generateCode(model: ModelStatic<Model>): Promise<string> {
         const prefix = CODE_PREFIX_MAP[model.name];
@@ -90,8 +103,9 @@ class MasterDataService {
     }
 
     async invalidateCache(modelName: string) {
+        const slug = MODEL_SLUG_MAP[modelName] || modelName.toLowerCase();
         await cacheService.delPattern(`master_data:${modelName}:*`);
-        await cacheService.delPattern(`cache:/api/hr/master/${modelName.toLowerCase()}*`);
+        await cacheService.delPattern(`cache:/api/hr/master/${slug}*`);
     }
 
     async create(model: ModelStatic<Model>, data: any) {

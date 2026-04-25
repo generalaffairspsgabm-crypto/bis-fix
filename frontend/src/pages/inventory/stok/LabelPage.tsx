@@ -4,23 +4,44 @@ import QRCode from 'react-qr-code';
 import inventoryLabelService from '../../../services/api/inventory-label.service';
 import { useLookupQR } from '../../../hooks/useInventoryLabel';
 import { useInvProdukList } from '../../../hooks/useInventoryMasterData';
+import { useSerialNumberList } from '../../../hooks/useInventoryStok';
 
 const LabelPage = () => {
-    const [selectedItems, setSelectedItems] = useState<Array<{ type: 'produk' | 'serial_number'; id: number; label: string; code: string }>>([]);
+    const [selectedItems, setSelectedItems] = useState<Array<{ type: 'produk' | 'serial_number' | 'asset_tag'; id: number; label: string; code: string }>>([]);
     const [printing, setPrinting] = useState(false);
     const [lookupCode, setLookupCode] = useState('');
     const [lookupQuery, setLookupQuery] = useState('');
+    const [selectedProdukId, setSelectedProdukId] = useState<number | null>(null);
     const { data: lookupResult, isLoading: lookupLoading } = useLookupQR(lookupQuery);
     const { data: produkData } = useInvProdukList({ page: 1, limit: 100, search: '' });
+    const { data: assetTagData } = useSerialNumberList({ page: 1, limit: 100 });
 
     const produkList = produkData?.data || [];
+    const allAssetTags = (assetTagData?.data || []).filter((sn: any) => sn.tag_number);
+    const assetTagList = selectedProdukId
+        ? allAssetTags.filter((sn: any) => sn.produk_id === selectedProdukId)
+        : [];
+    const selectedProduk = produkList.find((p: any) => p.id === selectedProdukId);
 
-    const addProduk = (produk: { id: number; code: string; nama: string }) => {
-        if (selectedItems.some(i => i.type === 'produk' && i.id === produk.id)) {
-            toast.error('Produk sudah ditambahkan');
+    const handleProdukSelect = (produk: { id: number; code: string; nama: string; has_tag_number?: boolean }) => {
+        if (produk.has_tag_number) {
+            setSelectedProdukId(produk.id);
+        } else {
+            if (selectedItems.some(i => i.type === 'produk' && i.id === produk.id)) {
+                toast.error('Produk sudah ditambahkan');
+                return;
+            }
+            setSelectedItems(prev => [...prev, { type: 'produk', id: produk.id, label: produk.nama, code: produk.code }]);
+        }
+    };
+
+    const addAssetTag = (tag: { id: number; tag_number?: string | null; produk?: { nama: string } }) => {
+        if (!tag.tag_number) return;
+        if (selectedItems.some(i => i.type === 'asset_tag' && i.id === tag.id)) {
+            toast.error('Asset tag sudah ditambahkan');
             return;
         }
-        setSelectedItems(prev => [...prev, { type: 'produk', id: produk.id, label: produk.nama, code: produk.code }]);
+        setSelectedItems(prev => [...prev, { type: 'asset_tag' as const, id: tag.id, label: tag.produk?.nama || '', code: tag.tag_number! }]);
     };
 
     const removeItem = (idx: number) => {
@@ -85,10 +106,10 @@ const LabelPage = () => {
                                 className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary"
                                 onChange={(e) => {
                                     const p = produkList.find((p: any) => p.id === Number(e.target.value));
-                                    if (p) addProduk(p);
-                                    e.target.value = '';
+                                    if (p) handleProdukSelect(p);
+                                    if (!p?.has_tag_number) e.target.value = '';
                                 }}
-                                value=""
+                                value={selectedProdukId ? String(selectedProdukId) : ''}
                             >
                                 <option value="">-- Pilih produk untuk ditambahkan --</option>
                                 {produkList.map((p: any) => (
@@ -96,6 +117,32 @@ const LabelPage = () => {
                                 ))}
                             </select>
                         </div>
+
+                        {selectedProdukId && selectedProduk?.has_tag_number && (
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Pilih Asset Tag — {selectedProduk?.nama}
+                                </label>
+                                {assetTagList.length > 0 ? (
+                                    <select
+                                        className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                        onChange={(e) => {
+                                            const t = assetTagList.find((t: any) => t.id === Number(e.target.value));
+                                            if (t) addAssetTag(t);
+                                            e.target.value = '';
+                                        }}
+                                        value=""
+                                    >
+                                        <option value="">-- Pilih asset tag untuk ditambahkan --</option>
+                                        {assetTagList.map((t: any) => (
+                                            <option key={t.id} value={t.id}>{t.tag_number}</option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    <p className="text-sm text-gray-400 italic">Belum ada asset tag untuk produk ini</p>
+                                )}
+                            </div>
+                        )}
 
                         {selectedItems.length > 0 && (
                             <div className="space-y-2">
@@ -105,7 +152,7 @@ const LabelPage = () => {
                                         <div key={idx} className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
                                             <div className="flex items-center gap-3">
                                                 <div className="bg-white dark:bg-gray-700 p-1 rounded">
-                                                    <QRCode value={`INV:PRODUK:${item.code}`} size={40} level="M" />
+                                                    <QRCode value={item.type === 'asset_tag' ? `INV:TAG:${item.code}` : `INV:PRODUK:${item.code}`} size={40} level="M" />
                                                 </div>
                                                 <div>
                                                     <p className="text-sm font-medium text-gray-900 dark:text-white">{item.label}</p>
@@ -171,7 +218,7 @@ const LabelPage = () => {
                                 <div className="flex items-center gap-2">
                                     <span className="material-symbols-outlined text-green-600">check_circle</span>
                                     <span className="text-sm font-semibold text-green-800 dark:text-green-300">
-                                        {lookupResult.data.type === 'produk' ? 'Produk Ditemukan' : 'Serial Number Ditemukan'}
+                                        {lookupResult.data.type === 'produk' ? 'Produk Ditemukan' : lookupResult.data.type === 'asset_tag' ? 'Asset Tag Ditemukan' : 'Serial Number Ditemukan'}
                                     </span>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3 text-sm">
@@ -179,38 +226,65 @@ const LabelPage = () => {
                                         <>
                                             <div>
                                                 <p className="text-gray-500 text-xs">Kode</p>
-                                                <p className="font-mono font-semibold text-gray-900 dark:text-white">{lookupResult.data.produk?.code}</p>
+                                                <p className="font-mono font-semibold text-gray-900 dark:text-white">{lookupResult.data.data?.code}</p>
                                             </div>
                                             <div>
                                                 <p className="text-gray-500 text-xs">Nama</p>
-                                                <p className="font-medium text-gray-900 dark:text-white">{lookupResult.data.produk?.nama}</p>
+                                                <p className="font-medium text-gray-900 dark:text-white">{lookupResult.data.data?.nama}</p>
                                             </div>
                                             <div>
                                                 <p className="text-gray-500 text-xs">Brand</p>
-                                                <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.produk?.brand?.nama || '-'}</p>
+                                                <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.data?.brand?.nama || '-'}</p>
+                                            </div>
+                                        </>
+                                    ) : lookupResult.data.type === 'asset_tag' ? (
+                                        <>
+                                            <div>
+                                                <p className="text-gray-500 text-xs">Asset Tag</p>
+                                                <p className="font-mono font-semibold text-gray-900 dark:text-white">{lookupResult.data.data?.tag_number}</p>
                                             </div>
                                             <div>
-                                                <p className="text-gray-500 text-xs">Kategori</p>
-                                                <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.produk?.brand?.sub_kategori?.kategori?.nama || '-'}</p>
+                                                <p className="text-gray-500 text-xs">Produk</p>
+                                                <p className="font-medium text-gray-900 dark:text-white">{lookupResult.data.data?.produk?.nama}</p>
                                             </div>
+                                            <div>
+                                                <p className="text-gray-500 text-xs">Status</p>
+                                                <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.data?.status}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-gray-500 text-xs">Gudang</p>
+                                                <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.data?.gudang?.nama || '-'}</p>
+                                            </div>
+                                            {lookupResult.data.data?.serial_number && (
+                                                <div>
+                                                    <p className="text-gray-500 text-xs">Serial Number</p>
+                                                    <p className="font-mono text-gray-700 dark:text-gray-300">{lookupResult.data.data.serial_number}</p>
+                                                </div>
+                                            )}
+                                            {lookupResult.data.data?.karyawan && (
+                                                <div>
+                                                    <p className="text-gray-500 text-xs">Karyawan</p>
+                                                    <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.data.karyawan.nama_lengkap}</p>
+                                                </div>
+                                            )}
                                         </>
                                     ) : (
                                         <>
                                             <div>
                                                 <p className="text-gray-500 text-xs">Serial Number</p>
-                                                <p className="font-mono font-semibold text-gray-900 dark:text-white">{lookupResult.data.serial_number?.serial_number}</p>
+                                                <p className="font-mono font-semibold text-gray-900 dark:text-white">{lookupResult.data.data?.serial_number}</p>
                                             </div>
                                             <div>
                                                 <p className="text-gray-500 text-xs">Produk</p>
-                                                <p className="font-medium text-gray-900 dark:text-white">{lookupResult.data.serial_number?.produk?.nama}</p>
+                                                <p className="font-medium text-gray-900 dark:text-white">{lookupResult.data.data?.produk?.nama}</p>
                                             </div>
                                             <div>
                                                 <p className="text-gray-500 text-xs">Status</p>
-                                                <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.serial_number?.status}</p>
+                                                <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.data?.status}</p>
                                             </div>
                                             <div>
                                                 <p className="text-gray-500 text-xs">Gudang</p>
-                                                <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.serial_number?.gudang?.nama || '-'}</p>
+                                                <p className="text-gray-700 dark:text-gray-300">{lookupResult.data.data?.gudang?.nama || '-'}</p>
                                             </div>
                                         </>
                                     )}

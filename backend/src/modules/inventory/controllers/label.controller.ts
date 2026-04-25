@@ -20,6 +20,15 @@ class LabelController {
         }
     }
 
+    async getAssetTagQR(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await labelService.generateAssetTagQR(Number(req.params.id));
+            res.json({ status: 'success', data });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async printLabels(req: Request, res: Response, next: NextFunction) {
         try {
             const { items } = req.body;

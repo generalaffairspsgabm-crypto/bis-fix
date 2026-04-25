@@ -9,7 +9,9 @@ import InvProduk from '../models/Produk';
 import InvGudang from '../models/Gudang';
 import InvUom from '../models/Uom';
 import InvBrand from '../models/Brand';
+import InvSubKategori from '../models/SubKategori';
 import Employee from '../../hr/models/Employee';
+import LokasiKerja from '../../hr/models/LokasiKerja';
 import User from '../../auth/models/User';
 import notificationService from '../../../shared/services/notification.service';
 
@@ -59,6 +61,42 @@ class StokService {
         }
 
         return `${prefix}-${String(nextNumber).padStart(4, '0')}`;
+    }
+
+    private async generateTagNumber(produkId: number, gudangId: number, t: Transaction): Promise<string | null> {
+        const produk = await InvProduk.findByPk(produkId, {
+            include: [{ model: InvBrand, as: 'brand', include: [{ model: InvSubKategori, as: 'sub_kategori' }] }],
+            transaction: t,
+        });
+
+        const prefixTag = produk?.brand?.sub_kategori?.prefix_tag;
+        if (!prefixTag) return null;
+
+        const gudang = await InvGudang.findByPk(gudangId, {
+            include: [{ model: LokasiKerja, as: 'lokasi_kerja' }],
+            transaction: t,
+        });
+
+        const kodeSite = gudang?.lokasi_kerja?.kode_site?.toUpperCase();
+        if (!kodeSite) return null;
+
+        const tagPrefix = `${prefixTag}_${kodeSite}_`;
+
+        const lastTag = await InvSerialNumber.findOne({
+            where: { tag_number: { [Op.like]: `${tagPrefix}%` } },
+            order: [['tag_number', 'DESC']],
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+        });
+
+        let nextNumber = 1;
+        if (lastTag?.tag_number) {
+            const parts = lastTag.tag_number.split('_');
+            const lastNum = parseInt(parts[parts.length - 1], 10);
+            if (!isNaN(lastNum)) nextNumber = lastNum + 1;
+        }
+
+        return `${tagPrefix}${String(nextNumber).padStart(7, '0')}`;
     }
 
     async getStokList(filters: any) {
@@ -207,7 +245,7 @@ class StokService {
 
         if (produk.has_serial_number && detail.serial_numbers?.length) {
             for (const sn of detail.serial_numbers) {
-                await InvSerialNumber.create({
+                const snRecord = await InvSerialNumber.create({
                     produk_id: detail.produk_id,
                     serial_number: sn,
                     gudang_id: gudangId,
@@ -216,6 +254,29 @@ class StokService {
                     transaksi_masuk_id: transaksi.id,
                     transaksi_terakhir_id: transaksi.id,
                 }, { transaction: t });
+
+                if (produk.has_tag_number) {
+                    const tagNumber = await this.generateTagNumber(detail.produk_id, gudangId, t);
+                    if (tagNumber) {
+                        await snRecord.update({ tag_number: tagNumber }, { transaction: t });
+                    }
+                }
+            }
+        } else if (produk.has_tag_number && !produk.has_serial_number) {
+            for (let i = 0; i < detail.jumlah; i++) {
+                const tagNumber = await this.generateTagNumber(detail.produk_id, gudangId, t);
+                if (tagNumber) {
+                    await InvSerialNumber.create({
+                        produk_id: detail.produk_id,
+                        serial_number: null,
+                        tag_number: tagNumber,
+                        gudang_id: gudangId,
+                        karyawan_id: null,
+                        status: 'Tersedia',
+                        transaksi_masuk_id: transaksi.id,
+                        transaksi_terakhir_id: transaksi.id,
+                    }, { transaction: t });
+                }
             }
         }
 

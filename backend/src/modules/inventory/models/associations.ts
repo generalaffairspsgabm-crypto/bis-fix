@@ -10,6 +10,7 @@ import InvTransaksiDetail from './TransaksiDetail';
 import InvSerialNumber from './SerialNumber';
 import Employee from '../../hr/models/Employee';
 import Department from '../../hr/models/Department';
+import LokasiKerja from '../../hr/models/LokasiKerja';
 import User from '../../auth/models/User';
 
 // Kategori -> SubKategori
@@ -31,6 +32,9 @@ Employee.hasMany(InvGudang, { foreignKey: 'penanggung_jawab_id', as: 'gudang_tan
 // Gudang -> Department
 InvGudang.belongsTo(Department, { foreignKey: 'department_id', as: 'department' });
 Department.hasMany(InvGudang, { foreignKey: 'department_id', as: 'gudang' });
+
+// Gudang -> LokasiKerja
+InvGudang.belongsTo(LokasiKerja, { foreignKey: 'lokasi_kerja_id', as: 'lokasi_kerja' });
 
 // Stok -> Produk, Gudang, Uom
 InvStok.belongsTo(InvProduk, { foreignKey: 'produk_id', as: 'produk' });

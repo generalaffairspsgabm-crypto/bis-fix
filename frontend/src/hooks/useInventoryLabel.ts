@@ -17,9 +17,17 @@ export const useSerialNumberQR = (snId: number) => {
     });
 };
 
+export const useAssetTagQR = (tagId: number) => {
+    return useQuery({
+        queryKey: ['inventoryLabel', 'asset-tag', tagId],
+        queryFn: () => inventoryLabelService.getAssetTagQR(tagId),
+        enabled: !!tagId,
+    });
+};
+
 export const usePrintLabels = () => {
     return useMutation({
-        mutationFn: (items: Array<{ type: 'produk' | 'serial_number'; id: number }>) =>
+        mutationFn: (items: Array<{ type: 'produk' | 'serial_number' | 'asset_tag'; id: number }>) =>
             inventoryLabelService.printLabels(items),
     });
 };

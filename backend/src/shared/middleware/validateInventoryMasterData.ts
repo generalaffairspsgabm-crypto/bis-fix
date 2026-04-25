@@ -4,7 +4,7 @@ import { AppError } from '../utils/errorHandler';
 
 const baseSchema = z.object({
     nama: z.string().min(1, 'Nama tidak boleh kosong'),
-    keterangan: z.string().optional(),
+    keterangan: z.string().optional().nullable(),
     status: z.union([z.boolean(), z.string()])
         .transform(val => {
             if (val === true || val === 'true' || val === 'Aktif') return 'Aktif';
@@ -14,12 +14,11 @@ const baseSchema = z.object({
         .default('Aktif'),
 });
 
-const kategoriSchema = baseSchema.extend({
-    type: z.enum(['Fixed Asset', 'Consumable'], { message: 'Type harus dipilih' }),
-});
+const kategoriSchema = baseSchema;
 
 const subKategoriSchema = baseSchema.extend({
     kategori_id: z.number().int().positive('Kategori harus dipilih'),
+    prefix_tag: z.string().optional().nullable(),
 });
 
 const brandSchema = baseSchema.extend({
@@ -37,12 +36,20 @@ const produkSchema = baseSchema.extend({
         })
         .optional()
         .default(false),
+    has_tag_number: z.union([z.boolean(), z.string()])
+        .transform(val => {
+            if (val === true || val === 'true') return true;
+            return false;
+        })
+        .optional()
+        .default(false),
 });
 
 const gudangSchema = baseSchema.extend({
     penanggung_jawab_id: z.number().int().optional().nullable(),
     department_id: z.number().int().optional().nullable(),
-    lokasi: z.string().optional(),
+    lokasi_kerja_id: z.number().int().optional().nullable(),
+    lokasi: z.string().optional().nullable(),
 });
 
 const schemaMap: Record<string, z.ZodSchema> = {

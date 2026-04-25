@@ -8,6 +8,7 @@ export class InvProduk extends Model {
     public nama!: string;
     public brand_id!: number;
     public has_serial_number!: boolean;
+    public has_tag_number!: boolean;
     public stok_minimum!: number | null;
     public gambar!: string | null;
     public keterangan!: string | null;
@@ -47,6 +48,11 @@ InvProduk.init({
         },
     },
     has_serial_number: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
+    has_tag_number: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,

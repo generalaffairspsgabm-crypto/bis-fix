@@ -258,18 +258,18 @@ async function seedAll() {
         // ═══════════════════════════════════════════
         console.log('\n--- Layer 5: Inventory Master Data ---');
 
-        const [ikatIT] = await InvKategori.findOrCreate({ where: { code: 'IKAT001' }, defaults: { code: 'IKAT001', nama: 'IT Equipment', type: 'Fixed Asset', keterangan: 'Peralatan IT', status: 'Aktif' } as any });
-        const [ikatOffice] = await InvKategori.findOrCreate({ where: { code: 'IKAT002' }, defaults: { code: 'IKAT002', nama: 'Office Supplies', type: 'Consumable', keterangan: 'Perlengkapan Kantor', status: 'Aktif' } as any });
-        const [ikatFurni] = await InvKategori.findOrCreate({ where: { code: 'IKAT003' }, defaults: { code: 'IKAT003', nama: 'Furniture', type: 'Fixed Asset', keterangan: 'Perabotan Kantor', status: 'Aktif' } as any });
+        const [ikatInventory] = await InvKategori.findOrCreate({ where: { code: 'IKAT001' }, defaults: { code: 'IKAT001', nama: 'Inventory', keterangan: 'Barang inventaris umum', status: 'Aktif' } as any });
+        const [ikatFixedAsset] = await InvKategori.findOrCreate({ where: { code: 'IKAT002' }, defaults: { code: 'IKAT002', nama: 'Fixed Asset', keterangan: 'Aset tetap perusahaan', status: 'Aktif' } as any });
+        const [ikatConsumable] = await InvKategori.findOrCreate({ where: { code: 'IKAT003' }, defaults: { code: 'IKAT003', nama: 'Consumable Asset', keterangan: 'Barang habis pakai', status: 'Aktif' } as any });
         console.log('  InvKategori: 3');
 
-        const [isubLaptop] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB001' }, defaults: { code: 'ISUB001', nama: 'Laptop', kategori_id: ikatIT.id, status: 'Aktif' } as any });
-        const [isubDesktop] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB002' }, defaults: { code: 'ISUB002', nama: 'Desktop', kategori_id: ikatIT.id, status: 'Aktif' } as any });
-        const [isubPrinter] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB003' }, defaults: { code: 'ISUB003', nama: 'Printer', kategori_id: ikatIT.id, status: 'Aktif' } as any });
-        const [isubATK] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB004' }, defaults: { code: 'ISUB004', nama: 'ATK', kategori_id: ikatOffice.id, status: 'Aktif' } as any });
-        const [isubKertas] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB005' }, defaults: { code: 'ISUB005', nama: 'Kertas', kategori_id: ikatOffice.id, status: 'Aktif' } as any });
-        const [isubMeja] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB006' }, defaults: { code: 'ISUB006', nama: 'Meja', kategori_id: ikatFurni.id, status: 'Aktif' } as any });
-        const [isubKursi] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB007' }, defaults: { code: 'ISUB007', nama: 'Kursi', kategori_id: ikatFurni.id, status: 'Aktif' } as any });
+        const [isubLaptop] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB001' }, defaults: { code: 'ISUB001', nama: 'Laptop', kategori_id: ikatInventory.id, status: 'Aktif' } as any });
+        const [isubDesktop] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB002' }, defaults: { code: 'ISUB002', nama: 'Desktop', kategori_id: ikatInventory.id, status: 'Aktif' } as any });
+        const [isubPrinter] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB003' }, defaults: { code: 'ISUB003', nama: 'Printer', kategori_id: ikatInventory.id, status: 'Aktif' } as any });
+        const [isubATK] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB004' }, defaults: { code: 'ISUB004', nama: 'ATK', kategori_id: ikatConsumable.id, status: 'Aktif' } as any });
+        const [isubKertas] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB005' }, defaults: { code: 'ISUB005', nama: 'Kertas', kategori_id: ikatConsumable.id, status: 'Aktif' } as any });
+        const [isubMeja] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB006' }, defaults: { code: 'ISUB006', nama: 'Meja', kategori_id: ikatFixedAsset.id, status: 'Aktif' } as any });
+        const [isubKursi] = await InvSubKategori.findOrCreate({ where: { code: 'ISUB007' }, defaults: { code: 'ISUB007', nama: 'Kursi', kategori_id: ikatFixedAsset.id, status: 'Aktif' } as any });
         console.log('  InvSubKategori: 7');
 
         const [ibrnLenovo] = await InvBrand.findOrCreate({ where: { code: 'IBRN001' }, defaults: { code: 'IBRN001', nama: 'Lenovo', sub_kategori_id: isubLaptop.id, status: 'Aktif' } as any });

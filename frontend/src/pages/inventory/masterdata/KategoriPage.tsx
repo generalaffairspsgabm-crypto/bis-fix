@@ -35,23 +35,12 @@ const KategoriPage = () => {
         { header: 'No', accessor: (_, index) => (page - 1) * 10 + index + 1, className: 'w-16' },
         { header: 'Code', accessor: 'code' },
         { header: 'Nama Kategori', accessor: 'nama' },
-        { header: 'Type', accessor: 'type' },
         { header: 'Keterangan', accessor: 'keterangan' },
         { header: 'Status', accessor: 'status' },
     ];
 
     const formFields = [
         { name: 'nama', label: 'Nama Kategori', type: 'text' as const, required: true, placeholder: 'Contoh: Elektronik, Alat Tulis', autoTitleCase: true },
-        {
-            name: 'type',
-            label: 'Type',
-            type: 'select' as const,
-            required: true,
-            options: [
-                { label: 'Fixed Asset', value: 'Fixed Asset' },
-                { label: 'Consumable', value: 'Consumable' },
-            ]
-        },
         { name: 'keterangan', label: 'Keterangan', type: 'textarea' as const, autoTitleCase: true },
         { name: 'status', label: 'Status', type: 'toggle' as const },
     ];

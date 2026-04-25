@@ -5,7 +5,7 @@ import { AppError } from '../utils/errorHandler';
 // Common schemas
 const baseSchema = z.object({
     nama: z.string().min(1, 'Nama tidak boleh kosong'),
-    keterangan: z.string().optional(),
+    keterangan: z.string().optional().nullable(),
     status: z.union([z.boolean(), z.string()])
         .transform(val => {
             if (val === true || val === 'true' || val === 'Aktif') return 'Aktif';
@@ -28,11 +28,12 @@ const posisiSchema = baseSchema.extend({
 });
 
 const tagSchema = baseSchema.extend({
-    warna_tag: z.string().optional(),
+    warna_tag: z.string().optional().nullable(),
 });
 
 const lokasiSchema = baseSchema.extend({
-    alamat: z.string().optional(),
+    alamat: z.string().optional().nullable(),
+    kode_site: z.string().optional().nullable(),
 });
 
 // Map model name to schema

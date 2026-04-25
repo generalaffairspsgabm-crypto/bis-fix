@@ -38,6 +38,7 @@ const LokasiKerjaPage: React.FC = () => {
     const columns: Column<LokasiKerja>[] = [
         { header: 'No', accessor: (_, index) => (page - 1) * 10 + index + 1, className: 'w-16' },
         { header: 'Code', accessor: 'code' },
+        { header: 'Kode Site', accessor: 'kode_site' },
         { header: 'Nama Lokasi', accessor: 'nama' },
         { header: 'Alamat', accessor: 'alamat' },
         { header: 'Status', accessor: 'status' },
@@ -45,6 +46,7 @@ const LokasiKerjaPage: React.FC = () => {
 
     const formFields = [
         { name: 'nama', label: 'Nama Lokasi', type: 'text' as const, required: true, autoTitleCase: true },
+        { name: 'kode_site', label: 'Kode Site', type: 'text' as const, placeholder: 'Contoh: ABM' },
         { name: 'alamat', label: 'Alamat', type: 'textarea' as const, autoTitleCase: true },
         { name: 'keterangan', label: 'Keterangan', type: 'textarea' as const, autoTitleCase: true },
         { name: 'status', label: 'Status', type: 'toggle' as const },

@@ -43,6 +43,7 @@ export interface Tag extends MasterData {
     warna_tag: string;
 }
 export interface LokasiKerja extends MasterData {
+    kode_site?: string;
     alamat?: string;
 }
 export interface StatusKaryawan extends MasterData { }

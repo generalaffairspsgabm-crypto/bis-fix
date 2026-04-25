@@ -59,7 +59,11 @@
       "Bash(python -c \"import json,sys; data=json.load\\(sys.stdin\\); text=data[0]['text']; print\\(text[:8000]\\)\")",
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__evaluate_script",
       "mcp__plugin_playwright_playwright__browser_press_key",
-      "mcp__plugin_playwright_playwright__browser_select_option"
+      "mcp__plugin_playwright_playwright__browser_select_option",
+      "Bash(npx kill-port *)",
+      "Bash(where psql *)",
+      "Bash(python3 -c \"import sys,json; print\\(json.load\\(sys.stdin\\)['data']['token']\\)\")",
+      "mcp__plugin_playwright_playwright__browser_run_code"
     ]
   }
 }

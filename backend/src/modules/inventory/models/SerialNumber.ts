@@ -4,7 +4,8 @@ import sequelize from '../../../config/database';
 export class InvSerialNumber extends Model {
     public id!: number;
     public produk_id!: number;
-    public serial_number!: string;
+    public serial_number!: string | null;
+    public tag_number!: string | null;
     public gudang_id!: number | null;
     public karyawan_id!: number | null;
     public status!: 'Tersedia' | 'Digunakan' | 'Rusak' | 'Disposed';
@@ -32,7 +33,12 @@ InvSerialNumber.init({
     },
     serial_number: {
         type: DataTypes.STRING(100),
-        allowNull: false,
+        allowNull: true,
+    },
+    tag_number: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        unique: true,
     },
     gudang_id: {
         type: DataTypes.INTEGER,

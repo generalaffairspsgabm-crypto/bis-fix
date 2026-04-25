@@ -50,6 +50,7 @@ const ProdukPage = () => {
         { header: 'Nama Produk', accessor: 'nama' },
         { header: 'Brand', accessor: (item: InvProduk) => item.brand?.nama || '-' },
         { header: 'Serial Number', accessor: (item: InvProduk) => item.has_serial_number ? 'Ya' : 'Tidak' },
+        { header: 'Tag Number', accessor: (item: InvProduk) => item.has_tag_number ? 'Ya' : 'Tidak' },
         { header: 'Stok Min', accessor: (item: InvProduk) => item.stok_minimum ?? 5, className: 'w-24' },
         { header: 'Status', accessor: 'status' },
     ];
@@ -65,6 +66,7 @@ const ProdukPage = () => {
             options: brandData?.data.map((d: any) => ({ label: d.nama, value: d.id })) || []
         },
         { name: 'has_serial_number', label: 'Memiliki Serial Number', type: 'toggle' as const },
+        { name: 'has_tag_number', label: 'Memiliki Tag Number', type: 'toggle' as const },
         { name: 'stok_minimum', label: 'Stok Minimum', type: 'number' as const },
         { name: 'keterangan', label: 'Keterangan', type: 'textarea' as const, autoTitleCase: true },
         { name: 'status', label: 'Status', type: 'toggle' as const },
@@ -96,6 +98,7 @@ const ProdukPage = () => {
             ...formData,
             brand_id: Number(formData.brand_id),
             has_serial_number: formData.has_serial_number === true || formData.has_serial_number === 'true',
+            has_tag_number: formData.has_tag_number === true || formData.has_tag_number === 'true',
             stok_minimum: formData.stok_minimum ? Number(formData.stok_minimum) : 5,
         };
         if (modalMode === 'create') {

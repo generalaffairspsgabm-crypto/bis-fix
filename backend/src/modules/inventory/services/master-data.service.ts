@@ -10,6 +10,15 @@ const CODE_PREFIX_MAP: Record<string, string> = {
     'InvGudang': 'IGD',
 };
 
+const MODEL_SLUG_MAP: Record<string, string> = {
+    'InvKategori': 'kategori',
+    'InvSubKategori': 'sub-kategori',
+    'InvBrand': 'brand',
+    'InvUom': 'uom',
+    'InvProduk': 'produk',
+    'InvGudang': 'gudang',
+};
+
 class InventoryMasterDataService {
     async generateCode(model: ModelStatic<Model>): Promise<string> {
         const prefix = CODE_PREFIX_MAP[model.name];
@@ -86,8 +95,9 @@ class InventoryMasterDataService {
     }
 
     async invalidateCache(modelName: string) {
+        const slug = MODEL_SLUG_MAP[modelName] || modelName.toLowerCase();
         await cacheService.delPattern(`inv_master_data:${modelName}:*`);
-        await cacheService.delPattern(`cache:/api/inventory/master/${modelName.toLowerCase()}*`);
+        await cacheService.delPattern(`cache:/api/inventory/master/${slug}*`);
     }
 
     async create(model: ModelStatic<Model>, data: any) {

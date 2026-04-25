@@ -10,7 +10,12 @@ const getSerialNumberQR = async (snId: number) => {
     return response.data;
 };
 
-const printLabels = async (items: Array<{ type: 'produk' | 'serial_number'; id: number }>): Promise<Blob> => {
+const getAssetTagQR = async (tagId: number) => {
+    const response = await client.get(`/inventory/label/asset-tag/${tagId}/qr`);
+    return response.data;
+};
+
+const printLabels = async (items: Array<{ type: 'produk' | 'serial_number' | 'asset_tag'; id: number }>): Promise<Blob> => {
     const response = await client.post('/inventory/label/print', { items }, { responseType: 'blob' });
     return response.data;
 };
@@ -20,5 +25,5 @@ const lookupQR = async (code: string) => {
     return response.data;
 };
 
-const inventoryLabelService = { getProductQR, getSerialNumberQR, printLabels, lookupQR };
+const inventoryLabelService = { getProductQR, getSerialNumberQR, getAssetTagQR, printLabels, lookupQR };
 export default inventoryLabelService;

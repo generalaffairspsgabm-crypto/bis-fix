@@ -23,7 +23,6 @@ export const useSerialNumberList = (filters?: SerialNumberFilter) => {
         queryKey: ['inventorySerialNumbers', filters],
         queryFn: () => inventoryStokService.getSerialNumbers(filters),
         placeholderData: keepPreviousData,
-        enabled: !!filters?.produk_id,
     });
 };
 

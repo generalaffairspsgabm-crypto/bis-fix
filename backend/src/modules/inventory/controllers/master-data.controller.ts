@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import masterDataService from '../services/master-data.service';
 import * as models from '../models';
 import { Employee } from '../../hr/models';
+import LokasiKerja from '../../hr/models/LokasiKerja';
 
 class InventoryMasterDataController {
     private getModel(modelName: string) {
@@ -35,6 +36,7 @@ class InventoryMasterDataController {
             } else if (modelName === 'gudang') {
                 include.push({ association: 'penanggung_jawab' });
                 include.push({ association: 'department' });
+                include.push({ association: 'lokasi_kerja' });
             }
 
             const result = await masterDataService.findAllWithFilter(model, req.query, include);
@@ -93,6 +95,10 @@ class InventoryMasterDataController {
                     req.body.department_id = (employee as any).department_id || null;
                 }
             }
+            if (normalizedModel === 'gudang' && req.body.lokasi_kerja_id) {
+                const lokasi = await LokasiKerja.findByPk(req.body.lokasi_kerja_id);
+                if (!lokasi) return res.status(400).json({ message: 'Lokasi kerja tidak ditemukan' });
+            }
 
             const data = await masterDataService.create(model, req.body);
             res.status(201).json({ status: 'success', data });
@@ -126,6 +132,10 @@ class InventoryMasterDataController {
                 if (!req.body.department_id) {
                     req.body.department_id = (employee as any).department_id || null;
                 }
+            }
+            if (normalizedModel === 'gudang' && req.body.lokasi_kerja_id) {
+                const lokasi = await LokasiKerja.findByPk(req.body.lokasi_kerja_id);
+                if (!lokasi) return res.status(400).json({ message: 'Lokasi kerja tidak ditemukan' });
             }
 
             const data = await masterDataService.update(model, Number(req.params.id), req.body);

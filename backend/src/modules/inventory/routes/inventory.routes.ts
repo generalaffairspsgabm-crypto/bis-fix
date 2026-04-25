@@ -241,6 +241,12 @@ router.get(
     (req, res, next) => labelController.getSerialNumberQR(req, res, next)
 );
 
+router.get(
+    '/label/asset-tag/:id/qr',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => labelController.getAssetTagQR(req, res, next)
+);
+
 router.post(
     '/label/print',
     checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),

@@ -7,6 +7,7 @@ export class InvSubKategori extends Model {
     public code!: string;
     public nama!: string;
     public kategori_id!: number;
+    public prefix_tag!: string | null;
     public keterangan!: string | null;
     public status!: 'Aktif' | 'Tidak Aktif';
 
@@ -42,6 +43,10 @@ InvSubKategori.init({
             model: 'inv_kategori',
             key: 'id',
         },
+    },
+    prefix_tag: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
     },
     keterangan: {
         type: DataTypes.TEXT,

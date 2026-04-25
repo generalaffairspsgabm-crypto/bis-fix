@@ -6,7 +6,6 @@ export class InvKategori extends Model {
     public id!: number;
     public code!: string;
     public nama!: string;
-    public type!: 'Fixed Asset' | 'Consumable';
     public keterangan!: string | null;
     public status!: 'Aktif' | 'Tidak Aktif';
 
@@ -32,10 +31,6 @@ InvKategori.init({
         validate: {
             notEmpty: { msg: 'Nama kategori tidak boleh kosong' },
         },
-    },
-    type: {
-        type: DataTypes.ENUM('Fixed Asset', 'Consumable'),
-        allowNull: false,
     },
     keterangan: {
         type: DataTypes.TEXT,

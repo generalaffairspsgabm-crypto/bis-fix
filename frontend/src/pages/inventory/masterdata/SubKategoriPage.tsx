@@ -37,6 +37,7 @@ const SubKategoriPage = () => {
         { header: 'Code', accessor: 'code' },
         { header: 'Nama Sub Kategori', accessor: 'nama' },
         { header: 'Kategori', accessor: (item: InvSubKategori) => item.kategori?.nama || '-' },
+        { header: 'Prefix Tag', accessor: 'prefix_tag' },
         { header: 'Keterangan', accessor: 'keterangan' },
         { header: 'Status', accessor: 'status' },
     ];
@@ -51,6 +52,7 @@ const SubKategoriPage = () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             options: kategoriData?.data.map((d: any) => ({ label: d.nama, value: d.id })) || []
         },
+        { name: 'prefix_tag', label: 'Prefix Tag', type: 'text' as const, placeholder: 'Contoh: FUROF' },
         { name: 'keterangan', label: 'Keterangan', type: 'textarea' as const, autoTitleCase: true },
         { name: 'status', label: 'Status', type: 'toggle' as const },
     ];
