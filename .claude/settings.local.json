@@ -63,7 +63,8 @@
       "Bash(npx kill-port *)",
       "Bash(where psql *)",
       "Bash(python3 -c \"import sys,json; print\\(json.load\\(sys.stdin\\)['data']['token']\\)\")",
-      "mcp__plugin_playwright_playwright__browser_run_code"
+      "mcp__plugin_playwright_playwright__browser_run_code",
+      "Bash(disown)"
     ]
   }
 }

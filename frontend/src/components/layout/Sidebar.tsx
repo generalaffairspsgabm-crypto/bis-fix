@@ -140,6 +140,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
             icon: 'upload_file',
             permission: { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.CREATE },
         },
+        {
+            name: 'Laporan',
+            path: '/inventory/laporan',
+            icon: 'summarize',
+            permission: { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.READ },
+        },
     ];
 
     const settingsNavItems: NavItem[] = [

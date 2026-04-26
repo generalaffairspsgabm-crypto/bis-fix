@@ -39,12 +39,14 @@ const InventoryDashboardPage = () => {
             const blob = type === 'excel'
                 ? await inventoryDashboardService.exportStokExcel()
                 : await inventoryDashboardService.exportStokPDF();
-            const url = URL.createObjectURL(blob);
+            const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
+            a.style.display = 'none';
             a.href = url;
             a.download = type === 'excel' ? `Stok-Inventaris.xlsx` : `Laporan-Stok.pdf`;
+            document.body.appendChild(a);
             a.click();
-            URL.revokeObjectURL(url);
+            setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 2000);
             toast.success(`Export ${type.toUpperCase()} berhasil`);
         } catch {
             toast.error(`Gagal export ${type.toUpperCase()}`);

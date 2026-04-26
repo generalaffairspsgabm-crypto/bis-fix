@@ -25,12 +25,14 @@ const EmployeeAssetsTab: React.FC<Props> = ({ employeeId }) => {
         setDownloading(true);
         try {
             const blob = await inventoryEmployeeService.downloadBeritaAcara(employeeId);
-            const url = URL.createObjectURL(blob);
+            const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
+            a.style.display = 'none';
             a.href = url;
             a.download = `Berita-Acara-Serah-Terima.pdf`;
+            document.body.appendChild(a);
             a.click();
-            URL.revokeObjectURL(url);
+            setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 2000);
             toast.success('Berita acara berhasil diunduh');
         } catch {
             toast.error('Gagal mengunduh berita acara');

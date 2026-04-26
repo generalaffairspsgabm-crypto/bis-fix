@@ -201,6 +201,56 @@ router.get(
     (req, res, next) => exportController.exportStokPDF(req, res, next)
 );
 
+// === Laporan (Report) Export Routes ===
+
+router.get(
+    '/export/transaksi/excel',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportTransaksiExcel(req, res, next)
+);
+
+router.get(
+    '/export/transaksi/pdf',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportTransaksiPDF(req, res, next)
+);
+
+router.get(
+    '/export/serial-number/excel',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportSerialNumberExcel(req, res, next)
+);
+
+router.get(
+    '/export/serial-number/pdf',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportSerialNumberPDF(req, res, next)
+);
+
+router.get(
+    '/export/stok-rendah/excel',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportStokRendahExcel(req, res, next)
+);
+
+router.get(
+    '/export/stok-rendah/pdf',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportStokRendahPDF(req, res, next)
+);
+
+router.get(
+    '/export/pergerakan/excel',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportPergerakanExcel(req, res, next)
+);
+
+router.get(
+    '/export/pergerakan/pdf',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => exportController.exportPergerakanPDF(req, res, next)
+);
+
 // === Employee Asset Routes ===
 
 router.get(

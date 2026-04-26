@@ -8,7 +8,7 @@ import type { NotificationItem } from '../../services/api/notification.service';
 
 const MODULE_HEADERS: Record<string, { title: string; links: { label: string; href: string }[] }> = {
     hr: { title: 'Human Resources', links: [{ label: 'Direktori', href: '/hr/employee' }, { label: 'Organisasi', href: '/hr/masterdata' }] },
-    inventory: { title: 'Inventory Management', links: [{ label: 'Stok', href: '/inventory/stok' }, { label: 'Laporan', href: '/inventory/dashboard' }] },
+    inventory: { title: 'Inventory Management', links: [{ label: 'Stok', href: '/inventory/stok' }, { label: 'Laporan', href: '/inventory/laporan' }] },
     settings: { title: 'Pengaturan Sistem', links: [{ label: 'Konfigurasi', href: '/settings/roles' }] },
 };
 

@@ -21,14 +21,26 @@ export const useEmployeeList = () => {
     return useQuery({
         queryKey: ['employees', 'list'],
         queryFn: async () => {
-            // Assuming endpoint /hr/employees exists or /employees. 
-            // Based on context, it's likely /hr/employees or similar.
-            // I will use a safe route or generic.
             const response = await client.get('/hr/employees', {
-                params: { limit: 1000, status: 'Aktif' } // Fetch active only for dropdowns
+                params: { limit: 1000, status: 'Aktif' }
             });
             return response.data;
         },
         enabled: !!token
+    });
+};
+
+export const useEmployeesByDepartment = (departmentId?: number) => {
+    const { token } = useAuthStore();
+
+    return useQuery({
+        queryKey: ['employees', 'by-department', departmentId],
+        queryFn: async () => {
+            const response = await client.get('/hr/employees', {
+                params: { department_id: departmentId, limit: 1000, status: 'Aktif' }
+            });
+            return response.data;
+        },
+        enabled: !!token && !!departmentId,
     });
 };
