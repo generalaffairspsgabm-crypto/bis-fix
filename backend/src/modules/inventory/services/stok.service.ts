@@ -108,7 +108,7 @@ class StokService {
         if (produk_id) where.produk_id = produk_id;
 
         const include: any[] = [
-            { model: InvProduk, as: 'produk', attributes: ['id', 'code', 'nama', 'has_serial_number'], include: [{ model: InvBrand, as: 'brand', attributes: ['id', 'nama'] }] },
+            { model: InvProduk, as: 'produk', attributes: ['id', 'code', 'nama', 'has_serial_number', 'has_tag_number'], include: [{ model: InvBrand, as: 'brand', attributes: ['id', 'nama'] }] },
             { model: InvGudang, as: 'gudang', attributes: ['id', 'code', 'nama'] },
             { model: InvUom, as: 'uom', attributes: ['id', 'nama'] },
         ];
@@ -148,7 +148,12 @@ class StokService {
         if (gudang_id) where.gudang_id = gudang_id;
         if (karyawan_id) where.karyawan_id = karyawan_id;
         if (status) where.status = status;
-        if (search) where.serial_number = { [Op.iLike]: `%${search}%` };
+        if (search) {
+            where[Op.or] = [
+                { serial_number: { [Op.iLike]: `%${search}%` } },
+                { tag_number: { [Op.iLike]: `%${search}%` } },
+            ];
+        }
 
         const { rows, count } = await InvSerialNumber.findAndCountAll({
             where,

@@ -9,6 +9,7 @@
     "migrate": "ts-node src/database/migrate.ts",
     "seed": "ts-node src/database/seed.ts",
     "seed:all": "ts-node src/database/seed-all.ts",
+    "seed:complete": "ts-node src/database/seed-complete.ts",
     "lint": "eslint \"src/**/*.{ts,js}\"",
     "lint:fix": "eslint \"src/**/*.{ts,js}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,js}\"",
