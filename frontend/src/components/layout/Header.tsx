@@ -7,9 +7,9 @@ import { useUnreadCount, useNotifications, useMarkAsRead, useMarkAllAsRead } fro
 import type { NotificationItem } from '../../services/api/notification.service';
 
 const MODULE_HEADERS: Record<string, { title: string; links: { label: string; href: string }[] }> = {
-    hr: { title: 'Human Resources', links: [{ label: 'Direktori', href: '#' }, { label: 'Organisasi', href: '#' }] },
-    inventory: { title: 'Inventory Management', links: [{ label: 'Stok', href: '#' }, { label: 'Laporan', href: '#' }] },
-    settings: { title: 'Pengaturan Sistem', links: [{ label: 'Konfigurasi', href: '#' }] },
+    hr: { title: 'Human Resources', links: [{ label: 'Direktori', href: '/hr/employee' }, { label: 'Organisasi', href: '/hr/masterdata' }] },
+    inventory: { title: 'Inventory Management', links: [{ label: 'Stok', href: '/inventory/stok' }, { label: 'Laporan', href: '/inventory/dashboard' }] },
+    settings: { title: 'Pengaturan Sistem', links: [{ label: 'Konfigurasi', href: '/settings/roles' }] },
 };
 
 const Header = () => {
@@ -47,7 +47,7 @@ const Header = () => {
                 <h2 className="text-xl font-extrabold text-[#0d121b] dark:text-white tracking-tight">{config.title}</h2>
                 <nav className="hidden lg:flex items-center gap-8 ml-10">
                     {config.links.map(link => (
-                        <a key={link.label} className="text-[13px] font-bold text-[#4c669a] hover:text-primary transition-all uppercase tracking-widest" href={link.href}>{link.label}</a>
+                        <button key={link.label} onClick={() => navigate(link.href)} className="text-[13px] font-bold text-[#4c669a] hover:text-primary transition-all uppercase tracking-widest">{link.label}</button>
                     ))}
                 </nav>
             </div>

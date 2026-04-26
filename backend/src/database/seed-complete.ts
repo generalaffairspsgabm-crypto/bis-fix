@@ -938,6 +938,42 @@ async function seedComplete() {
                 tag_number: `LPT-IT2-${String(i + 1).padStart(4, '0')}`,
                 gudang_code: 'GDG-002', status: 'Tersedia' as const, trx_masuk_code: 'TRX-002',
             })),
+            // Epson L3210 - serial only (GDG-001, 5 unit)
+            ...Array.from({ length: 5 }, (_, i) => ({
+                produk_code: 'PRD-006', serial_number: `EPS-L3210-2025-${String(i + 1).padStart(4, '0')}`,
+                tag_number: null,
+                gudang_code: 'GDG-001', status: 'Tersedia' as const, trx_masuk_code: 'TRX-001',
+            })),
+            // Meja Kerja - tag only (GDG-001, 15 unit sisa setelah transfer 5 ke Bandung)
+            ...Array.from({ length: 15 }, (_, i) => ({
+                produk_code: 'PRD-007', serial_number: null,
+                tag_number: `MJA-JKT-${String(i + 1).padStart(4, '0')}`,
+                gudang_code: 'GDG-001', status: 'Tersedia' as const, trx_masuk_code: 'TRX-001',
+            })),
+            // Meja Kerja - tag only (GDG-004 Bandung, 5 unit transfer)
+            ...Array.from({ length: 5 }, (_, i) => ({
+                produk_code: 'PRD-007', serial_number: null,
+                tag_number: `MJA-BDG-${String(i + 1).padStart(4, '0')}`,
+                gudang_code: 'GDG-004', status: 'Tersedia' as const, trx_masuk_code: 'TRX-001',
+            })),
+            // Kursi Kantor - tag only (GDG-001, 15 unit sisa setelah transfer)
+            ...Array.from({ length: 15 }, (_, i) => ({
+                produk_code: 'PRD-008', serial_number: null,
+                tag_number: `KRS-JKT-${String(i + 1).padStart(4, '0')}`,
+                gudang_code: 'GDG-001', status: 'Tersedia' as const, trx_masuk_code: 'TRX-001',
+            })),
+            // Kursi Kantor - tag only (GDG-004 Bandung, 5 unit transfer)
+            ...Array.from({ length: 5 }, (_, i) => ({
+                produk_code: 'PRD-008', serial_number: null,
+                tag_number: `KRS-BDG-${String(i + 1).padStart(4, '0')}`,
+                gudang_code: 'GDG-004', status: 'Tersedia' as const, trx_masuk_code: 'TRX-001',
+            })),
+            // Lemari Arsip - tag only (GDG-003 Bekasi, 10 unit)
+            ...Array.from({ length: 10 }, (_, i) => ({
+                produk_code: 'PRD-009', serial_number: null,
+                tag_number: `LMR-BKS-${String(i + 1).padStart(4, '0')}`,
+                gudang_code: 'GDG-003', status: 'Tersedia' as const, trx_masuk_code: 'TRX-003',
+            })),
             // Toyota Avanza (tidak ada stok di gudang — contoh kendaraan operasional)
         ];
 
