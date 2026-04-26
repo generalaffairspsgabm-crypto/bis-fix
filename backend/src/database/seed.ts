@@ -1,137 +1,83 @@
 import sequelize from '../config/database';
-import {
-    Divisi,
-    Department,
-    PosisiJabatan,
-    KategoriPangkat,
-    Golongan,
-    SubGolongan,
-    JenisHubunganKerja,
-    Tag,
-    LokasiKerja,
-    StatusKaryawan,
-    Employee,
-    EmployeePersonalInfo,
-    EmployeeHRInfo,
-    EmployeeFamilyInfo
-} from '../modules/hr/models';
+import { RESOURCES, ACTIONS } from '../shared/constants/permissions';
+import { Role } from '../modules/auth/models/Role';
+import { Permission } from '../modules/auth/models/Permission';
+import User from '../modules/auth/models/User';
 
 const seed = async () => {
     try {
-        // Note: Assuming master data is already seeded by previous migrations/seeders. 
-        // If not, we would need to check/create them here.
-        // For this seed, we will query existing master data to assume valid IDs.
-        // If IDs are auto-increment and consistent, we can guess, but finding one is safer.
+        await sequelize.authenticate();
 
-        // Check if we have master data, otherwise we might fail.
-        // Ideally, master data seeders should run before this.
-        // We will attempt to create dummy employees using IDs 1, if available, or create minimal master data if missing (optional, but good for standalone testing)
+        const permissionsData = [
+            { resource: RESOURCES.EMPLOYEES, action: ACTIONS.CREATE },
+            { resource: RESOURCES.EMPLOYEES, action: ACTIONS.READ },
+            { resource: RESOURCES.EMPLOYEES, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.EMPLOYEES, action: ACTIONS.DELETE },
+            { resource: RESOURCES.EMPLOYEES, action: ACTIONS.VIEW_ALL },
+            { resource: RESOURCES.EMPLOYEES, action: ACTIONS.VIEW_DEPARTMENT },
+            { resource: RESOURCES.MASTER_DATA, action: ACTIONS.CREATE },
+            { resource: RESOURCES.MASTER_DATA, action: ACTIONS.READ },
+            { resource: RESOURCES.MASTER_DATA, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.MASTER_DATA, action: ACTIONS.DELETE },
+            { resource: RESOURCES.DOCUMENTS, action: ACTIONS.CREATE },
+            { resource: RESOURCES.DOCUMENTS, action: ACTIONS.READ },
+            { resource: RESOURCES.DOCUMENTS, action: ACTIONS.DELETE },
+            { resource: RESOURCES.AUDIT_LOGS, action: ACTIONS.READ },
+            { resource: RESOURCES.DASHBOARD, action: ACTIONS.READ },
+            { resource: RESOURCES.DASHBOARD, action: ACTIONS.VIEW_ALL },
+            { resource: RESOURCES.DASHBOARD, action: ACTIONS.VIEW_DEPARTMENT },
+            { resource: RESOURCES.IMPORT, action: ACTIONS.IMPORT },
+            { resource: RESOURCES.EXPORT, action: ACTIONS.EXPORT },
+            { resource: RESOURCES.ROLES, action: ACTIONS.CREATE },
+            { resource: RESOURCES.ROLES, action: ACTIONS.READ },
+            { resource: RESOURCES.ROLES, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.ROLES, action: ACTIONS.DELETE },
+            { resource: RESOURCES.USERS, action: ACTIONS.CREATE },
+            { resource: RESOURCES.USERS, action: ACTIONS.READ },
+            { resource: RESOURCES.USERS, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.USERS, action: ACTIONS.DELETE },
+            { resource: RESOURCES.INVENTORY_MASTER_DATA, action: ACTIONS.CREATE },
+            { resource: RESOURCES.INVENTORY_MASTER_DATA, action: ACTIONS.READ },
+            { resource: RESOURCES.INVENTORY_MASTER_DATA, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.INVENTORY_MASTER_DATA, action: ACTIONS.DELETE },
+            { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.CREATE },
+            { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.READ },
+            { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.DELETE },
+        ];
 
-        // For simplicity, assuming standard initial seed has run.
+        for (const p of permissionsData) {
+            await Permission.findOrCreate({ where: { resource: p.resource, action: p.action }, defaults: p });
+        }
 
-        // Create Employee 1 (Manager)
-        const manager = await Employee.create({
-            nama_lengkap: 'Budi Santoso',
-            nomor_induk_karyawan: 'EMP001',
-            email_perusahaan: 'budi.santoso@company.com',
-            nomor_handphone: '081234567890',
-            divisi_id: 1, // Assuming id 1 exists
-            department_id: 1,
-            posisi_jabatan_id: 1,
-            status_karyawan_id: 1,
-            lokasi_kerja_id: 1,
-            tag_id: 1
-        });
+        const rolesData = [
+            { name: 'superadmin', display_name: 'Super Administrator', is_system_role: true },
+            { name: 'admin', display_name: 'HR Admin', is_system_role: true },
+            { name: 'staff', display_name: 'HR Staff', is_system_role: true },
+            { name: 'manager', display_name: 'Manager', is_system_role: true },
+            { name: 'employee', display_name: 'Employee', is_system_role: true },
+        ];
+        for (const r of rolesData) {
+            await Role.findOrCreate({ where: { name: r.name }, defaults: r });
+        }
 
-        await EmployeePersonalInfo.create({
-            employee_id: manager.id,
-            jenis_kelamin: 'Laki-laki',
-            tempat_lahir: 'Jakarta',
-            tanggal_lahir: '1980-01-01',
-            email_pribadi: 'budi.personal@gmail.com',
-            agama: 'Islam',
-            golongan_darah: 'O',
-            nomor_ktp: '1234567890123456',
-            alamat_domisili: 'Jl. Sudirman No. 1',
-            kota_domisili: 'Jakarta Selatan',
-            status_pernikahan: 'Menikah',
-            nama_pasangan: 'Siti Aminah',
-            jumlah_anak: 2
-        });
+        const allPermissions = await Permission.findAll();
+        const superadminRole = await Role.findOne({ where: { name: 'superadmin' } });
+        if (superadminRole) await superadminRole.setPermissions(allPermissions);
 
-        await EmployeeHRInfo.create({
-            employee_id: manager.id,
-            jenis_hubungan_kerja_id: 1,
-            tanggal_masuk: '2010-01-01',
-            tingkat_pendidikan: 'S1',
-            nama_sekolah: 'Universitas Indonesia',
-            kategori_pangkat_id: 1,
-            golongan_pangkat_id: 1
-        });
-
-        await EmployeeFamilyInfo.create({
-            employee_id: manager.id,
-            nama_ayah_mertua: 'H. Abdul',
-            data_anak: [
-                { nama: 'Anak 1', jenis_kelamin: 'Laki-laki', tanggal_lahir: '2010-05-05' },
-                { nama: 'Anak 2', jenis_kelamin: 'Perempuan', tanggal_lahir: '2012-06-06' }
-            ]
-        });
-
-
-        // Create Employee 2 (Staff)
-        const staff = await Employee.create({
-            nama_lengkap: 'Ani Lestari',
-            nomor_induk_karyawan: 'EMP002',
-            email_perusahaan: 'ani.lestari@company.com',
-            nomor_handphone: '089876543210',
-            divisi_id: 1,
-            department_id: 1,
-            posisi_jabatan_id: 2,
-            status_karyawan_id: 1,
-            lokasi_kerja_id: 1,
-            tag_id: 1,
-            manager_id: manager.id, // Set manager
-            atasan_langsung_id: manager.id
-        });
-
-        await EmployeePersonalInfo.create({
-            employee_id: staff.id,
-            jenis_kelamin: 'Perempuan',
-            tempat_lahir: 'Bandung',
-            tanggal_lahir: '1995-02-15',
-            email_pribadi: 'ani.l@gmail.com',
-            agama: 'Kristen',
-            golongan_darah: 'A',
-            nomor_ktp: '9876543210987654',
-            alamat_domisili: 'Jl. Asia Afrika No. 10',
-            kota_domisili: 'Bandung',
-            status_pernikahan: 'Belum Menikah'
-        });
-
-        await EmployeeHRInfo.create({
-            employee_id: staff.id,
-            jenis_hubungan_kerja_id: 2,
-            tanggal_masuk: '2020-03-01',
-            tingkat_pendidikan: 'D3',
-            nama_sekolah: 'Politeknik Negeri Bandung'
-        });
-
-        await EmployeeFamilyInfo.create({
-            employee_id: staff.id,
-            jumlah_saudara_kandung: 1,
-            data_saudara_kandung: [
-                { nama: 'Budi Kecil', jenis_kelamin: 'Laki-laki', tanggal_lahir: '2000-01-01', pekerjaan: 'Mahasiswa' }
-            ]
-        });
+        if (superadminRole) {
+            await User.findOrCreate({ where: { nik: '111111' }, defaults: { nama: 'Superadmin', nik: '111111', password: 'password123', role_id: superadminRole.id, is_active: true } as any });
+            await User.findOrCreate({ where: { nik: '1234567890123456' }, defaults: { nama: 'Superadmin Full', nik: '1234567890123456', password: 'password123', role_id: superadminRole.id, is_active: true } as any });
+        }
 
         console.log('Seed data created successfully');
+        console.log('Login: NIK 1234567890123456 / password123');
+        console.log('Login: NIK 111111 / password123');
     } catch (error) {
         console.error('Error creating seed data:', error);
     }
 };
 
-// Execute if run directly
 if (require.main === module) {
     seed().then(() => {
         console.log('Done');
