@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { AxiosError } from 'axios';
@@ -76,12 +76,16 @@ const GudangForm = ({
         }
     }, [initialValues, reset]);
 
-    // Reset PJ and Lokasi when department changes
+    // Reset PJ and Lokasi when department changes (skip initial load)
     const [prevDeptId, setPrevDeptId] = useState(watchDeptId);
+    const isInitialMount = useRef(true);
     useEffect(() => {
         if (watchDeptId !== prevDeptId) {
-            setValue('penanggung_jawab_id', '');
-            setValue('lokasi_kerja_id', '');
+            if (!isInitialMount.current) {
+                setValue('penanggung_jawab_id', '');
+                setValue('lokasi_kerja_id', '');
+            }
+            isInitialMount.current = false;
             setPrevDeptId(watchDeptId);
         }
     }, [watchDeptId, prevDeptId, setValue]);
@@ -90,8 +94,8 @@ const GudangForm = ({
     useEffect(() => {
         if (watchPjId && employees.length > 0) {
             const emp = employees.find((e: any) => String(e.id) === watchPjId);
-            if (emp?.lokasi_kerja_id) {
-                setValue('lokasi_kerja_id', String(emp.lokasi_kerja_id));
+            if (emp?.lokasi_kerja?.id) {
+                setValue('lokasi_kerja_id', String(emp.lokasi_kerja.id));
             }
         }
     }, [watchPjId, employees, setValue]);
