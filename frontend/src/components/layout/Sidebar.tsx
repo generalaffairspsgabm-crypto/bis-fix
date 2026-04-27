@@ -169,6 +169,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
                     path: '/settings/roles',
                     icon: 'admin_panel_settings',
                     permission: { resource: RESOURCES.ROLES, action: ACTIONS.READ }
+                },
+                {
+                    name: 'Perusahaan',
+                    path: '/settings/company',
+                    icon: 'business',
                 }
             ]
         }

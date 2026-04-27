@@ -64,7 +64,13 @@
       "Bash(where psql *)",
       "Bash(python3 -c \"import sys,json; print\\(json.load\\(sys.stdin\\)['data']['token']\\)\")",
       "mcp__plugin_playwright_playwright__browser_run_code",
-      "Bash(disown)"
+      "Bash(disown)",
+      "Bash(nohup npm *)",
+      "Bash(echo \"Backend PID: $!\")",
+      "Bash(echo \"Frontend PID: $!\")",
+      "Bash(pkill -f \"nodemon --exec ts-node src/index.ts\")",
+      "mcp__plugin_playwright_playwright__browser_tabs",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__list_network_requests"
     ]
   }
 }

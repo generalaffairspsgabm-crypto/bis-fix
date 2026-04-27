@@ -6,6 +6,7 @@ import InvGudang from '../models/Gudang';
 import InvBrand from '../models/Brand';
 import Employee from '../../hr/models/Employee';
 import { AppError } from '../../../shared/utils/errorHandler';
+import companySettingsService from '../../auth/services/company-settings.service';
 
 class LabelService {
     async generateProductQR(produkId: number): Promise<{ qr: string; produk: any }> {
@@ -49,6 +50,7 @@ class LabelService {
     }
 
     async generateLabelPDF(items: Array<{ type: 'produk' | 'serial_number' | 'asset_tag'; id: number }>): Promise<Buffer> {
+        const settings = await companySettingsService.getSettings();
         const labels: Array<{ qr: string; line1: string; line2: string; line3?: string; isAssetTag?: boolean }> = [];
 
         for (const item of items) {
@@ -59,7 +61,7 @@ class LabelService {
                 const { qr, assetTag } = await this.generateAssetTagQR(item.id);
                 labels.push({
                     qr,
-                    line1: 'PT Prima Sarana Gemilang',
+                    line1: settings.company_legal_name,
                     line2: assetTag.produk?.nama || '',
                     line3: assetTag.tag_number,
                     isAssetTag: true,

@@ -6,12 +6,17 @@ import { loginSchema, LoginInput } from '../../schemas/auth.schema';
 import { authService } from '../../services/api/auth.service';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import { useCompanySettings } from '../../hooks/useCompanySettings';
 
 const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { login } = useAuthStore();
     const navigate = useNavigate();
+    const { data: settings } = useCompanySettings();
+
+    const apiBase = import.meta.env.VITE_API_URL?.replace('/api', '') || '';
+    const logoUrl = settings?.logo_url ? `${apiBase}${settings.logo_url}` : null;
 
     const {
         register,
@@ -42,15 +47,19 @@ const LoginPage = () => {
                 <div className="max-w-[1280px] mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-3 text-primary">
                         <div className="w-8 h-8 text-primary">
-                            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
+                            {logoUrl ? (
+                                <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
+                            ) : (
+                                <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z"
+                                        fill="currentColor"
+                                    ></path>
+                                </svg>
+                            )}
                         </div>
                         <h2 className="text-[#0d121b] dark:text-white text-lg font-bold leading-tight tracking-tight">
-                            Bebang Sistem Informasi
+                            {settings?.company_name || 'Bebang Sistem Informasi'}
                         </h2>
                     </div>
                     <div className="flex items-center gap-6">
@@ -94,12 +103,16 @@ const LoginPage = () => {
                         >
                             <div className="bg-white/90 dark:bg-gray-900/90 p-4 rounded-full shadow-lg">
                                 <div className="w-10 h-10 text-primary">
-                                    <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z"
-                                            fill="currentColor"
-                                        ></path>
-                                    </svg>
+                                    {logoUrl ? (
+                                        <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
+                                    ) : (
+                                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z"
+                                                fill="currentColor"
+                                            ></path>
+                                        </svg>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -107,10 +120,10 @@ const LoginPage = () => {
                     <div className="px-8 pt-8 pb-10">
                         <div className="text-center mb-8">
                             <h1 className="text-[#0d121b] dark:text-white text-2xl font-bold tracking-tight">
-                                Selamat Datang di Bebang
+                                Selamat Datang di {settings?.company_short_name || 'Bebang'}
                             </h1>
                             <p className="text-[#4c669a] dark:text-gray-400 text-sm mt-2">
-                                Sistem Informasi Terintegrasi PT Prima Sarana Gemilang
+                                {settings?.company_tagline || 'Sistem Informasi Terintegrasi'} {settings?.company_legal_name || 'PT Prima Sarana Gemilang'}
                             </p>
                         </div>
 
@@ -217,7 +230,7 @@ const LoginPage = () => {
             <footer className="w-full py-6 text-center">
                 <div className="px-4">
                     <p className="text-xs text-[#4c669a] dark:text-gray-500 font-medium uppercase tracking-widest">
-                        © 2024 PT Prima Sarana Gemilang • IT Division • v1.4.2
+                        © {new Date().getFullYear()} {settings?.company_legal_name || 'PT Prima Sarana Gemilang'} • IT Division • v{settings?.app_version || '1.4.2'}
                     </p>
                 </div>
             </footer>

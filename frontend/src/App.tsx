@@ -6,8 +6,9 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { PermissionGuard } from './components/auth/PermissionGuard';
 import { RESOURCES, ACTIONS } from './types/permission';
 import PermissionDeniedPage from './pages/error/PermissionDeniedPage';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import LoadingSpinner from './components/common/LoadingSpinner';
+import { useCompanySettings } from './hooks/useCompanySettings';
 
 const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'));
 const EmployeeListPage = lazy(() => import('./pages/hr/EmployeeListPage'));
@@ -20,6 +21,7 @@ const EmployeeDetailPage = lazy(() => import('./pages/hr/EmployeeDetailPage'));
 const RoleManagementPage = lazy(() => import('./pages/admin/RoleManagementPage'));
 const RoleFormPage = lazy(() => import('./pages/admin/RoleFormPage'));
 const UserManagementPage = lazy(() => import('./pages/admin/UserManagementPage'));
+const CompanySettingsPage = lazy(() => import('./pages/admin/CompanySettingsPage'));
 
 // Master Data Pages
 const DivisiPage = lazy(() => import('./pages/hr/masterdata/DivisiPage'));
@@ -55,6 +57,14 @@ const InventoryImportPage = lazy(() => import('./pages/inventory/ImportPage'));
 const LaporanPage = lazy(() => import('./pages/inventory/LaporanPage'));
 
 function App() {
+    const { data: settings } = useCompanySettings();
+
+    useEffect(() => {
+        if (settings?.company_name) {
+            document.title = settings.company_name;
+        }
+    }, [settings?.company_name]);
+
     return (
         <Suspense fallback={<LoadingSpinner />}>
             <Routes>
@@ -248,6 +258,7 @@ function App() {
                                 <RoleFormPage />
                             </PermissionGuard>
                         } />
+                        <Route path="company" element={<CompanySettingsPage />} />
                     </Route>
                 </Route>
 

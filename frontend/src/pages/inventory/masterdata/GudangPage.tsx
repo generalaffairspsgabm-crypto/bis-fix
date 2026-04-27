@@ -60,7 +60,10 @@ const GudangForm = ({
     const employees: any[] = empData?.data || [];
     const lokasiList = lokasiData?.data || [];
 
+    const userChangedDept = useRef(false);
+
     useEffect(() => {
+        userChangedDept.current = false;
         if (initialValues && Object.keys(initialValues).length > 0) {
             reset({
                 nama: initialValues.nama || '',
@@ -76,19 +79,27 @@ const GudangForm = ({
         }
     }, [initialValues, reset]);
 
-    // Reset PJ and Lokasi when department changes (skip initial load)
-    const [prevDeptId, setPrevDeptId] = useState(watchDeptId);
-    const isInitialMount = useRef(true);
+    // Re-apply department value once departments finish loading (edit mode)
     useEffect(() => {
-        if (watchDeptId !== prevDeptId) {
-            if (!isInitialMount.current) {
-                setValue('penanggung_jawab_id', '');
-                setValue('lokasi_kerja_id', '');
+        if (initialValues?.department_id && departments.length > 0) {
+            const deptId = String(initialValues.department_id);
+            const exists = departments.some((d: any) => String(d.id) === deptId);
+            if (exists) {
+                setValue('department_id', deptId);
             }
-            isInitialMount.current = false;
-            setPrevDeptId(watchDeptId);
         }
-    }, [watchDeptId, prevDeptId, setValue]);
+    }, [departments, initialValues, setValue]);
+
+    // Re-apply PJ value once employees finish loading (edit mode)
+    useEffect(() => {
+        if (initialValues?.penanggung_jawab_id && employees.length > 0 && !userChangedDept.current) {
+            const pjId = String(initialValues.penanggung_jawab_id);
+            const exists = employees.some((e: any) => String(e.id) === pjId);
+            if (exists) {
+                setValue('penanggung_jawab_id', pjId);
+            }
+        }
+    }, [employees, initialValues, setValue]);
 
     // Auto-fill lokasi_kerja when PJ is selected
     useEffect(() => {
@@ -99,6 +110,15 @@ const GudangForm = ({
             }
         }
     }, [watchPjId, employees, setValue]);
+
+    const deptRegister = register('department_id');
+
+    const handleDeptChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        deptRegister.onChange(e);
+        userChangedDept.current = true;
+        setValue('penanggung_jawab_id', '');
+        setValue('lokasi_kerja_id', '');
+    };
 
     const onFormSubmit = (data: GudangFormData) => {
         onSubmit({
@@ -129,7 +149,7 @@ const GudangForm = ({
 
             <div className="flex flex-col gap-1.5">
                 <label className={labelClass}>Department</label>
-                <select {...register('department_id')} className={selectClass}>
+                <select {...deptRegister} onChange={handleDeptChange} className={selectClass}>
                     <option value="">Pilih Department</option>
                     {departments.map((d: any) => (
                         <option key={d.id} value={d.id}>{d.nama}</option>

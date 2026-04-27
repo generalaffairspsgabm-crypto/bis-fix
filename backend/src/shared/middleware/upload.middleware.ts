@@ -169,3 +169,25 @@ export const uploadTransaksiDocuments = multer({
     fileFilter: documentFileFilter,
 }).array('dokumen', 5);
 
+// Company logo upload
+const companyLogoDir = path.join(process.cwd(), 'uploads/company');
+if (!fs.existsSync(companyLogoDir)) {
+    fs.mkdirSync(companyLogoDir, { recursive: true });
+}
+
+const companyLogoStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, companyLogoDir);
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname).toLowerCase();
+        cb(null, `logo-${Date.now()}${ext}`);
+    }
+});
+
+export const uploadCompanyLogo = multer({
+    storage: companyLogoStorage,
+    limits: { fileSize: 2 * 1024 * 1024 },
+    fileFilter,
+}).single('logo');
+

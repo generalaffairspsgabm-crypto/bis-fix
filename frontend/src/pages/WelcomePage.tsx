@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 import UserProfileDropdown from '../components/auth/UserProfileDropdown';
+import { useCompanySettings } from '../hooks/useCompanySettings';
 
 const WelcomePage = () => {
     const { user } = useAuthStore();
     const navigate = useNavigate();
+    const { data: settings } = useCompanySettings();
 
     return (
         <div className="bg-background-light dark:bg-background-dark font-display text-[#0d121b] dark:text-slate-200 min-h-screen flex flex-col">
@@ -17,10 +19,10 @@ const WelcomePage = () => {
                         </div>
                         <div className="flex flex-col">
                             <h2 className="text-[#0d121b] dark:text-white text-base font-bold leading-tight tracking-tight">
-                                PT Prima Sarana Gemilang
+                                {settings?.company_legal_name || 'PT Prima Sarana Gemilang'}
                             </h2>
                             <span className="text-[10px] font-semibold uppercase tracking-wider text-[#4c669a]">
-                                Bebang Sistem Informasi
+                                {settings?.company_name || 'Bebang Sistem Informasi'}
                             </span>
                         </div>
                     </div>
@@ -204,7 +206,9 @@ const WelcomePage = () => {
                             </div>
                         </div>
 
-                        <div className="module-card group flex flex-col bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer hover:shadow-xl hover:border-primary/30 transition-all opacity-70">
+                        <div
+                            onClick={() => navigate('/settings')}
+                            className="module-card group flex flex-col bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer hover:shadow-xl hover:border-primary/30 transition-all">
                             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 group-hover:scale-110 transition-transform">
                                 <span className="material-symbols-outlined text-[32px]">admin_panel_settings</span>
                             </div>
@@ -216,7 +220,7 @@ const WelcomePage = () => {
                             </div>
                             <div className="mt-auto flex items-center justify-between">
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-red-600 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded">
-                                    Coming Soon
+                                    Active
                                 </span>
                                 <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">
                                     arrow_forward
@@ -283,7 +287,7 @@ const WelcomePage = () => {
                 <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="flex items-center gap-4">
                         <p className="text-[#4c669a] text-xs font-medium">
-                            © 2024 PT Prima Sarana Gemilang. Hak Cipta Dilindungi.
+                            © {new Date().getFullYear()} {settings?.company_legal_name || 'PT Prima Sarana Gemilang'}. Hak Cipta Dilindungi.
                         </p>
                     </div>
                     <div className="flex items-center gap-6">

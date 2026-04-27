@@ -11,8 +11,17 @@ import InvBrand from '../models/Brand';
 import InvSerialNumber from '../models/SerialNumber';
 import Employee from '../../hr/models/Employee';
 import User from '../../auth/models/User';
+import companySettingsService from '../../auth/services/company-settings.service';
 
 class InventoryExportService {
+    private async getBranding() {
+        const s = await companySettingsService.getSettings();
+        return {
+            creator: `${s.company_short_name} Inventory`,
+            footer: `${s.company_short_name} - ${s.company_name}`,
+        };
+    }
+
     async exportStokToExcel(filters: any): Promise<Buffer> {
         const { gudang_id } = filters;
         const where: any = {};
@@ -52,8 +61,9 @@ class InventoryExportService {
             limit: 500,
         });
 
+        const branding = await this.getBranding();
         const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'BIS Inventory';
+        workbook.creator = branding.creator;
         workbook.created = new Date();
 
         const headerStyle: Partial<ExcelJS.Style> = {
@@ -127,6 +137,7 @@ class InventoryExportService {
     }
 
     async exportStokToPDF(filters: any): Promise<Buffer> {
+        const branding = await this.getBranding();
         const where: any = {};
         if (filters.gudang_id) where.gudang_id = filters.gudang_id;
 
@@ -161,7 +172,7 @@ ${stokData.map((item: any, idx: number) => `<tr>
 <td>${item.gudang?.nama}</td><td style="text-align:right">${item.jumlah}</td><td>${item.uom?.nama}</td>
 </tr>`).join('')}
 </tbody></table>
-<p class="footer">BIS - Bebang Sistem Informasi</p>
+<p class="footer">${branding.footer}</p>
 </body></html>`;
 
         const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
@@ -238,8 +249,9 @@ tr:nth-child(even) { background: #f9f9f9; }
             order: [['tanggal', 'DESC'], ['created_at', 'DESC']],
         });
 
+        const branding = await this.getBranding();
         const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'BIS Inventory';
+        workbook.creator = branding.creator;
         workbook.created = new Date();
 
         const sheet = workbook.addWorksheet('Laporan Transaksi');
@@ -295,6 +307,7 @@ tr:nth-child(even) { background: #f9f9f9; }
     }
 
     async exportTransaksiToPDF(filters: any): Promise<Buffer> {
+        const branding = await this.getBranding();
         const where: any = {};
         if (filters.tipe) where.tipe = filters.tipe;
         if (filters.gudang_id) where.gudang_id = filters.gudang_id;
@@ -345,7 +358,7 @@ tr:nth-child(even) { background: #f9f9f9; }
 <thead><tr><th>No</th><th>Kode</th><th>Tanggal</th><th>Tipe</th><th>Gudang</th><th>Kode Produk</th><th>Nama Produk</th><th>Jumlah</th><th>UOM</th></tr></thead>
 <tbody>${rows.join('')}</tbody>
 </table>
-<p class="footer">BIS - Bebang Sistem Informasi</p>
+<p class="footer">${branding.footer}</p>
 </body></html>`;
 
         return this.generatePDF(html);
@@ -366,8 +379,9 @@ tr:nth-child(even) { background: #f9f9f9; }
             order: [['created_at', 'DESC']],
         });
 
+        const branding = await this.getBranding();
         const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'BIS Inventory';
+        workbook.creator = branding.creator;
         workbook.created = new Date();
 
         const sheet = workbook.addWorksheet('Aset & Serial Number');
@@ -406,6 +420,7 @@ tr:nth-child(even) { background: #f9f9f9; }
     }
 
     async exportSerialNumberToPDF(filters: any): Promise<Buffer> {
+        const branding = await this.getBranding();
         const where: any = {};
         if (filters.gudang_id) where.gudang_id = filters.gudang_id;
         if (filters.status) where.status = filters.status;
@@ -438,7 +453,7 @@ ${data.map((item: any, idx: number) => `<tr>
 <td>${statusBadge(item.status)}</td><td>${item.karyawan?.nama_lengkap || '-'}</td>
 </tr>`).join('')}
 </tbody></table>
-<p class="footer">BIS - Bebang Sistem Informasi</p>
+<p class="footer">${branding.footer}</p>
 </body></html>`;
 
         return this.generatePDF(html);
@@ -468,8 +483,9 @@ ${data.map((item: any, idx: number) => `<tr>
             subQuery: false,
         });
 
+        const branding = await this.getBranding();
         const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'BIS Inventory';
+        workbook.creator = branding.creator;
         workbook.created = new Date();
 
         const sheet = workbook.addWorksheet('Stok Rendah');
@@ -510,6 +526,7 @@ ${data.map((item: any, idx: number) => `<tr>
     }
 
     async exportStokRendahToPDF(filters: any): Promise<Buffer> {
+        const branding = await this.getBranding();
         const where: any = {};
         if (filters.gudang_id) where.gudang_id = filters.gudang_id;
 
@@ -553,7 +570,7 @@ ${data.map((item: any, idx: number) => {
 <td>${item.uom?.nama || '-'}</td></tr>`;
 }).join('')}
 </tbody></table>
-<p class="footer">BIS - Bebang Sistem Informasi</p>
+<p class="footer">${branding.footer}</p>
 </body></html>`;
 
         return this.generatePDF(html);
@@ -614,8 +631,9 @@ ${data.map((item: any, idx: number) => {
             ...deadItems,
         ];
 
+        const branding = await this.getBranding();
         const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'BIS Inventory';
+        workbook.creator = branding.creator;
         workbook.created = new Date();
 
         const sheet = workbook.addWorksheet('Pergerakan Barang');
@@ -649,6 +667,7 @@ ${data.map((item: any, idx: number) => {
     }
 
     async exportPergerakanToPDF(filters: any): Promise<Buffer> {
+        const branding = await this.getBranding();
         const days = parseInt(filters.days, 10) || 90;
         const cutoffDate = new Date();
         cutoffDate.setDate(cutoffDate.getDate() - days);
@@ -718,7 +737,7 @@ ${allItems.map((item, idx) => `<tr>
 <td style="${classStyle[item.classification]};font-weight:bold">${item.classification}</td>
 </tr>`).join('')}
 </tbody></table>
-<p class="footer">BIS - Bebang Sistem Informasi</p>
+<p class="footer">${branding.footer}</p>
 </body></html>`;
 
         return this.generatePDF(html);
