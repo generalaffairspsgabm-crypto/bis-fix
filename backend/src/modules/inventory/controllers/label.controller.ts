@@ -31,11 +31,16 @@ class LabelController {
 
     async printLabels(req: Request, res: Response, next: NextFunction) {
         try {
-            const { items } = req.body;
+            const { items, paperType, thermalSize, columns } = req.body;
             if (!items || !Array.isArray(items) || items.length === 0) {
                 return res.status(400).json({ status: 'error', message: 'Items harus diisi' });
             }
-            const buffer = await labelService.generateLabelPDF(items);
+            const config = {
+                paperType: paperType || 'a4',
+                thermalSize: thermalSize || '70x40',
+                columns: columns || 3,
+            };
+            const buffer = await labelService.generateLabelPDF(items, config);
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'attachment; filename=Label-Inventaris.pdf');
             res.send(buffer);

@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
 import inventoryLabelService from '../services/api/inventory-label.service';
+import type { PrintLabelPayload } from '../services/api/inventory-label.service';
 
 export const useProductQR = (produkId: number) => {
     return useQuery({
@@ -27,8 +28,8 @@ export const useAssetTagQR = (tagId: number) => {
 
 export const usePrintLabels = () => {
     return useMutation({
-        mutationFn: (items: Array<{ type: 'produk' | 'serial_number' | 'asset_tag'; id: number }>) =>
-            inventoryLabelService.printLabels(items),
+        mutationFn: (payload: PrintLabelPayload) =>
+            inventoryLabelService.printLabels(payload),
     });
 };
 

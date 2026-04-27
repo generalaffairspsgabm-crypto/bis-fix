@@ -20,7 +20,8 @@
     "test:unit": "jest --testPathPattern=__tests__/.*\\.test\\.ts$",
     "test:integration": "jest --testPathPattern=__tests__/integration/.*\\.test\\.ts$",
     "load-test": "npx artillery run load/artillery.yml",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "reset-data": "ts-node src/database/reset-data.ts"
   },
   "dependencies": {
     "@types/node-cron": "^3.0.11",
