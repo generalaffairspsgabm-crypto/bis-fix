@@ -3,6 +3,23 @@ import importService from '../services/import.service';
 import fs from 'fs';
 
 class InventoryImportController {
+    async downloadTemplate(req: Request, res: Response, next: NextFunction) {
+        try {
+            const type = req.params.type as 'produk' | 'stok-masuk';
+            if (!['produk', 'stok-masuk'].includes(type)) {
+                return res.status(400).json({ message: 'Tipe template tidak valid. Gunakan: produk atau stok-masuk' });
+            }
+
+            const buffer = await importService.generateTemplate(type);
+
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', `attachment; filename=template-${type}-${Date.now()}.xlsx`);
+            res.send(buffer);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async uploadAndPreview(req: Request, res: Response, next: NextFunction) {
         try {
             if (!req.file) return res.status(400).json({ message: 'File Excel harus diupload' });

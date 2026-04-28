@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { AxiosError } from 'axios';
@@ -7,6 +7,7 @@ import { useInvGudangList, useInvProdukList, useInvUomList } from '../../../hook
 import { TransaksiPayload, TransaksiTipe, TransaksiSubTipe, TransaksiDetailPayload } from '../../../types/inventory';
 import Button from '../../../components/common/Button';
 import inventoryStokService from '../../../services/api/inventory-stok.service';
+import inventoryEmployeeService from '../../../services/api/inventory-employee.service';
 
 const SUB_TIPE_MAP: Record<TransaksiTipe, { value: TransaksiSubTipe; label: string }[]> = {
     'Masuk': [
@@ -50,6 +51,36 @@ const TransaksiFormPage = () => {
     const [dokumenFiles, setDokumenFiles] = useState<File[]>([]);
     const dokumenInputRef = useRef<HTMLInputElement>(null);
 
+    const [karyawanSearch, setKaryawanSearch] = useState('');
+    const [karyawanOptions, setKaryawanOptions] = useState<{ id: number; nama_lengkap: string; nomor_induk_karyawan: string }[]>([]);
+    const [showKaryawanDropdown, setShowKaryawanDropdown] = useState(false);
+    const [karyawanNama, setKaryawanNama] = useState('');
+    const karyawanDropdownRef = useRef<HTMLDivElement>(null);
+
+    const searchKaryawan = useCallback(async (query: string) => {
+        if (query.length < 2) { setKaryawanOptions([]); return; }
+        try {
+            const res = await inventoryEmployeeService.searchEmployees(query);
+            setKaryawanOptions(res.data);
+            setShowKaryawanDropdown(true);
+        } catch { setKaryawanOptions([]); }
+    }, []);
+
+    useEffect(() => {
+        const timer = setTimeout(() => searchKaryawan(karyawanSearch), 300);
+        return () => clearTimeout(timer);
+    }, [karyawanSearch, searchKaryawan]);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (karyawanDropdownRef.current && !karyawanDropdownRef.current.contains(e.target as Node)) {
+                setShowKaryawanDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     const [details, setDetails] = useState<DetailRow[]>([
         { _key: '1', produk_id: 0, uom_id: 0, jumlah: 1, catatan: '', serial_numbers: [] },
     ]);
@@ -69,7 +100,15 @@ const TransaksiFormPage = () => {
     };
 
     const updateDetail = (key: string, field: keyof TransaksiDetailPayload, value: any) => {
-        setDetails(prev => prev.map(d => d._key === key ? { ...d, [field]: value } : d));
+        setDetails(prev => prev.map(d => {
+            if (d._key !== key) return d;
+            const updated = { ...d, [field]: value };
+            if (field === 'produk_id') {
+                const produk = produkData?.data?.find(p => p.id === Number(value));
+                if (produk?.uom_id) updated.uom_id = produk.uom_id;
+            }
+            return updated;
+        }));
     };
 
     const updateSerialNumbers = (key: string, value: string) => {
@@ -189,13 +228,43 @@ const TransaksiFormPage = () => {
                         {showKaryawan && (
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-sm font-medium text-gray-700 dark:text-gray-200">Karyawan *</label>
-                                <input
-                                    type="number"
-                                    placeholder="ID Karyawan"
-                                    value={karyawanId || ''}
-                                    onChange={(e) => setKaryawanId(Number(e.target.value))}
-                                    className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                                />
+                                <div className="relative" ref={karyawanDropdownRef}>
+                                    <input
+                                        type="text"
+                                        placeholder="Ketik nama karyawan..."
+                                        value={karyawanNama || karyawanSearch}
+                                        onChange={(e) => {
+                                            setKaryawanSearch(e.target.value);
+                                            setKaryawanNama('');
+                                            setKaryawanId(0);
+                                        }}
+                                        onFocus={() => { if (karyawanOptions.length > 0) setShowKaryawanDropdown(true); }}
+                                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                                    />
+                                    {karyawanId > 0 && (
+                                        <button type="button" onClick={() => { setKaryawanId(0); setKaryawanNama(''); setKaryawanSearch(''); }}
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                            <span className="material-symbols-outlined text-[16px]">close</span>
+                                        </button>
+                                    )}
+                                    {showKaryawanDropdown && karyawanOptions.length > 0 && (
+                                        <div className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                                            {karyawanOptions.map((emp) => (
+                                                <button key={emp.id} type="button"
+                                                    onClick={() => {
+                                                        setKaryawanId(emp.id);
+                                                        setKaryawanNama(`${emp.nama_lengkap} (${emp.nomor_induk_karyawan})`);
+                                                        setKaryawanSearch('');
+                                                        setShowKaryawanDropdown(false);
+                                                    }}
+                                                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex justify-between items-center">
+                                                    <span className="text-gray-900 dark:text-white">{emp.nama_lengkap}</span>
+                                                    <span className="text-xs text-gray-400 font-mono">{emp.nomor_induk_karyawan}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
 
@@ -280,12 +349,17 @@ const TransaksiFormPage = () => {
 
                                     {selectedProduk?.has_serial_number && (
                                         <div className="flex flex-col gap-1.5">
-                                            <label className="text-xs font-medium text-gray-500">Serial Numbers (satu per baris)</label>
+                                            <label className="text-xs font-medium text-gray-500">
+                                                Serial Numbers (satu per baris)
+                                                <span className="ml-2 text-gray-400">
+                                                    {detail.serial_numbers?.length || 0} / {detail.jumlah} diisi
+                                                </span>
+                                            </label>
                                             <textarea
                                                 value={detail.serial_numbers?.join('\n') || ''}
                                                 onChange={(e) => updateSerialNumbers(detail._key, e.target.value)}
-                                                rows={3}
-                                                placeholder="SN-001&#10;SN-002&#10;SN-003"
+                                                rows={Math.max(3, detail.jumlah)}
+                                                placeholder={Array.from({length: Math.min(detail.jumlah, 5)}, (_, i) => `SN-${String(i+1).padStart(3,'0')}`).join('\n')}
                                                 className="flex w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
                                             />
                                         </div>

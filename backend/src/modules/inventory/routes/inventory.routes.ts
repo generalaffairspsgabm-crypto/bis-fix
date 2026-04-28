@@ -162,6 +162,12 @@ router.get(
 
 // === Import Routes ===
 
+router.get(
+    '/import/template/:type',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => importController.downloadTemplate(req, res, next)
+);
+
 router.post(
     '/import/preview',
     checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.CREATE),
@@ -252,6 +258,12 @@ router.get(
 );
 
 // === Employee Asset Routes ===
+
+router.get(
+    '/employees/search',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => employeeAssetController.searchEmployees(req, res, next)
+);
 
 router.get(
     '/employee/:employeeId/assets',

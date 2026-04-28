@@ -25,6 +25,10 @@ InvBrand.belongsTo(InvSubKategori, { foreignKey: 'sub_kategori_id', as: 'sub_kat
 InvBrand.hasMany(InvProduk, { foreignKey: 'brand_id', as: 'produk' });
 InvProduk.belongsTo(InvBrand, { foreignKey: 'brand_id', as: 'brand' });
 
+// UOM -> Produk (default UOM)
+InvUom.hasMany(InvProduk, { foreignKey: 'uom_id', as: 'produk' });
+InvProduk.belongsTo(InvUom, { foreignKey: 'uom_id', as: 'uom' });
+
 // Gudang -> Employee (penanggung jawab)
 InvGudang.belongsTo(Employee, { foreignKey: 'penanggung_jawab_id', as: 'penanggung_jawab' });
 Employee.hasMany(InvGudang, { foreignKey: 'penanggung_jawab_id', as: 'gudang_tanggung_jawab' });

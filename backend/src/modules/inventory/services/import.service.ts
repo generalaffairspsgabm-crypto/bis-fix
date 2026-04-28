@@ -68,6 +68,9 @@ class InventoryImportService {
         const brands = await InvBrand.findAll({ where: { status: 'Aktif' }, raw: true });
         const brandMap = new Map(brands.map(b => [b.nama.toLowerCase(), b.id]));
 
+        const uoms = await InvUom.findAll({ where: { status: 'Aktif' }, raw: true });
+        const uomMap = new Map(uoms.map(u => [u.nama.toLowerCase(), u.id]));
+
         const result: ImportResult = { success: 0, failed: 0, total: rows.length, errors: [] };
 
         for (const row of rows) {
@@ -87,13 +90,19 @@ class InventoryImportService {
                     continue;
                 }
 
+                const uomName = (row['UOM'] || row['uom'] || row['Satuan'] || '').toLowerCase();
+                const uomId = uomName ? uomMap.get(uomName) || null : null;
+
                 const hasSerial = ['ya', 'yes', '1', 'true'].includes((row['Serial Number'] || row['has_serial_number'] || '').toLowerCase());
+                const hasTag = ['ya', 'yes', '1', 'true'].includes((row['Tag Number'] || row['has_tag_number'] || '').toLowerCase());
                 const stokMin = parseInt(row['Stok Minimum'] || row['stok_minimum'] || '5', 10);
 
                 await InvProduk.create({
                     nama,
                     brand_id: brandId,
+                    uom_id: uomId,
                     has_serial_number: hasSerial,
+                    has_tag_number: hasTag,
                     stok_minimum: isNaN(stokMin) ? 5 : stokMin,
                     keterangan: row['Keterangan'] || row['keterangan'] || null,
                     status: 'Aktif',
@@ -223,6 +232,89 @@ class InventoryImportService {
         }
 
         return result;
+    }
+
+    async generateTemplate(type: 'produk' | 'stok-masuk'): Promise<Buffer> {
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet('Template');
+
+        if (type === 'produk') {
+            sheet.columns = [
+                { header: 'Nama Produk', key: 'nama', width: 30 },
+                { header: 'Brand', key: 'brand', width: 20 },
+                { header: 'UOM', key: 'uom', width: 15 },
+                { header: 'Serial Number', key: 'serial_number', width: 18 },
+                { header: 'Tag Number', key: 'tag_number', width: 18 },
+                { header: 'Stok Minimum', key: 'stok_minimum', width: 15 },
+                { header: 'Keterangan', key: 'keterangan', width: 30 },
+            ];
+
+            sheet.addRow({ nama: 'Laptop Lenovo ThinkPad X1', brand: 'Lenovo', uom: 'Unit', serial_number: 'Ya', tag_number: 'Ya', stok_minimum: 5, keterangan: 'Laptop kantor' });
+            sheet.addRow({ nama: 'Mouse Wireless Logitech', brand: 'Logitech', uom: 'Pcs', serial_number: 'Tidak', tag_number: 'Tidak', stok_minimum: 10, keterangan: '' });
+        } else {
+            sheet.columns = [
+                { header: 'Kode Produk', key: 'code', width: 15 },
+                { header: 'Nama Produk', key: 'nama', width: 30 },
+                { header: 'UOM', key: 'uom', width: 15 },
+                { header: 'Gudang', key: 'gudang', width: 20 },
+                { header: 'Jumlah', key: 'jumlah', width: 10 },
+                { header: 'Serial Number', key: 'serial_number', width: 40 },
+            ];
+
+            sheet.addRow({ code: 'IPR-0001', nama: 'Laptop Lenovo ThinkPad X1', uom: 'Unit', gudang: 'Gudang Utama', jumlah: 3, serial_number: 'SN-001, SN-002, SN-003' });
+            sheet.addRow({ code: 'IPR-0002', nama: 'Mouse Wireless Logitech', uom: 'Pcs', gudang: 'Gudang Utama', jumlah: 10, serial_number: '' });
+        }
+
+        // Style header
+        const headerRow = sheet.getRow(1);
+        headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4472C4' } };
+        headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+        // Style example rows
+        [2, 3].forEach(rowNum => {
+            const row = sheet.getRow(rowNum);
+            if (row.cellCount > 0) {
+                row.font = { italic: true, color: { argb: 'FF808080' } };
+            }
+        });
+
+        // Add instruction sheet
+        const instrSheet = workbook.addWorksheet('Petunjuk');
+        instrSheet.getColumn(1).width = 50;
+        instrSheet.getColumn(2).width = 60;
+
+        instrSheet.addRow(['PETUNJUK PENGISIAN TEMPLATE']);
+        instrSheet.getRow(1).font = { bold: true, size: 14 };
+
+        instrSheet.addRow([]);
+        instrSheet.addRow(['Catatan:']);
+        instrSheet.addRow(['- Hapus baris contoh (baris 2-3 di sheet Template) sebelum mengisi data']);
+        instrSheet.addRow(['- Data yang bertanda wajib harus diisi']);
+        instrSheet.addRow(['- Nama Brand, UOM, dan Gudang harus sesuai dengan master data yang ada di sistem']);
+
+        if (type === 'produk') {
+            instrSheet.addRow([]);
+            instrSheet.addRow(['Kolom', 'Keterangan']);
+            instrSheet.addRow(['Nama Produk', 'Wajib. Nama produk yang ingin ditambahkan.']);
+            instrSheet.addRow(['Brand', 'Wajib. Harus sesuai nama brand di master data.']);
+            instrSheet.addRow(['UOM', 'Opsional. Satuan default produk (Unit, Pcs, Kg, dll).']);
+            instrSheet.addRow(['Serial Number', 'Ya / Tidak. Apakah produk memiliki serial number.']);
+            instrSheet.addRow(['Tag Number', 'Ya / Tidak. Apakah produk memiliki tag number (asset tag).']);
+            instrSheet.addRow(['Stok Minimum', 'Angka minimum stok. Default: 5.']);
+            instrSheet.addRow(['Keterangan', 'Opsional. Catatan tambahan.']);
+        } else {
+            instrSheet.addRow([]);
+            instrSheet.addRow(['Kolom', 'Keterangan']);
+            instrSheet.addRow(['Kode Produk', 'Wajib (salah satu). Kode produk di sistem.']);
+            instrSheet.addRow(['Nama Produk', 'Wajib (salah satu). Jika kode kosong, akan dicari berdasarkan nama.']);
+            instrSheet.addRow(['UOM', 'Wajib. Satuan (harus sesuai master data UOM).']);
+            instrSheet.addRow(['Gudang', 'Wajib. Nama gudang tujuan (harus sesuai master data).']);
+            instrSheet.addRow(['Jumlah', 'Wajib. Jumlah barang masuk (angka > 0).']);
+            instrSheet.addRow(['Serial Number', 'Opsional. Pisahkan dengan koma jika lebih dari satu.']);
+        }
+
+        return Buffer.from(await workbook.xlsx.writeBuffer());
     }
 
     async generateErrorReport(errors: ImportError[]): Promise<Buffer> {

@@ -1,6 +1,17 @@
 import client from './client';
 import { InvSerialNumber, InvTransaksi } from '../../types/inventory';
 
+interface EmployeeSearchResult {
+    id: number;
+    nama_lengkap: string;
+    nomor_induk_karyawan: string;
+}
+
+const searchEmployees = async (query: string): Promise<{ status: string; data: EmployeeSearchResult[] }> => {
+    const response = await client.get(`/inventory/employees/search`, { params: { q: query } });
+    return response.data;
+};
+
 const getEmployeeAssets = async (employeeId: number): Promise<{ status: string; data: InvSerialNumber[] }> => {
     const response = await client.get(`/inventory/employee/${employeeId}/assets`);
     return response.data;
@@ -19,5 +30,5 @@ const downloadBeritaAcara = async (employeeId: number, transaksiId?: number): Pr
     return response.data;
 };
 
-const inventoryEmployeeService = { getEmployeeAssets, getAssetHistory, downloadBeritaAcara };
+const inventoryEmployeeService = { searchEmployees, getEmployeeAssets, getAssetHistory, downloadBeritaAcara };
 export default inventoryEmployeeService;

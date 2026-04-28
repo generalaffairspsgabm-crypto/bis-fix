@@ -7,6 +7,7 @@ export class InvProduk extends Model {
     public code!: string;
     public nama!: string;
     public brand_id!: number;
+    public uom_id!: number | null;
     public has_serial_number!: boolean;
     public has_tag_number!: boolean;
     public stok_minimum!: number | null;
@@ -15,6 +16,7 @@ export class InvProduk extends Model {
     public status!: 'Aktif' | 'Tidak Aktif';
 
     public brand?: any;
+    public uom?: any;
 
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
@@ -44,6 +46,14 @@ InvProduk.init({
         allowNull: false,
         references: {
             model: 'inv_brand',
+            key: 'id',
+        },
+    },
+    uom_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'inv_uom',
             key: 'id',
         },
     },

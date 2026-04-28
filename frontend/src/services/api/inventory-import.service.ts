@@ -38,11 +38,17 @@ const downloadErrorReport = async (errors: any[]): Promise<Blob> => {
     return response.data;
 };
 
+const downloadTemplate = async (type: string): Promise<Blob> => {
+    const response = await client.get(`/inventory/import/template/${type}`, { responseType: 'blob' });
+    return response.data;
+};
+
 const inventoryImportService = {
     uploadAndPreview,
     importProduk,
     importStokMasuk,
     downloadErrorReport,
+    downloadTemplate,
 };
 
 export default inventoryImportService;

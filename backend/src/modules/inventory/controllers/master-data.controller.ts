@@ -33,6 +33,7 @@ class InventoryMasterDataController {
                 include.push({ association: 'sub_kategori' });
             } else if (modelName === 'produk') {
                 include.push({ association: 'brand' });
+                include.push({ association: 'uom' });
             } else if (modelName === 'gudang') {
                 include.push({ association: 'penanggung_jawab' });
                 include.push({ association: 'department' });

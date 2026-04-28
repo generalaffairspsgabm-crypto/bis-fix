@@ -11,6 +11,7 @@ const ImportPage = () => {
     const [preview, setPreview] = useState<ImportPreviewData | null>(null);
     const [result, setResult] = useState<ImportResultData | null>(null);
     const [loading, setLoading] = useState(false);
+    const [downloadingTemplate, setDownloadingTemplate] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +71,23 @@ const ImportPage = () => {
         setResult(null);
     };
 
+    const handleDownloadTemplate = async () => {
+        setDownloadingTemplate(true);
+        try {
+            const blob = await inventoryImportService.downloadTemplate(importType);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `template-${importType}.xlsx`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch {
+            toast.error('Gagal download template');
+        } finally {
+            setDownloadingTemplate(false);
+        }
+    };
+
     return (
         <div className="p-6 max-w-5xl">
             <div className="mb-6">
@@ -121,6 +139,11 @@ const ImportPage = () => {
                                 <strong>Kode Produk</strong> atau <strong>Nama Produk</strong> (wajib), <strong>UOM/Satuan</strong> (wajib), <strong>Gudang</strong> (wajib), <strong>Jumlah</strong> (wajib), Serial Number (koma-separated, opsional)
                             </p>
                         )}
+                        <button type="button" onClick={handleDownloadTemplate} disabled={downloadingTemplate}
+                            className="mt-3 flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors disabled:opacity-50">
+                            <span className="material-symbols-outlined text-[16px]">download</span>
+                            {downloadingTemplate ? 'Downloading...' : 'Download Template Excel'}
+                        </button>
                     </div>
                 </div>
             )}

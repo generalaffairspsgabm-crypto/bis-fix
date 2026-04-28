@@ -87,7 +87,9 @@ const EmployeeAssetsTab: React.FC<Props> = ({ employeeId }) => {
                         <thead>
                             <tr className="bg-gray-50 dark:bg-gray-800">
                                 <th className="text-left px-4 py-3 font-semibold text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">Produk</th>
+                                <th className="text-left px-4 py-3 font-semibold text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">Brand</th>
                                 <th className="text-left px-4 py-3 font-semibold text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">Serial Number</th>
+                                <th className="text-left px-4 py-3 font-semibold text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">Tag Number</th>
                                 <th className="text-left px-4 py-3 font-semibold text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">Status</th>
                                 <th className="text-left px-4 py-3 font-semibold text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">Gudang Asal</th>
                                 <th className="text-left px-4 py-3 font-semibold text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">Tanggal Terima</th>
@@ -100,7 +102,9 @@ const EmployeeAssetsTab: React.FC<Props> = ({ employeeId }) => {
                                         <div className="font-medium text-gray-900 dark:text-white">{item.produk?.nama}</div>
                                         <div className="text-xs text-gray-400 font-mono">{item.produk?.code}</div>
                                     </td>
-                                    <td className="px-4 py-3 font-mono text-xs font-semibold text-gray-700 dark:text-gray-300">{item.serial_number}</td>
+                                    <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{(item.produk as any)?.brand?.nama || '-'}</td>
+                                    <td className="px-4 py-3 font-mono text-xs font-semibold text-gray-700 dark:text-gray-300">{item.serial_number || '-'}</td>
+                                    <td className="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-300">{item.tag_number || '-'}</td>
                                     <td className="px-4 py-3">
                                         <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[item.status] || ''}`}>
                                             {item.status}

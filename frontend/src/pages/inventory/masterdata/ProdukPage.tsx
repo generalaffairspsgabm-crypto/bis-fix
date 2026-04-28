@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { toast } from 'react-hot-toast';
 import { AxiosError } from 'axios';
-import { useInvProdukList, useInvBrandList, useCreateInventoryMasterData, useUpdateInventoryMasterData, useDeleteInventoryMasterData } from '../../../hooks/useInventoryMasterData';
+import { useInvProdukList, useInvBrandList, useInvUomList, useCreateInventoryMasterData, useUpdateInventoryMasterData, useDeleteInventoryMasterData } from '../../../hooks/useInventoryMasterData';
 import { useQueryClient } from '@tanstack/react-query';
 import MasterDataTable, { Column } from '../../../components/hr/MasterDataTable';
 import MasterDataForm from '../../../components/hr/MasterDataForm';
@@ -32,6 +32,9 @@ const ProdukPage = () => {
 
     const { data, isLoading } = useInvProdukList({ page, limit: 10, search, status });
     const { data: brandData } = useInvBrandList({ limit: 100, status: 'true' });
+    const { data: uomData } = useInvUomList({ limit: 100, status: 'true' });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const uomOptions = uomData?.data?.map((d: any) => ({ label: d.nama, value: d.id })) || [];
     const createMutation = useCreateInventoryMasterData<InvProduk>('produk');
     const updateMutation = useUpdateInventoryMasterData<InvProduk>('produk');
     const deleteMutation = useDeleteInventoryMasterData('produk');
@@ -49,6 +52,7 @@ const ProdukPage = () => {
         { header: 'Code', accessor: 'code' },
         { header: 'Nama Produk', accessor: 'nama' },
         { header: 'Brand', accessor: (item: InvProduk) => item.brand?.nama || '-' },
+        { header: 'UOM', accessor: (item: InvProduk) => item.uom?.nama || '-' },
         { header: 'Serial Number', accessor: (item: InvProduk) => item.has_serial_number ? 'Ya' : 'Tidak' },
         { header: 'Tag Number', accessor: (item: InvProduk) => item.has_tag_number ? 'Ya' : 'Tidak' },
         { header: 'Stok Min', accessor: (item: InvProduk) => item.stok_minimum ?? 5, className: 'w-24' },
@@ -64,6 +68,12 @@ const ProdukPage = () => {
             required: true,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             options: brandData?.data.map((d: any) => ({ label: d.nama, value: d.id })) || []
+        },
+        {
+            name: 'uom_id',
+            label: 'UOM (Satuan)',
+            type: 'select' as const,
+            options: uomOptions
         },
         { name: 'has_serial_number', label: 'Memiliki Serial Number', type: 'toggle' as const },
         { name: 'has_tag_number', label: 'Memiliki Tag Number', type: 'toggle' as const },
@@ -97,6 +107,7 @@ const ProdukPage = () => {
         const payload = {
             ...formData,
             brand_id: Number(formData.brand_id),
+            uom_id: formData.uom_id ? Number(formData.uom_id) : null,
             has_serial_number: formData.has_serial_number === true || formData.has_serial_number === 'true',
             has_tag_number: formData.has_tag_number === true || formData.has_tag_number === 'true',
             stok_minimum: formData.stok_minimum ? Number(formData.stok_minimum) : 5,

@@ -17,11 +17,13 @@ export interface InvUom extends MasterData {}
 
 export interface InvProduk extends MasterData {
     brand_id: number;
+    uom_id?: number | null;
     has_serial_number: boolean;
     has_tag_number: boolean;
     stok_minimum?: number | null;
     gambar?: string | null;
     brand?: InvBrand;
+    uom?: InvUom;
 }
 
 export interface InvGudang extends MasterData {
