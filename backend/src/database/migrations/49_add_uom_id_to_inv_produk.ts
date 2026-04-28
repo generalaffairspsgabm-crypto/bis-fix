@@ -1,9 +1,8 @@
 import { DataTypes } from 'sequelize';
-import type { MigrationFn } from 'umzug';
+import { Migration } from '../umzug';
 
-export const up: MigrationFn<any> = async ({ context: sequelize }) => {
-    const qi = sequelize.getQueryInterface();
-    await qi.addColumn('inv_produk', 'uom_id', {
+export const up: Migration = async ({ context: queryInterface }) => {
+    await queryInterface.addColumn('inv_produk', 'uom_id', {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: { model: 'inv_uom', key: 'id' },
@@ -12,7 +11,6 @@ export const up: MigrationFn<any> = async ({ context: sequelize }) => {
     });
 };
 
-export const down: MigrationFn<any> = async ({ context: sequelize }) => {
-    const qi = sequelize.getQueryInterface();
-    await qi.removeColumn('inv_produk', 'uom_id');
+export const down: Migration = async ({ context: queryInterface }) => {
+    await queryInterface.removeColumn('inv_produk', 'uom_id');
 };
