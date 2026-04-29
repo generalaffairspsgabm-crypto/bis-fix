@@ -17,7 +17,7 @@ export interface FacBuilding extends MasterData {
 
 export interface FacRoomType extends MasterData {}
 
-export interface FacRoom extends MasterData {
+export interface FacRoom extends Omit<MasterData, 'status'> {
     building_id: number;
     room_type_id?: number | null;
     lantai?: string | null;
@@ -175,6 +175,7 @@ export interface WorkOrderFilterParams {
 export interface OccupantFilterParams {
     room_id?: number;
     building_id?: number;
+    employee_id?: number;
     status?: OccupantStatus;
     search?: string;
     page?: number;
