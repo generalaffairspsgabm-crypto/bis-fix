@@ -12,6 +12,14 @@ import {
     InvKategori, InvSubKategori, InvBrand, InvUom, InvProduk,
     InvGudang, InvStok, InvTransaksi, InvTransaksiDetail, InvSerialNumber,
 } from '../modules/inventory/models';
+import {
+    FacilityBuilding, FacilityRoomType, FacilityRoom,
+    FacilityMaintenanceCategory, FacilityOccupant, FacilityAsset, FacilityWorkOrder,
+} from '../modules/facility/models';
+import {
+    FacilityBuilding, FacilityRoomType, FacilityRoom,
+    FacilityMaintenanceCategory, FacilityOccupant, FacilityAsset, FacilityWorkOrder,
+} from '../modules/facility/models';
 
 async function seedComplete() {
     try {
@@ -25,6 +33,8 @@ async function seedComplete() {
         await sequelize.query('SET session_replication_role = replica;');
 
         const tablesToClean = [
+            'facility_work_orders', 'facility_assets', 'facility_occupants',
+            'facility_maintenance_categories', 'facility_rooms', 'facility_room_types', 'facility_buildings',
             'inv_serial_number', 'inv_transaksi_detail', 'inv_transaksi',
             'inv_stok', 'inv_produk', 'inv_gudang', 'inv_brand',
             'inv_sub_kategori', 'inv_kategori', 'inv_uom',
@@ -87,6 +97,14 @@ async function seedComplete() {
             { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.READ },
             { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.UPDATE },
             { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.DELETE },
+            { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.CREATE },
+            { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.READ },
+            { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.DELETE },
+            { resource: RESOURCES.FACILITY_WORK_ORDER, action: ACTIONS.CREATE },
+            { resource: RESOURCES.FACILITY_WORK_ORDER, action: ACTIONS.READ },
+            { resource: RESOURCES.FACILITY_WORK_ORDER, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.FACILITY_WORK_ORDER, action: ACTIONS.DELETE },
         ];
 
         for (const p of permissionsData) {
@@ -121,6 +139,7 @@ async function seedComplete() {
                 ...fp(RESOURCES.USERS, [ACTIONS.READ, ACTIONS.UPDATE]),
                 ...fp(RESOURCES.ROLES, [ACTIONS.READ]),
                 ...fp(RESOURCES.INVENTORY_MASTER_DATA), ...fp(RESOURCES.INVENTORY_STOCK),
+                ...fp(RESOURCES.FACILITY_MASTER_DATA), ...fp(RESOURCES.FACILITY_WORK_ORDER),
             ]);
         }
 
@@ -133,6 +152,8 @@ async function seedComplete() {
                 ...fp(RESOURCES.AUDIT_LOGS, [ACTIONS.READ]),
                 ...fp(RESOURCES.DASHBOARD, [ACTIONS.READ, ACTIONS.VIEW_ALL]),
                 ...fp(RESOURCES.EXPORT, [ACTIONS.EXPORT]),
+                ...fp(RESOURCES.FACILITY_MASTER_DATA, [ACTIONS.READ]),
+                ...fp(RESOURCES.FACILITY_WORK_ORDER, [ACTIONS.CREATE, ACTIONS.READ, ACTIONS.UPDATE]),
             ]);
         }
 
@@ -143,6 +164,8 @@ async function seedComplete() {
                 ...fp(RESOURCES.MASTER_DATA, [ACTIONS.READ]),
                 ...fp(RESOURCES.DASHBOARD, [ACTIONS.READ, ACTIONS.VIEW_DEPARTMENT]),
                 ...fp(RESOURCES.DOCUMENTS, [ACTIONS.READ]),
+                ...fp(RESOURCES.FACILITY_MASTER_DATA, [ACTIONS.READ]),
+                ...fp(RESOURCES.FACILITY_WORK_ORDER, [ACTIONS.READ]),
             ]);
         }
 

@@ -15,6 +15,7 @@ import { EmployeeQRCode } from '../../components/hr/EmployeeQRCode';
 
 import EntityHistoryTimeline from '../../components/hr/EntityHistoryTimeline';
 import EmployeeAssetsTab from '../../components/inventory/EmployeeAssetsTab';
+import EmployeeAccommodationTab from '../../components/facility/EmployeeAccommodationTab';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { usePermission } from '../../hooks/usePermission';
 import { RESOURCES, ACTIONS } from '../../types/permission';
@@ -138,6 +139,7 @@ const EmployeeDetailPage: React.FC = () => {
         { id: 'payroll', label: 'Payroll' },
         { id: 'attendance', label: 'Cuti & Izin' },
         { id: 'assets', label: 'Aset' },
+        { id: 'akomodasi', label: 'Akomodasi' },
         { id: 'documents', label: 'Dokumen' },
         { id: 'history', label: 'Riwayat' }
     ];
@@ -409,6 +411,9 @@ const EmployeeDetailPage: React.FC = () => {
                     )}
                     {activeTab === 'assets' && (
                         <EmployeeAssetsTab employeeId={employee.id} />
+                    )}
+                    {activeTab === 'akomodasi' && (
+                        <EmployeeAccommodationTab employeeId={employee.id} />
                     )}
                     {activeTab === 'history' && employee.id && (
                         <EntityHistoryTimeline entityType="employees" entityId={employee.id} />

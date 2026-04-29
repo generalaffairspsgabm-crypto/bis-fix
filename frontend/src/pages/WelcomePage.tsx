@@ -166,19 +166,21 @@ const WelcomePage = () => {
                             </div>
                         </div>
 
-                        <div className="module-card group flex flex-col bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer hover:shadow-xl hover:border-primary/30 transition-all opacity-70">
+                        <div
+                            onClick={() => navigate('/facility')}
+                            className="module-card group flex flex-col bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer hover:shadow-xl hover:border-primary/30 transition-all">
                             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-900/20 text-teal-600 group-hover:scale-110 transition-transform">
                                 <span className="material-symbols-outlined text-[32px]">hotel</span>
                             </div>
                             <div className="flex flex-col gap-1 mb-4">
-                                <p className="text-[#0d121b] dark:text-white text-lg font-bold leading-tight">Mess Management</p>
+                                <p className="text-[#0d121b] dark:text-white text-lg font-bold leading-tight">Facility Mgmt</p>
                                 <p className="text-[#4c669a] dark:text-slate-400 text-sm font-medium leading-relaxed">
-                                    Manajemen Mess & Akomodasi Site
+                                    Gedung, Ruangan & Akomodasi Site
                                 </p>
                             </div>
                             <div className="mt-auto flex items-center justify-between">
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-teal-600 bg-teal-50 dark:bg-teal-900/20 px-2 py-1 rounded">
-                                    Coming Soon
+                                    Active
                                 </span>
                                 <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">
                                     arrow_forward
