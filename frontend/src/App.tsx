@@ -56,6 +56,16 @@ const LabelPage = lazy(() => import('./pages/inventory/stok/LabelPage'));
 const InventoryImportPage = lazy(() => import('./pages/inventory/ImportPage'));
 const LaporanPage = lazy(() => import('./pages/inventory/LaporanPage'));
 
+// Facility Pages
+const FacilityDashboardPage = lazy(() => import('./pages/facility/DashboardPage'));
+const FacBuildingPage = lazy(() => import('./pages/facility/masterdata/BuildingPage'));
+const FacRoomTypePage = lazy(() => import('./pages/facility/masterdata/RoomTypePage'));
+const FacRoomPage = lazy(() => import('./pages/facility/masterdata/RoomPage'));
+const FacMaintenanceCategoryPage = lazy(() => import('./pages/facility/masterdata/MaintenanceCategoryPage'));
+const FacWorkOrderPage = lazy(() => import('./pages/facility/WorkOrderPage'));
+const FacOccupantPage = lazy(() => import('./pages/facility/OccupantPage'));
+const FacAssetPage = lazy(() => import('./pages/facility/AssetPage'));
+
 function App() {
     const { data: settings } = useCompanySettings();
 
@@ -232,6 +242,35 @@ function App() {
                         } />
                         <Route path="laporan" element={
                             <PermissionGuard resource={RESOURCES.INVENTORY_STOCK} action={ACTIONS.READ} redirectTo="/403"><LaporanPage /></PermissionGuard>
+                        } />
+                    </Route>
+
+                    {/* Facility Routes */}
+                    <Route path="facility">
+                        <Route index element={<Navigate to="dashboard" replace />} />
+                        <Route path="dashboard" element={
+                            <PermissionGuard resource={RESOURCES.FACILITY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><FacilityDashboardPage /></PermissionGuard>
+                        } />
+                        <Route path="master-data/building" element={
+                            <PermissionGuard resource={RESOURCES.FACILITY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><FacBuildingPage /></PermissionGuard>
+                        } />
+                        <Route path="master-data/room-type" element={
+                            <PermissionGuard resource={RESOURCES.FACILITY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><FacRoomTypePage /></PermissionGuard>
+                        } />
+                        <Route path="master-data/room" element={
+                            <PermissionGuard resource={RESOURCES.FACILITY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><FacRoomPage /></PermissionGuard>
+                        } />
+                        <Route path="master-data/maintenance-category" element={
+                            <PermissionGuard resource={RESOURCES.FACILITY_MASTER_DATA} action={ACTIONS.READ} redirectTo="/403"><FacMaintenanceCategoryPage /></PermissionGuard>
+                        } />
+                        <Route path="work-orders" element={
+                            <PermissionGuard resource={RESOURCES.FACILITY_WORK_ORDER} action={ACTIONS.READ} redirectTo="/403"><FacWorkOrderPage /></PermissionGuard>
+                        } />
+                        <Route path="occupants" element={
+                            <PermissionGuard resource={RESOURCES.FACILITY_WORK_ORDER} action={ACTIONS.READ} redirectTo="/403"><FacOccupantPage /></PermissionGuard>
+                        } />
+                        <Route path="assets" element={
+                            <PermissionGuard resource={RESOURCES.FACILITY_WORK_ORDER} action={ACTIONS.READ} redirectTo="/403"><FacAssetPage /></PermissionGuard>
                         } />
                     </Route>
 

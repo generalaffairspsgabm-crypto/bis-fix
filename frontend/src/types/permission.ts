@@ -26,6 +26,8 @@ export const RESOURCES = {
     USERS: 'users',
     INVENTORY_MASTER_DATA: 'inventory_master_data',
     INVENTORY_STOCK: 'inventory_stock',
+    FACILITY_MASTER_DATA: 'facility_master_data',
+    FACILITY_WORK_ORDER: 'facility_work_order',
 } as const;
 
 export const ACTIONS = {

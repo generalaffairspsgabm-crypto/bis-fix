@@ -64,7 +64,7 @@ export const validateFacilityMasterData = (req: Request, res: Response, next: Ne
         next();
     } catch (error: any) {
         if (error instanceof z.ZodError) {
-            const formattedErrors = error.errors.map((err: any) => ({
+            const formattedErrors = error.issues.map((err: any) => ({
                 field: err.path.join('.'),
                 message: err.message
             }));

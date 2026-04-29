@@ -17,11 +17,12 @@ interface NavItem {
     subItems?: NavItem[];
 }
 
-type ActiveModule = 'hr' | 'inventory' | 'settings';
+type ActiveModule = 'hr' | 'inventory' | 'facility' | 'settings';
 
 const MODULE_CONFIG: Record<ActiveModule, { title: string; subtitle: string; icon: string; color: string }> = {
     hr: { title: 'Human Resources', subtitle: 'Manajemen SDM', icon: 'groups', color: 'bg-primary' },
     inventory: { title: 'Inventory', subtitle: 'Manajemen Inventaris', icon: 'inventory_2', color: 'bg-orange-500' },
+    facility: { title: 'Facility', subtitle: 'Manajemen Fasilitas', icon: 'apartment', color: 'bg-teal-600' },
     settings: { title: 'Pengaturan', subtitle: 'Konfigurasi Sistem', icon: 'settings', color: 'bg-slate-600' },
 };
 
@@ -31,11 +32,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
 
     const activeModule: ActiveModule = useMemo(() => {
         if (location.pathname.startsWith('/inventory')) return 'inventory';
+        if (location.pathname.startsWith('/facility')) return 'facility';
         if (location.pathname.startsWith('/settings')) return 'settings';
         return 'hr';
     }, [location.pathname]);
 
-    const [openMenus, setOpenMenus] = useState<string[]>(['Master Data', 'Manajemen Karyawan', 'Master Data Inventory', 'Manajemen Stok', 'Pengaturan']);
+    const [openMenus, setOpenMenus] = useState<string[]>(['Master Data', 'Manajemen Karyawan', 'Master Data Inventory', 'Manajemen Stok', 'Master Data Fasilitas', 'Operasional', 'Pengaturan']);
 
     const toggleMenu = (name: string) => {
         setOpenMenus(prev =>
@@ -179,10 +181,46 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         }
     ];
 
+    const facilityNavItems: NavItem[] = [
+        {
+            name: 'Halaman Utama',
+            path: '/welcome',
+            icon: 'home',
+        },
+        {
+            name: 'Dashboard',
+            path: '/facility/dashboard',
+            icon: 'dashboard',
+            permission: { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.READ },
+        },
+        {
+            name: 'Master Data Fasilitas',
+            icon: 'database',
+            permission: { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.READ },
+            subItems: [
+                { name: 'Gedung', path: '/facility/master-data/building', icon: 'apartment' },
+                { name: 'Tipe Ruangan', path: '/facility/master-data/room-type', icon: 'door_open' },
+                { name: 'Ruangan', path: '/facility/master-data/room', icon: 'meeting_room' },
+                { name: 'Kategori Maintenance', path: '/facility/master-data/maintenance-category', icon: 'build' },
+            ]
+        },
+        {
+            name: 'Operasional',
+            icon: 'engineering',
+            permission: { resource: RESOURCES.FACILITY_WORK_ORDER, action: ACTIONS.READ },
+            subItems: [
+                { name: 'Work Order', path: '/facility/work-orders', icon: 'assignment' },
+                { name: 'Penghuni', path: '/facility/occupants', icon: 'person_pin' },
+                { name: 'Aset Ruangan', path: '/facility/assets', icon: 'devices' },
+            ]
+        },
+    ];
+
     const navItems = useMemo(() => {
         const itemsMap: Record<ActiveModule, NavItem[]> = {
             hr: hrNavItems,
             inventory: inventoryNavItems,
+            facility: facilityNavItems,
             settings: settingsNavItems,
         };
 
