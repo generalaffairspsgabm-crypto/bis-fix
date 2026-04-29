@@ -111,7 +111,7 @@ Membuat semua data demo:
 - 20 karyawan lengkap (personal info, HR info, family info)
 - 12 akun user dengan berbagai role
 - 15 produk inventaris, 5 gudang
-- 108 serial number/asset tag
+- 53 serial number/asset tag
 - 8 transaksi inventaris
 
 Gunakan ini untuk **melihat dan menguji semua fitur** sebelum input data real.

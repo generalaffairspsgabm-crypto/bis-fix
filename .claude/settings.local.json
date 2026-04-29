@@ -71,7 +71,19 @@
       "Bash(pkill -f \"nodemon --exec ts-node src/index.ts\")",
       "mcp__plugin_playwright_playwright__browser_tabs",
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__list_network_requests",
-      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__get_network_request"
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__get_network_request",
+      "Bash(findstr :3000)",
+      "Bash(findstr LISTENING)",
+      "PowerShell(Stop-Process *)",
+      "PowerShell(Get-NetTCPConnection *)",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__fill_form",
+      "Bash(findstr \":3000 :5173 :5174\")",
+      "Bash(start *)",
+      "PowerShell(Start-Process \"http://localhost:5173/login\")",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Test-NetConnection *)",
+      "Bash(findstr \":3000 :5173\")",
+      "Bash(findstr *)"
     ]
   }
 }

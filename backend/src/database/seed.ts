@@ -2,6 +2,7 @@ import sequelize from '../config/database';
 import { RESOURCES, ACTIONS } from '../shared/constants/permissions';
 import { Role } from '../modules/auth/models/Role';
 import { Permission } from '../modules/auth/models/Permission';
+import '../modules/auth/models/RolePermission'; // Register belongsToMany associations
 import User from '../modules/auth/models/User';
 
 const seed = async () => {
