@@ -47,3 +47,23 @@ FacilityAsset.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
 // Room -> WorkOrders
 FacilityRoom.hasMany(FacilityWorkOrder, { foreignKey: 'room_id', as: 'work_orders' });
 FacilityWorkOrder.belongsTo(FacilityRoom, { foreignKey: 'room_id', as: 'room' });
+
+// WorkOrder -> MaintenanceCategory
+FacilityWorkOrder.belongsTo(FacilityMaintenanceCategory, { foreignKey: 'kategori_id', as: 'kategori' });
+
+// WorkOrder -> Employee (reported_by, assigned_to)
+FacilityWorkOrder.belongsTo(Employee, { foreignKey: 'reported_by', as: 'reporter' });
+FacilityWorkOrder.belongsTo(Employee, { foreignKey: 'assigned_to', as: 'assignee' });
+
+// WorkOrder -> User (created_by)
+FacilityWorkOrder.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
+
+export {
+    FacilityBuilding,
+    FacilityRoomType,
+    FacilityRoom,
+    FacilityMaintenanceCategory,
+    FacilityOccupant,
+    FacilityAsset,
+    FacilityWorkOrder,
+};

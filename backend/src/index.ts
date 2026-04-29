@@ -6,6 +6,7 @@ import { env } from './config/env';
 import sequelize from './config/database';
 import './modules/hr/models/associations'; // Import associations
 import './modules/inventory/models/associations'; // Import inventory associations
+import './modules/facility/models/associations'; // Import facility associations
 
 const app = express();
 
