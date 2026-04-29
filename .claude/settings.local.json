@@ -83,7 +83,8 @@
       "PowerShell(Get-Process *)",
       "PowerShell(Test-NetConnection *)",
       "Bash(findstr \":3000 :5173\")",
-      "Bash(findstr *)"
+      "Bash(findstr *)",
+      "Bash(timeout 8 bash *)"
     ]
   }
 }
