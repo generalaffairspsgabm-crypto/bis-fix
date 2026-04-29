@@ -24,6 +24,14 @@ Tersedia 2 akun superadmin:
 | `111111` | `password123` | Superadmin | Akun superadmin singkat |
 | `1234567890123456` | `password123` | Superadmin | Akun superadmin utama |
 
+### Seed RBAC + Cleanup (`npm run seed:all`)
+
+Sama seperti seed minimal (2 akun superadmin), tapi juga:
+- Cleanup semua data non-credential (karyawan, inventaris, master data)
+- Re-seed RBAC (35 permissions, 5 roles)
+
+Berguna untuk **reset data tanpa kehilangan user credentials**.
+
 ### Seed Lengkap (`npm run seed:complete`)
 
 Tersedia 12 akun dengan berbagai role:

@@ -123,6 +123,9 @@ BIS (Bebang Sistem Informasi)
 
 ### Import Data
 - Import produk dari file Excel
+- Import karyawan dari file Excel
+- Download template import (format .xlsx)
+- Validasi data sebelum import
 
 ### Laporan
 - Laporan stok per gudang

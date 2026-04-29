@@ -51,6 +51,9 @@ Jika ingin mengisi ulang data demo setelah reset:
 # Seed lengkap (termasuk cleanup otomatis)
 npm run seed:complete
 
+# Seed RBAC + cleanup data non-credential
+npm run seed:all
+
 # Seed minimal (hanya RBAC + superadmin)
 npm run seed
 ```
@@ -186,6 +189,29 @@ npx puppeteer browsers install chrome
 # Jalankan seed:complete (otomatis cleanup + seed ulang)
 cd backend
 npm run seed:complete
+```
+
+### 9. `npm run seed` berhasil tapi user tidak terbuat
+
+**Penyebab:** Association `belongsToMany` antara Role dan Permission tidak ter-register karena model `RolePermission` belum di-import. Akibatnya `setPermissions()` gagal, dan karena user creation ada di block `try` yang sama, user juga tidak dibuat.
+
+**Solusi:**
+Pastikan file `src/database/seed.ts` memiliki import berikut di bagian atas:
+```typescript
+import '../modules/auth/models/RolePermission'; // Register belongsToMany associations
+```
+
+Kemudian rebuild dan jalankan ulang:
+```bash
+cd backend
+npm run build
+npm run seed
+```
+
+Verifikasi user berhasil dibuat:
+```bash
+# Cek di database
+psql -U postgres -d bebang_db -c "SELECT nik, nama FROM users;"
 ```
 
 ---

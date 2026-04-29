@@ -59,7 +59,7 @@ Pastikan service PostgreSQL sudah running dan database `bebang_db` sudah dibuat 
 
 ### 2. Jalankan Database Migration
 
-Migration membuat semua tabel yang diperlukan (48 migration files):
+Migration membuat semua tabel yang diperlukan (50 migration files):
 
 ```bash
 cd backend
@@ -73,7 +73,7 @@ Database connected.
 { event: 'migrated', name: '00_initial_schema.ts' }
 { event: 'migrating', name: '01_create_users_table.ts' }
 ...
-{ event: 'migrated', name: '48_create_company_settings.ts' }
+{ event: 'migrated', name: '49_add_uom_id_to_inv_produk.ts' }
 All migrations completed.
 ```
 
@@ -98,25 +98,40 @@ Membuat:
 
 Gunakan ini jika Anda ingin **langsung input data real**.
 
-#### Opsi B: Seed Lengkap (Dengan Data Demo)
+#### Opsi B: Seed RBAC + Cleanup (`npm run seed:all`)
+
+```bash
+npm run seed:all
+```
+
+Membuat:
+- Cleanup semua data non-credential (karyawan, inventaris, master data)
+- 35 permissions (RBAC)
+- 5 roles dengan permission masing-masing
+- 2 akun superadmin
+
+Gunakan ini untuk **reset data tanpa kehilangan user credentials**.
+
+#### Opsi C: Seed Lengkap (Dengan Data Demo)
 
 ```bash
 npm run seed:complete
 ```
 
 Membuat semua data demo:
-- RBAC (permissions, roles)
+- RBAC (35 permissions, 5 roles dengan permission masing-masing)
 - 6 divisi, 12 departemen, 18 posisi jabatan
-- 10 master data HR lainnya
+- 10 master data HR lainnya (status, lokasi, golongan, dll)
 - 20 karyawan lengkap (personal info, HR info, family info)
 - 12 akun user dengan berbagai role
-- 15 produk inventaris, 5 gudang
+- 5 kategori, 12 sub kategori, 15 brand, 6 UOM, 15 produk, 5 gudang
 - 53 serial number/asset tag
-- 8 transaksi inventaris
+- 8 transaksi inventaris (masuk, keluar, transfer, opname)
+- 16 stok records
 
 Gunakan ini untuk **melihat dan menguji semua fitur** sebelum input data real.
 
-#### Opsi C: Seed Ulang (Reset + Seed)
+#### Opsi D: Seed Ulang (Reset + Seed)
 
 Jika ingin seed ulang dari awal:
 ```bash
@@ -187,6 +202,7 @@ Frontend akan berjalan di **http://localhost:5173** dengan hot-reload (Vite HMR)
 | `npm run start` | Jalankan production build |
 | `npm run migrate` | Jalankan database migration |
 | `npm run seed` | Seed minimal (RBAC + superadmin) |
+| `npm run seed:all` | Seed RBAC + cleanup data non-credential |
 | `npm run seed:complete` | Seed lengkap dengan data demo |
 | `npm run reset-data` | Hapus semua data kecuali credentials |
 | `npm run type-check` | Cek TypeScript tanpa compile |

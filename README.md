@@ -103,6 +103,7 @@ Buka **http://localhost:5173** — Login: NIK `1234567890123456` / Password `pas
 npm run dev              # Dev server (port 3000)
 npm run migrate          # Database migration
 npm run seed             # Seed minimal (credentials only)
+npm run seed:all         # Seed RBAC + cleanup data non-credential
 npm run seed:complete    # Seed lengkap (semua data demo)
 npm run reset-data       # Hapus data seed, pertahankan credentials
 npm run build            # Compile TypeScript
