@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { AxiosError } from 'axios';
 import { useCreateTransaksi } from '../../../hooks/useInventoryStok';
 import { useInvGudangList, useInvProdukList, useInvUomList } from '../../../hooks/useInventoryMasterData';
+import { useFacBuildingList, useFacRoomList } from '../../../hooks/useFacilityMasterData';
 import { TransaksiPayload, TransaksiTipe, TransaksiSubTipe, TransaksiDetailPayload } from '../../../types/inventory';
 import Button from '../../../components/common/Button';
 import inventoryStokService from '../../../services/api/inventory-stok.service';
@@ -38,12 +39,16 @@ const TransaksiFormPage = () => {
     const { data: gudangData } = useInvGudangList({ limit: 100, status: 'Aktif' });
     const { data: produkData } = useInvProdukList({ limit: 200, status: 'Aktif' });
     const { data: uomData } = useInvUomList({ limit: 100, status: 'Aktif' });
+    const { data: buildingData } = useFacBuildingList({ limit: 100, status: 'Aktif' });
+    const { data: roomData } = useFacRoomList({ limit: 200, status: 'Tersedia' });
 
     const [tipe, setTipe] = useState<TransaksiTipe>('Masuk');
     const [subTipe, setSubTipe] = useState<TransaksiSubTipe>('Supplier');
     const [tanggal, setTanggal] = useState(new Date().toISOString().split('T')[0]);
     const [gudangId, setGudangId] = useState<number>(0);
     const [gudangTujuanId, setGudangTujuanId] = useState<number>(0);
+    const [buildingId, setBuildingId] = useState<number>(0);
+    const [roomId, setRoomId] = useState<number>(0);
     const [karyawanId, setKaryawanId] = useState<number>(0);
     const [supplierNama, setSupplierNama] = useState('');
     const [noReferensi, setNoReferensi] = useState('');
@@ -116,15 +121,19 @@ const TransaksiFormPage = () => {
         setDetails(prev => prev.map(d => d._key === key ? { ...d, serial_numbers: sns } : d));
     };
 
-    const showGudangTujuan = subTipe === 'Transfer Masuk' || subTipe === 'Transfer Gudang' || subTipe === 'Ke Gedung/Mess';
+    const showGudangTujuan = subTipe === 'Transfer Masuk' || subTipe === 'Transfer Gudang';
+    const showBuilding = subTipe === 'Ke Gedung/Mess';
     const showKaryawan = subTipe === 'Ke Karyawan' || subTipe === 'Retur Karyawan';
     const showSupplier = subTipe === 'Supplier';
+
+    const filteredRooms = roomData?.data?.filter(r => r.building_id === buildingId) || [];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!gudangId) { toast.error('Pilih gudang'); return; }
         if (showGudangTujuan && !gudangTujuanId) { toast.error('Pilih gudang tujuan'); return; }
+        if (showBuilding && !buildingId) { toast.error('Pilih gedung/mess tujuan'); return; }
         if (showSupplier && !supplierNama.trim()) { toast.error('Isi nama supplier'); return; }
 
         const invalidDetail = details.find(d => !d.produk_id || !d.uom_id || d.jumlah === 0);
@@ -136,6 +145,8 @@ const TransaksiFormPage = () => {
             tanggal,
             gudang_id: gudangId,
             gudang_tujuan_id: showGudangTujuan ? gudangTujuanId : null,
+            facility_building_id: showBuilding ? buildingId : null,
+            facility_room_id: showBuilding && roomId ? roomId : null,
             karyawan_id: showKaryawan ? karyawanId : null,
             supplier_nama: showSupplier ? supplierNama : null,
             no_referensi: noReferensi || null,
@@ -223,6 +234,31 @@ const TransaksiFormPage = () => {
                                     ))}
                                 </select>
                             </div>
+                        )}
+
+                        {showBuilding && (
+                            <>
+                                <div className="flex flex-col gap-1.5">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200">Gedung/Mess Tujuan *</label>
+                                    <select value={buildingId} onChange={(e) => { setBuildingId(Number(e.target.value)); setRoomId(0); }} className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+                                        <option value={0}>-- Pilih Gedung/Mess --</option>
+                                        {buildingData?.data?.map((b) => (
+                                            <option key={b.id} value={b.id}>{b.code} - {b.nama} ({b.tipe})</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                {buildingId > 0 && filteredRooms.length > 0 && (
+                                    <div className="flex flex-col gap-1.5">
+                                        <label className="text-sm font-medium text-gray-700 dark:text-gray-200">Ruangan (opsional)</label>
+                                        <select value={roomId} onChange={(e) => setRoomId(Number(e.target.value))} className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+                                            <option value={0}>-- Semua / Tidak Spesifik --</option>
+                                            {filteredRooms.map((r) => (
+                                                <option key={r.id} value={r.id}>{r.code} - {r.nama}{r.lantai ? ` (Lt. ${r.lantai})` : ''}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
+                            </>
                         )}
 
                         {showKaryawan && (

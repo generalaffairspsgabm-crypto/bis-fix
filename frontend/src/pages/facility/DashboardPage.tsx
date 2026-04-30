@@ -1,5 +1,6 @@
 ﻿import { useFacilityDashboardSummary } from '../../hooks/useFacilityDashboard';
 import { FacWorkOrder } from '../../types/facility';
+import { InvTransaksi } from '../../types/inventory';
 
 const prioritasColor = (p: string) => {
     switch (p) {
@@ -156,6 +157,50 @@ const DashboardPage = () => {
                     </div>
                 ) : (
                     <p className="text-sm text-gray-400 text-center py-8">Belum ada work order</p>
+                )}
+            </div>
+
+            {/* Recent Inventory Distribution to Facility */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <div className="flex items-center gap-2 mb-4">
+                    <span className="material-symbols-outlined text-blue-500">inventory_2</span>
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Distribusi Inventory ke Fasilitas</h2>
+                </div>
+                {(summary?.recentFacilityTransaksi || []).length > 0 ? (
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                            <thead>
+                                <tr className="border-b border-gray-200 dark:border-gray-700">
+                                    <th className="text-left py-3 px-2 font-medium text-gray-500 dark:text-gray-400">Code</th>
+                                    <th className="text-left py-3 px-2 font-medium text-gray-500 dark:text-gray-400">Tanggal</th>
+                                    <th className="text-left py-3 px-2 font-medium text-gray-500 dark:text-gray-400">Gedung</th>
+                                    <th className="text-left py-3 px-2 font-medium text-gray-500 dark:text-gray-400">Ruangan</th>
+                                    <th className="text-left py-3 px-2 font-medium text-gray-500 dark:text-gray-400">Item</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {(summary?.recentFacilityTransaksi || []).map((trx: InvTransaksi) => (
+                                    <tr key={trx.id} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                                        <td className="py-3 px-2 text-gray-600 dark:text-gray-300 font-mono text-xs">{trx.code}</td>
+                                        <td className="py-3 px-2 text-gray-600 dark:text-gray-300">{new Date(trx.tanggal).toLocaleDateString('id-ID')}</td>
+                                        <td className="py-3 px-2 text-gray-900 dark:text-white font-medium">{trx.facility_building?.nama || '-'}</td>
+                                        <td className="py-3 px-2 text-gray-600 dark:text-gray-300">{trx.facility_room?.nama || '-'}</td>
+                                        <td className="py-3 px-2">
+                                            <div className="space-y-0.5">
+                                                {(trx.details || []).map((d, idx) => (
+                                                    <div key={idx} className="text-gray-600 dark:text-gray-300 text-xs">
+                                                        {d.produk?.nama} <span className="text-gray-400">x{d.jumlah} {d.uom?.nama}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : (
+                    <p className="text-sm text-gray-400 text-center py-8">Belum ada distribusi inventory ke fasilitas</p>
                 )}
             </div>
         </div>

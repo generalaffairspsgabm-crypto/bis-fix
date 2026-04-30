@@ -149,6 +149,7 @@ export interface FacilityDashboardSummary {
     workOrdersByPriority: { prioritas: string; count: number }[];
     recentWorkOrders: FacWorkOrder[];
     assetsByCondition: { status: string; count: number }[];
+    recentFacilityTransaksi: import('./inventory').InvTransaksi[];
 }
 
 // === Filter Types ===

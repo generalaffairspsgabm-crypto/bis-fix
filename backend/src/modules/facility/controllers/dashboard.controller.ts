@@ -1,9 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
+import { fn, col } from 'sequelize';
 import FacilityBuilding from '../models/Building';
 import FacilityRoom from '../models/Room';
 import FacilityOccupant from '../models/Occupant';
 import FacilityAsset from '../models/Asset';
 import FacilityWorkOrder from '../models/WorkOrder';
+import InvTransaksi from '../../inventory/models/Transaksi';
+import InvTransaksiDetail from '../../inventory/models/TransaksiDetail';
+import InvProduk from '../../inventory/models/Produk';
+import InvUom from '../../inventory/models/Uom';
 
 class FacilityDashboardController {
     async getSummary(req: Request, res: Response, next: NextFunction) {
@@ -11,45 +16,82 @@ class FacilityDashboardController {
             const [
                 totalBuildings,
                 totalRooms,
-                roomsTersedia,
-                roomsPenuh,
-                roomsMaintenance,
-                totalOccupantsAktif,
-                totalAssetsAktif,
-                workOrdersOpen,
-                workOrdersInProgress,
-                workOrdersResolved,
+                totalOccupants,
+                openWorkOrders,
+                workOrdersByStatusRaw,
+                workOrdersByPriorityRaw,
+                recentWorkOrders,
+                assetsByConditionRaw,
+                recentFacilityTransaksi,
             ] = await Promise.all([
                 FacilityBuilding.count({ where: { status: 'Aktif' } }),
                 FacilityRoom.count(),
-                FacilityRoom.count({ where: { status: 'Tersedia' } }),
-                FacilityRoom.count({ where: { status: 'Penuh' } }),
-                FacilityRoom.count({ where: { status: 'Maintenance' } }),
                 FacilityOccupant.count({ where: { status: 'Aktif' } }),
-                FacilityAsset.count({ where: { status: 'Aktif' } }),
                 FacilityWorkOrder.count({ where: { status: 'Open' } }),
-                FacilityWorkOrder.count({ where: { status: 'In Progress' } }),
-                FacilityWorkOrder.count({ where: { status: 'Resolved' } }),
+                FacilityWorkOrder.findAll({
+                    attributes: ['status', [fn('COUNT', col('id')), 'count']],
+                    group: ['status'],
+                    raw: true,
+                }) as unknown as Promise<Array<{ status: string; count: number }>>,
+                FacilityWorkOrder.findAll({
+                    attributes: ['prioritas', [fn('COUNT', col('id')), 'count']],
+                    group: ['prioritas'],
+                    raw: true,
+                }) as unknown as Promise<Array<{ prioritas: string; count: number }>>,
+                FacilityWorkOrder.findAll({
+                    include: [{ model: FacilityRoom, as: 'room', attributes: ['id', 'nama'] }],
+                    order: [['created_at', 'DESC']],
+                    limit: 5,
+                }),
+                FacilityAsset.findAll({
+                    attributes: ['status', [fn('COUNT', col('id')), 'count']],
+                    group: ['status'],
+                    raw: true,
+                }) as unknown as Promise<Array<{ status: string; count: number }>>,
+                InvTransaksi.findAll({
+                    where: { sub_tipe: 'Ke Gedung/Mess' },
+                    include: [
+                        { model: FacilityBuilding, as: 'facility_building', attributes: ['id', 'code', 'nama'] },
+                        { model: FacilityRoom, as: 'facility_room', attributes: ['id', 'code', 'nama'] },
+                        {
+                            model: InvTransaksiDetail, as: 'details',
+                            include: [
+                                { model: InvProduk, as: 'produk', attributes: ['id', 'code', 'nama'] },
+                                { model: InvUom, as: 'uom', attributes: ['id', 'nama'] },
+                            ],
+                        },
+                    ],
+                    order: [['created_at', 'DESC']],
+                    limit: 10,
+                }),
             ]);
+
+            const workOrdersByStatus = (workOrdersByStatusRaw || []).map((r: any) => ({
+                status: r.status,
+                count: Number(r.count),
+            }));
+            const workOrdersByPriority = (workOrdersByPriorityRaw || []).map((r: any) => ({
+                prioritas: r.prioritas,
+                count: Number(r.count),
+            }));
+            const assetsByCondition = (assetsByConditionRaw || []).map((r: any) => ({
+                status: r.status,
+                count: Number(r.count),
+            }));
 
             res.json({
                 status: 'success',
                 data: {
-                    buildings: { total: totalBuildings },
-                    rooms: {
-                        total: totalRooms,
-                        tersedia: roomsTersedia,
-                        penuh: roomsPenuh,
-                        maintenance: roomsMaintenance,
-                    },
-                    occupants: { aktif: totalOccupantsAktif },
-                    assets: { aktif: totalAssetsAktif },
-                    workOrders: {
-                        open: workOrdersOpen,
-                        inProgress: workOrdersInProgress,
-                        resolved: workOrdersResolved,
-                    },
-                }
+                    totalBuildings,
+                    totalRooms,
+                    totalOccupants,
+                    openWorkOrders,
+                    workOrdersByStatus,
+                    workOrdersByPriority,
+                    recentWorkOrders,
+                    assetsByCondition,
+                    recentFacilityTransaksi,
+                },
             });
         } catch (error) {
             next(error);

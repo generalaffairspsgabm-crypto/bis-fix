@@ -4,7 +4,7 @@ import FacilityRoom from '../models/Room';
 
 class FacilityOccupantService {
     async findAllWithFilter(filters: any) {
-        const { status, search, room_id, employee_id, page = 1, limit = 10 } = filters;
+        const { status, search, room_id, building_id, employee_id, page = 1, limit = 10 } = filters;
         const offset = (Number(page) - 1) * Number(limit);
         const where: any = {};
 
@@ -12,16 +12,36 @@ class FacilityOccupantService {
         if (room_id) where.room_id = Number(room_id);
         if (employee_id) where.employee_id = Number(employee_id);
 
+        // Build room include with optional building_id filter
+        const roomWhere: any = {};
+        if (building_id) roomWhere.building_id = Number(building_id);
+
+        const includeOpts: any[] = [
+            {
+                association: 'room',
+                ...(Object.keys(roomWhere).length > 0 ? { where: roomWhere } : {}),
+                include: [{ association: 'building' }],
+            },
+            { association: 'employee' },
+        ];
+
+        // Search across employee name, NIK, and room name
+        if (search) {
+            where[Op.or] = [
+                { '$employee.nama_lengkap$': { [Op.iLike]: `%${search}%` } },
+                { '$employee.nomor_induk_karyawan$': { [Op.iLike]: `%${search}%` } },
+                { '$room.nama$': { [Op.iLike]: `%${search}%` } },
+            ];
+        }
+
         const { count, rows } = await FacilityOccupant.findAndCountAll({
             where,
-            include: [
-                { association: 'room', include: [{ association: 'building' }] },
-                { association: 'employee' },
-            ],
+            include: includeOpts,
             limit: Number(limit),
             offset: Number(offset),
             order: [['id', 'DESC']],
-            distinct: true
+            distinct: true,
+            subQuery: false,
         });
 
         return {
