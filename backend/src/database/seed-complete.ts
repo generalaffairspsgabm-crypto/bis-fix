@@ -16,10 +16,6 @@ import {
     FacilityBuilding, FacilityRoomType, FacilityRoom,
     FacilityMaintenanceCategory, FacilityOccupant, FacilityAsset, FacilityWorkOrder,
 } from '../modules/facility/models';
-import {
-    FacilityBuilding, FacilityRoomType, FacilityRoom,
-    FacilityMaintenanceCategory, FacilityOccupant, FacilityAsset, FacilityWorkOrder,
-} from '../modules/facility/models';
 
 async function seedComplete() {
     try {
@@ -1018,6 +1014,203 @@ async function seedComplete() {
         console.log(`  ${serialData.length} serial numbers\n`);
 
         // ═══════════════════════════════════════════════════════════════
+        // LAYER 7: FACILITY MANAGEMENT
+        // ═══════════════════════════════════════════════════════════════
+        console.log('=== LAYER 7: FACILITY ===');
+
+        // Get first superadmin user for created_by
+        const adminUser = await User.findOne({ where: { nik: '111111' } });
+        const createdById = adminUser?.id ?? 1;
+
+        // --- Room Types (5) ---
+        const roomTypeData = [
+            { code: 'FRT-001', nama: 'Kamar Tidur Single', keterangan: 'Kamar tidur untuk 1 orang', status: 'Aktif' as const },
+            { code: 'FRT-002', nama: 'Kamar Tidur Double', keterangan: 'Kamar tidur untuk 2 orang', status: 'Aktif' as const },
+            { code: 'FRT-003', nama: 'Ruang Kantor', keterangan: 'Ruang kerja kantor', status: 'Aktif' as const },
+            { code: 'FRT-004', nama: 'Ruang Meeting', keterangan: 'Ruang rapat/meeting', status: 'Aktif' as const },
+            { code: 'FRT-005', nama: 'Gudang/Storage', keterangan: 'Ruang penyimpanan barang', status: 'Aktif' as const },
+        ];
+        const roomTypeMap: Record<string, any> = {};
+        for (const d of roomTypeData) {
+            const [row] = await FacilityRoomType.findOrCreate({ where: { code: d.code }, defaults: d as any });
+            roomTypeMap[d.code] = row;
+        }
+        console.log(`  ${roomTypeData.length} room types`);
+
+        // --- Maintenance Categories (4) ---
+        const maintCatData = [
+            { code: 'FMC-001', nama: 'Listrik & Elektronik', keterangan: 'Perbaikan instalasi listrik dan perangkat elektronik', status: 'Aktif' as const },
+            { code: 'FMC-002', nama: 'Plumbing', keterangan: 'Perbaikan saluran air dan sanitasi', status: 'Aktif' as const },
+            { code: 'FMC-003', nama: 'Sipil & Bangunan', keterangan: 'Perbaikan struktur bangunan, cat, lantai', status: 'Aktif' as const },
+            { code: 'FMC-004', nama: 'AC & Pendingin', keterangan: 'Perawatan dan perbaikan AC', status: 'Aktif' as const },
+        ];
+        const maintCatMap: Record<string, any> = {};
+        for (const d of maintCatData) {
+            const [row] = await FacilityMaintenanceCategory.findOrCreate({ where: { code: d.code }, defaults: d as any });
+            maintCatMap[d.code] = row;
+        }
+        console.log(`  ${maintCatData.length} maintenance categories`);
+
+        // --- Buildings (5) ---
+        const buildingData = [
+            { code: 'BLD-001', nama: 'Mess Karyawan Jakarta', tipe: 'Mess' as const, lokasi_code: 'LOK-001', pj_nik: 'EMP-002', kapasitas_total: 20, alamat: 'Jl. Jend. Sudirman No. 1A, Jakarta Selatan', keterangan: 'Mess karyawan kantor pusat', status: 'Aktif' as const },
+            { code: 'BLD-002', nama: 'Mess Karyawan Bekasi', tipe: 'Mess' as const, lokasi_code: 'LOK-002', pj_nik: 'EMP-005', kapasitas_total: 30, alamat: 'Jl. Industri Raya No. 5A, Bekasi', keterangan: 'Mess karyawan site Bekasi', status: 'Aktif' as const },
+            { code: 'BLD-003', nama: 'Kantor Pusat Jakarta', tipe: 'Kantor' as const, lokasi_code: 'LOK-001', pj_nik: 'EMP-001', kapasitas_total: 50, alamat: 'Jl. Jend. Sudirman No. 1, Jakarta Selatan 12190', keterangan: 'Gedung kantor pusat', status: 'Aktif' as const },
+            { code: 'BLD-004', nama: 'Workshop Bekasi', tipe: 'Workshop' as const, lokasi_code: 'LOK-002', pj_nik: 'EMP-005', kapasitas_total: 15, alamat: 'Jl. Industri Raya No. 7, Bekasi', keterangan: 'Workshop produksi Bekasi', status: 'Aktif' as const },
+            { code: 'BLD-005', nama: 'Mess Karyawan Bandung', tipe: 'Mess' as const, lokasi_code: 'LOK-003', pj_nik: 'EMP-004', kapasitas_total: 16, alamat: 'Jl. Soekarno-Hatta No. 90, Bandung', keterangan: 'Mess karyawan cabang Bandung', status: 'Aktif' as const },
+        ];
+        const buildingMap: Record<string, any> = {};
+        for (const d of buildingData) {
+            const [row] = await FacilityBuilding.findOrCreate({
+                where: { code: d.code },
+                defaults: {
+                    code: d.code, nama: d.nama, tipe: d.tipe,
+                    lokasi_kerja_id: lokasiMap[d.lokasi_code].id,
+                    penanggung_jawab_id: employeeMap[d.pj_nik]?.id ?? null,
+                    kapasitas_total: d.kapasitas_total, alamat: d.alamat,
+                    keterangan: d.keterangan, status: d.status,
+                } as any,
+            });
+            buildingMap[d.code] = row;
+        }
+        console.log(`  ${buildingData.length} buildings`);
+
+        // --- FACILITY_SEED_PART2 ---
+
+        // --- Rooms (16) ---
+        const roomData = [
+            // Mess Jakarta (BLD-001) - 6 kamar
+            { code: 'RM-001', nama: 'Kamar 101', building_code: 'BLD-001', type_code: 'FRT-001', lantai: '1', kapasitas: 1, status: 'Penuh' as const },
+            { code: 'RM-002', nama: 'Kamar 102', building_code: 'BLD-001', type_code: 'FRT-001', lantai: '1', kapasitas: 1, status: 'Tersedia' as const },
+            { code: 'RM-003', nama: 'Kamar 201', building_code: 'BLD-001', type_code: 'FRT-002', lantai: '2', kapasitas: 2, status: 'Penuh' as const },
+            { code: 'RM-004', nama: 'Kamar 202', building_code: 'BLD-001', type_code: 'FRT-002', lantai: '2', kapasitas: 2, status: 'Tersedia' as const },
+            { code: 'RM-005', nama: 'Kamar 301', building_code: 'BLD-001', type_code: 'FRT-001', lantai: '3', kapasitas: 1, status: 'Maintenance' as const },
+            { code: 'RM-006', nama: 'Kamar 302', building_code: 'BLD-001', type_code: 'FRT-001', lantai: '3', kapasitas: 1, status: 'Tersedia' as const },
+            // Mess Bekasi (BLD-002) - 4 kamar
+            { code: 'RM-007', nama: 'Kamar A1', building_code: 'BLD-002', type_code: 'FRT-002', lantai: '1', kapasitas: 2, status: 'Penuh' as const },
+            { code: 'RM-008', nama: 'Kamar A2', building_code: 'BLD-002', type_code: 'FRT-002', lantai: '1', kapasitas: 2, status: 'Tersedia' as const },
+            { code: 'RM-009', nama: 'Kamar B1', building_code: 'BLD-002', type_code: 'FRT-001', lantai: '2', kapasitas: 1, status: 'Penuh' as const },
+            { code: 'RM-010', nama: 'Kamar B2', building_code: 'BLD-002', type_code: 'FRT-001', lantai: '2', kapasitas: 1, status: 'Tersedia' as const },
+            // Kantor Pusat (BLD-003) - 3 ruang
+            { code: 'RM-011', nama: 'Ruang IT', building_code: 'BLD-003', type_code: 'FRT-003', lantai: '2', kapasitas: 10, status: 'Tersedia' as const },
+            { code: 'RM-012', nama: 'Ruang Meeting Utama', building_code: 'BLD-003', type_code: 'FRT-004', lantai: '3', kapasitas: 20, status: 'Tersedia' as const },
+            { code: 'RM-013', nama: 'Gudang IT', building_code: 'BLD-003', type_code: 'FRT-005', lantai: '1', kapasitas: 0, status: 'Tersedia' as const },
+            // Mess Bandung (BLD-005) - 3 kamar
+            { code: 'RM-014', nama: 'Kamar 1A', building_code: 'BLD-005', type_code: 'FRT-002', lantai: '1', kapasitas: 2, status: 'Penuh' as const },
+            { code: 'RM-015', nama: 'Kamar 1B', building_code: 'BLD-005', type_code: 'FRT-001', lantai: '1', kapasitas: 1, status: 'Tersedia' as const },
+            { code: 'RM-016', nama: 'Kamar 2A', building_code: 'BLD-005', type_code: 'FRT-002', lantai: '2', kapasitas: 2, status: 'Tersedia' as const },
+        ];
+        const roomMap: Record<string, any> = {};
+        for (const d of roomData) {
+            const [row] = await FacilityRoom.findOrCreate({
+                where: { code: d.code },
+                defaults: {
+                    code: d.code, nama: d.nama,
+                    building_id: buildingMap[d.building_code].id,
+                    room_type_id: roomTypeMap[d.type_code]?.id ?? null,
+                    lantai: d.lantai, kapasitas: d.kapasitas,
+                    status: d.status,
+                } as any,
+            });
+            roomMap[d.code] = row;
+        }
+        console.log(`  ${roomData.length} rooms`);
+
+        // --- FACILITY_SEED_PART3 ---
+
+        // --- Occupants (8 active, 2 historical) ---
+        const occupantData = [
+            // Mess Jakarta BLD-001
+            { room_code: 'RM-001', emp_nik: 'EMP-008', tanggal_masuk: '2024-03-01', tanggal_keluar: null, status: 'Aktif' as const, keterangan: 'Karyawan IT Support' },
+            { room_code: 'RM-003', emp_nik: 'EMP-010', tanggal_masuk: '2024-02-15', tanggal_keluar: null, status: 'Aktif' as const, keterangan: 'Karyawan QC' },
+            { room_code: 'RM-003', emp_nik: 'EMP-011', tanggal_masuk: '2024-02-15', tanggal_keluar: null, status: 'Aktif' as const, keterangan: 'Karyawan QC' },
+            // Mess Bekasi BLD-002
+            { room_code: 'RM-007', emp_nik: 'EMP-013', tanggal_masuk: '2024-01-10', tanggal_keluar: null, status: 'Aktif' as const, keterangan: 'Karyawan Produksi' },
+            { room_code: 'RM-007', emp_nik: 'EMP-014', tanggal_masuk: '2024-01-10', tanggal_keluar: null, status: 'Aktif' as const, keterangan: 'Karyawan Produksi' },
+            { room_code: 'RM-009', emp_nik: 'EMP-016', tanggal_masuk: '2024-04-01', tanggal_keluar: null, status: 'Aktif' as const, keterangan: 'Karyawan Maintenance' },
+            // Mess Bandung BLD-005
+            { room_code: 'RM-014', emp_nik: 'EMP-017', tanggal_masuk: '2024-05-01', tanggal_keluar: null, status: 'Aktif' as const, keterangan: 'Karyawan Sales Bandung' },
+            { room_code: 'RM-014', emp_nik: 'EMP-018', tanggal_masuk: '2024-05-01', tanggal_keluar: null, status: 'Aktif' as const, keterangan: 'Karyawan Sales Bandung' },
+            // Historical (selesai)
+            { room_code: 'RM-002', emp_nik: 'EMP-012', tanggal_masuk: '2023-06-01', tanggal_keluar: '2024-01-31', status: 'Selesai' as const, keterangan: 'Pindah ke site Bekasi' },
+            { room_code: 'RM-006', emp_nik: 'EMP-015', tanggal_masuk: '2023-09-01', tanggal_keluar: '2024-03-15', status: 'Selesai' as const, keterangan: 'Kontrak selesai' },
+        ];
+        for (const d of occupantData) {
+            await FacilityOccupant.create({
+                room_id: roomMap[d.room_code].id,
+                employee_id: employeeMap[d.emp_nik].id,
+                tanggal_masuk: d.tanggal_masuk,
+                tanggal_keluar: d.tanggal_keluar,
+                status: d.status,
+                keterangan: d.keterangan,
+                created_by: createdById,
+            } as any);
+        }
+        console.log(`  ${occupantData.length} occupants (8 active, 2 historical)`);
+
+        // --- FACILITY_SEED_PART4 ---
+
+        // --- Assets (link serial numbers to rooms) ---
+        const snLaptop1 = await InvSerialNumber.findOne({ where: { serial_number: 'LNV-T14-2025-0001' } });
+        const snLaptop2 = await InvSerialNumber.findOne({ where: { serial_number: 'LNV-T14-2025-0002' } });
+        const snMonitor1 = await InvSerialNumber.findOne({ where: { serial_number: 'SAM-27M-2025-0001' } });
+        const snMonitor2 = await InvSerialNumber.findOne({ where: { serial_number: 'SAM-27M-2025-0002' } });
+        const snPrinter1 = await InvSerialNumber.findOne({ where: { serial_number: 'EPS-L3210-2025-0001' } });
+
+        const assetData = [
+            { room_code: 'RM-011', sn: snLaptop1, tanggal: '2025-01-15', ket: 'Laptop untuk ruang IT' },
+            { room_code: 'RM-011', sn: snMonitor1, tanggal: '2025-01-15', ket: 'Monitor ruang IT' },
+            { room_code: 'RM-011', sn: snPrinter1, tanggal: '2025-01-20', ket: 'Printer ruang IT' },
+            { room_code: 'RM-012', sn: snLaptop2, tanggal: '2025-02-01', ket: 'Laptop ruang meeting' },
+            { room_code: 'RM-012', sn: snMonitor2, tanggal: '2025-02-01', ket: 'Monitor ruang meeting' },
+        ];
+        let assetCount = 0;
+        for (const d of assetData) {
+            if (d.sn) {
+                await FacilityAsset.create({
+                    room_id: roomMap[d.room_code].id,
+                    serial_number_id: d.sn.id,
+                    tanggal_penempatan: d.tanggal,
+                    keterangan: d.ket,
+                    status: 'Aktif',
+                    created_by: createdById,
+                } as any);
+                assetCount++;
+            }
+        }
+        console.log(`  ${assetCount} assets placed in rooms`);
+
+        // --- Work Orders (6) ---
+        const workOrderData = [
+            { code: 'WO-001', room_code: 'RM-005', cat_code: 'FMC-001', judul: 'Perbaikan Lampu Kamar 301', deskripsi: 'Lampu kamar 301 mati, perlu penggantian', prioritas: 'Medium' as const, status: 'In Progress' as const, reporter_nik: 'EMP-008', assignee_nik: 'EMP-016', tanggal_lapor: '2025-01-10', tanggal_selesai: null, estimasi: 150000, realisasi: null, catatan: null },
+            { code: 'WO-002', room_code: 'RM-007', cat_code: 'FMC-002', judul: 'Keran Air Bocor Kamar A1', deskripsi: 'Keran air di kamar mandi bocor', prioritas: 'High' as const, status: 'Resolved' as const, reporter_nik: 'EMP-013', assignee_nik: 'EMP-016', tanggal_lapor: '2025-01-05', tanggal_selesai: '2025-01-07', estimasi: 200000, realisasi: 175000, catatan: 'Keran diganti baru' },
+            { code: 'WO-003', room_code: 'RM-011', cat_code: 'FMC-004', judul: 'AC Ruang IT Tidak Dingin', deskripsi: 'AC di ruang IT tidak mengeluarkan udara dingin', prioritas: 'High' as const, status: 'Open' as const, reporter_nik: 'EMP-006', assignee_nik: null, tanggal_lapor: '2025-01-12', tanggal_selesai: null, estimasi: 500000, realisasi: null, catatan: null },
+            { code: 'WO-004', room_code: 'RM-003', cat_code: 'FMC-003', judul: 'Cat Dinding Mengelupas', deskripsi: 'Cat dinding kamar 201 mengelupas di beberapa bagian', prioritas: 'Low' as const, status: 'Closed' as const, reporter_nik: 'EMP-010', assignee_nik: 'EMP-016', tanggal_lapor: '2024-12-20', tanggal_selesai: '2024-12-28', estimasi: 300000, realisasi: 280000, catatan: 'Pengecatan ulang selesai' },
+            { code: 'WO-005', room_code: 'RM-014', cat_code: 'FMC-001', judul: 'Stop Kontak Rusak', deskripsi: 'Stop kontak di kamar 1A tidak berfungsi', prioritas: 'Critical' as const, status: 'Open' as const, reporter_nik: 'EMP-017', assignee_nik: null, tanggal_lapor: '2025-01-14', tanggal_selesai: null, estimasi: 100000, realisasi: null, catatan: null },
+            { code: 'WO-006', room_code: 'RM-012', cat_code: 'FMC-004', judul: 'Perawatan Rutin AC Meeting Room', deskripsi: 'Jadwal perawatan rutin AC ruang meeting', prioritas: 'Low' as const, status: 'In Progress' as const, reporter_nik: 'EMP-002', assignee_nik: 'EMP-016', tanggal_lapor: '2025-01-08', tanggal_selesai: null, estimasi: 250000, realisasi: null, catatan: null },
+        ];
+        for (const d of workOrderData) {
+            await FacilityWorkOrder.create({
+                code: d.code,
+                room_id: roomMap[d.room_code].id,
+                kategori_id: maintCatMap[d.cat_code]?.id ?? null,
+                judul: d.judul,
+                deskripsi: d.deskripsi,
+                prioritas: d.prioritas,
+                status: d.status,
+                reported_by: d.reporter_nik ? employeeMap[d.reporter_nik]?.id : null,
+                assigned_to: d.assignee_nik ? employeeMap[d.assignee_nik]?.id : null,
+                tanggal_lapor: d.tanggal_lapor,
+                tanggal_selesai: d.tanggal_selesai,
+                estimasi_biaya: d.estimasi,
+                realisasi_biaya: d.realisasi,
+                catatan_penyelesaian: d.catatan,
+                created_by: createdById,
+            } as any);
+        }
+        console.log(`  ${workOrderData.length} work orders\n`);
+
+        // ═══════════════════════════════════════════════════════════════
         // DONE
         // ═══════════════════════════════════════════════════════════════
         console.log('╔══════════════════════════════════════════════════╗');
@@ -1038,6 +1231,10 @@ async function seedComplete() {
         console.log('║    5 kategori, 12 sub kategori, 15 brand        ║');
         console.log('║    6 UOM, 15 produk, 5 gudang                   ║');
         console.log('║    8 transaksi, 16 stok, 53 serial numbers      ║');
+        console.log('║  Facility:                                      ║');
+        console.log('║    5 room types, 4 maint. categories            ║');
+        console.log('║    5 buildings, 16 rooms                        ║');
+        console.log('║    10 occupants, 5 assets, 6 work orders        ║');
         console.log('╠══════════════════════════════════════════════════╣');
         console.log('║  Login credentials (semua password: password123) ║');
         console.log('║  Superadmin : NIK 111111                        ║');

@@ -5,6 +5,12 @@ import { env } from '../config/env';
 const KEEP_TABLES = ['users', 'roles', 'permissions', 'role_permissions', 'company_settings'];
 
 const TABLES_TO_CLEAN = [
+    // Facility leaf (hapus dulu karena FK)
+    'facility_work_orders', 'facility_assets', 'facility_occupants',
+    // Facility mid
+    'facility_rooms',
+    // Facility master
+    'facility_buildings', 'facility_room_types', 'facility_maintenance_categories',
     // Inventory leaf
     'inv_serial_number', 'inv_transaksi_detail', 'inv_stok',
     // Inventory mid
