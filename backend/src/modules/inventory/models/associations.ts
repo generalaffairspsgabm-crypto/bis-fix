@@ -12,6 +12,8 @@ import Employee from '../../hr/models/Employee';
 import Department from '../../hr/models/Department';
 import LokasiKerja from '../../hr/models/LokasiKerja';
 import User from '../../auth/models/User';
+import FacilityBuilding from '../../facility/models/Building';
+import FacilityRoom from '../../facility/models/Room';
 
 // Kategori -> SubKategori
 InvKategori.hasMany(InvSubKategori, { foreignKey: 'kategori_id', as: 'sub_kategori' });
@@ -47,11 +49,13 @@ InvStok.belongsTo(InvUom, { foreignKey: 'uom_id', as: 'uom' });
 InvProduk.hasMany(InvStok, { foreignKey: 'produk_id', as: 'stok' });
 InvGudang.hasMany(InvStok, { foreignKey: 'gudang_id', as: 'stok' });
 
-// Transaksi -> Gudang, Karyawan, User
+// Transaksi -> Gudang, Karyawan, User, Facility
 InvTransaksi.belongsTo(InvGudang, { foreignKey: 'gudang_id', as: 'gudang' });
 InvTransaksi.belongsTo(InvGudang, { foreignKey: 'gudang_tujuan_id', as: 'gudang_tujuan' });
 InvTransaksi.belongsTo(Employee, { foreignKey: 'karyawan_id', as: 'karyawan' });
 InvTransaksi.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
+InvTransaksi.belongsTo(FacilityBuilding, { foreignKey: 'facility_building_id', as: 'facility_building' });
+InvTransaksi.belongsTo(FacilityRoom, { foreignKey: 'facility_room_id', as: 'facility_room' });
 InvTransaksi.hasMany(InvTransaksiDetail, { foreignKey: 'transaksi_id', as: 'details' });
 
 // TransaksiDetail -> Transaksi, Produk, Uom

@@ -71,6 +71,8 @@ export interface InvTransaksi {
     tanggal: string;
     gudang_id: number;
     gudang_tujuan_id?: number | null;
+    facility_building_id?: number | null;
+    facility_room_id?: number | null;
     karyawan_id?: number | null;
     supplier_nama?: string | null;
     no_referensi?: string | null;
@@ -81,6 +83,8 @@ export interface InvTransaksi {
     updated_at: string;
     gudang?: { id: number; code: string; nama: string };
     gudang_tujuan?: { id: number; code: string; nama: string } | null;
+    facility_building?: { id: number; code: string; nama: string } | null;
+    facility_room?: { id: number; code: string; nama: string } | null;
     karyawan?: { id: number; nama_lengkap: string; nomor_induk_karyawan?: string } | null;
     creator?: { id: number; nama: string };
     details?: InvTransaksiDetail[];
@@ -131,6 +135,8 @@ export interface TransaksiPayload {
     tanggal: string;
     gudang_id: number;
     gudang_tujuan_id?: number | null;
+    facility_building_id?: number | null;
+    facility_room_id?: number | null;
     karyawan_id?: number | null;
     supplier_nama?: string | null;
     no_referensi?: string | null;
@@ -150,6 +156,7 @@ export interface TransaksiFilter {
     tipe?: TransaksiTipe;
     sub_tipe?: TransaksiSubTipe;
     gudang_id?: number;
+    facility_building_id?: number;
     tanggal_dari?: string;
     tanggal_sampai?: string;
     search?: string;

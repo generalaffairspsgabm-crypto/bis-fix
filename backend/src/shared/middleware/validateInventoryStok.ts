@@ -24,6 +24,8 @@ const transaksiSchema = z.object({
     tanggal: z.string().min(1, 'Tanggal harus diisi'),
     gudang_id: z.number().int().positive('Gudang harus dipilih'),
     gudang_tujuan_id: z.number().int().positive().optional().nullable(),
+    facility_building_id: z.number().int().positive().optional().nullable(),
+    facility_room_id: z.number().int().positive().optional().nullable(),
     karyawan_id: z.number().int().positive().optional().nullable(),
     supplier_nama: z.string().optional().nullable(),
     no_referensi: z.string().optional().nullable(),
@@ -33,8 +35,11 @@ const transaksiSchema = z.object({
     if (data.sub_tipe === 'Supplier' && !data.supplier_nama) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Nama supplier harus diisi', path: ['supplier_nama'] });
     }
-    if ((data.sub_tipe === 'Transfer Masuk' || data.sub_tipe === 'Transfer Gudang' || data.sub_tipe === 'Ke Gedung/Mess') && !data.gudang_tujuan_id) {
+    if ((data.sub_tipe === 'Transfer Masuk' || data.sub_tipe === 'Transfer Gudang') && !data.gudang_tujuan_id) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Gudang tujuan harus dipilih', path: ['gudang_tujuan_id'] });
+    }
+    if (data.sub_tipe === 'Ke Gedung/Mess' && !data.facility_building_id) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Gedung/Mess tujuan harus dipilih', path: ['facility_building_id'] });
     }
     if ((data.sub_tipe === 'Ke Karyawan' || data.sub_tipe === 'Retur Karyawan') && !data.karyawan_id) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Karyawan harus dipilih', path: ['karyawan_id'] });

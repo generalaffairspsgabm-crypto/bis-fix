@@ -14,6 +14,8 @@ import Employee from '../../hr/models/Employee';
 import LokasiKerja from '../../hr/models/LokasiKerja';
 import User from '../../auth/models/User';
 import notificationService from '../../../shared/services/notification.service';
+import FacilityBuilding from '../../facility/models/Building';
+import FacilityRoom from '../../facility/models/Room';
 
 const CODE_PREFIX_MAP: Record<string, string> = {
     'Masuk': 'STM',
@@ -35,6 +37,8 @@ interface TransaksiPayload {
     tanggal: string;
     gudang_id: number;
     gudang_tujuan_id?: number;
+    facility_building_id?: number;
+    facility_room_id?: number;
     karyawan_id?: number;
     supplier_nama?: string;
     no_referensi?: string;
@@ -190,6 +194,8 @@ class StokService {
                 tanggal: payload.tanggal,
                 gudang_id: payload.gudang_id,
                 gudang_tujuan_id: payload.gudang_tujuan_id || null,
+                facility_building_id: payload.facility_building_id || null,
+                facility_room_id: payload.facility_room_id || null,
                 karyawan_id: payload.karyawan_id || null,
                 supplier_nama: payload.supplier_nama || null,
                 no_referensi: payload.no_referensi || null,
@@ -221,7 +227,7 @@ class StokService {
             // For transfer: create paired transaction
             if (payload.sub_tipe === 'Transfer Masuk' && payload.gudang_tujuan_id) {
                 await this.createPairedTransferKeluar(payload, transaksi, userId, t);
-            } else if ((payload.sub_tipe === 'Transfer Gudang' || payload.sub_tipe === 'Ke Gedung/Mess') && payload.gudang_tujuan_id) {
+            } else if (payload.sub_tipe === 'Transfer Gudang' && payload.gudang_tujuan_id) {
                 await this.createPairedTransferMasuk(payload, transaksi, userId, t);
             }
 
@@ -327,13 +333,16 @@ class StokService {
                     updateData.gudang_id = null;
                     updateData.karyawan_id = payload.karyawan_id;
                     updateData.status = 'Digunakan';
+                } else if (payload.sub_tipe === 'Ke Gedung/Mess') {
+                    updateData.gudang_id = null;
+                    updateData.status = 'Digunakan';
                 } else if (payload.sub_tipe === 'Disposal') {
                     updateData.gudang_id = null;
                     updateData.status = 'Disposed';
                 } else if (payload.sub_tipe === 'Rusak/Terbuang') {
                     updateData.gudang_id = null;
                     updateData.status = 'Rusak';
-                } else if (payload.sub_tipe === 'Transfer Gudang' || payload.sub_tipe === 'Ke Gedung/Mess') {
+                } else if (payload.sub_tipe === 'Transfer Gudang') {
                     updateData.gudang_id = payload.gudang_tujuan_id;
                 }
 
@@ -472,13 +481,14 @@ class StokService {
     }
 
     async getTransaksiList(filters: any) {
-        const { tipe, sub_tipe, gudang_id, tanggal_dari, tanggal_sampai, search, page = 1, limit = 10 } = filters;
+        const { tipe, sub_tipe, gudang_id, facility_building_id, tanggal_dari, tanggal_sampai, search, page = 1, limit = 10 } = filters;
         const offset = (Number(page) - 1) * Number(limit);
         const where: any = {};
 
         if (tipe) where.tipe = tipe;
         if (sub_tipe) where.sub_tipe = sub_tipe;
         if (gudang_id) where.gudang_id = gudang_id;
+        if (facility_building_id) where.facility_building_id = facility_building_id;
         if (tanggal_dari && tanggal_sampai) {
             where.tanggal = { [Op.between]: [tanggal_dari, tanggal_sampai] };
         } else if (tanggal_dari) {
@@ -499,6 +509,8 @@ class StokService {
             include: [
                 { model: InvGudang, as: 'gudang', attributes: ['id', 'code', 'nama'] },
                 { model: InvGudang, as: 'gudang_tujuan', attributes: ['id', 'code', 'nama'] },
+                { model: FacilityBuilding, as: 'facility_building', attributes: ['id', 'code', 'nama'] },
+                { model: FacilityRoom, as: 'facility_room', attributes: ['id', 'code', 'nama'] },
                 { model: Employee, as: 'karyawan', attributes: ['id', 'nama_lengkap'] },
                 { model: User, as: 'creator', attributes: ['id', 'nama'] },
             ],
@@ -522,6 +534,8 @@ class StokService {
             include: [
                 { model: InvGudang, as: 'gudang', attributes: ['id', 'code', 'nama'] },
                 { model: InvGudang, as: 'gudang_tujuan', attributes: ['id', 'code', 'nama'] },
+                { model: FacilityBuilding, as: 'facility_building', attributes: ['id', 'code', 'nama'] },
+                { model: FacilityRoom, as: 'facility_room', attributes: ['id', 'code', 'nama'] },
                 { model: Employee, as: 'karyawan', attributes: ['id', 'nama_lengkap', 'nomor_induk_karyawan'] },
                 { model: User, as: 'creator', attributes: ['id', 'nama'] },
                 {
@@ -588,6 +602,32 @@ class StokService {
                 totalPages: Math.ceil(count / Number(limit)),
             },
         };
+    }
+
+    async getFacilityInventory(buildingId: number) {
+        const transaksi = await InvTransaksi.findAll({
+            where: {
+                facility_building_id: buildingId,
+                sub_tipe: 'Ke Gedung/Mess',
+            },
+            include: [
+                { model: InvGudang, as: 'gudang', attributes: ['id', 'code', 'nama'] },
+                { model: FacilityBuilding, as: 'facility_building', attributes: ['id', 'code', 'nama'] },
+                { model: FacilityRoom, as: 'facility_room', attributes: ['id', 'code', 'nama'] },
+                { model: User, as: 'creator', attributes: ['id', 'nama'] },
+                {
+                    model: InvTransaksiDetail,
+                    as: 'details',
+                    include: [
+                        { model: InvProduk, as: 'produk', attributes: ['id', 'code', 'nama', 'has_serial_number'] },
+                        { model: InvUom, as: 'uom', attributes: ['id', 'nama'] },
+                    ],
+                },
+            ],
+            order: [['created_at', 'DESC']],
+        });
+
+        return transaksi;
     }
 }
 

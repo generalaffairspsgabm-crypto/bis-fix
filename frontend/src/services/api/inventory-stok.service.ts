@@ -52,6 +52,11 @@ const uploadDokumen = async (transaksiId: number, files: File[]): Promise<{ stat
     return response.data;
 };
 
+const getFacilityInventory = async (buildingId: number): Promise<{ status: string; data: InvTransaksi[] }> => {
+    const response = await client.get<{ status: string; data: InvTransaksi[] }>(`/inventory/facility/${buildingId}/inventory`);
+    return response.data;
+};
+
 const inventoryStokService = {
     getStok,
     getSerialNumbers,
@@ -60,6 +65,7 @@ const inventoryStokService = {
     getTransaksiDetail,
     getKartuStok,
     uploadDokumen,
+    getFacilityInventory,
 };
 
 export default inventoryStokService;

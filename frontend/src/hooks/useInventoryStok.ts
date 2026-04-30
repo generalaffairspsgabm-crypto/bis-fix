@@ -35,6 +35,7 @@ export const useCreateTransaksi = () => {
             queryClient.invalidateQueries({ queryKey: ['inventoryTransaksi'] });
             queryClient.invalidateQueries({ queryKey: ['inventorySerialNumbers'] });
             queryClient.invalidateQueries({ queryKey: ['inventoryKartuStok'] });
+            queryClient.invalidateQueries({ queryKey: ['facilityInventory'] });
         },
     });
 };

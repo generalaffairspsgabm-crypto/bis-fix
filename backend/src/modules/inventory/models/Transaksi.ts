@@ -9,6 +9,8 @@ export class InvTransaksi extends Model {
     public tanggal!: string;
     public gudang_id!: number;
     public gudang_tujuan_id!: number | null;
+    public facility_building_id!: number | null;
+    public facility_room_id!: number | null;
     public karyawan_id!: number | null;
     public supplier_nama!: string | null;
     public no_referensi!: string | null;
@@ -18,6 +20,8 @@ export class InvTransaksi extends Model {
 
     public gudang?: any;
     public gudang_tujuan?: any;
+    public facility_building?: any;
+    public facility_room?: any;
     public karyawan?: any;
     public creator?: any;
     public details?: any[];
@@ -58,6 +62,16 @@ InvTransaksi.init({
         type: DataTypes.INTEGER,
         allowNull: true,
         references: { model: 'inv_gudang', key: 'id' },
+    },
+    facility_building_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: { model: 'facility_buildings', key: 'id' },
+    },
+    facility_room_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: { model: 'facility_rooms', key: 'id' },
     },
     karyawan_id: {
         type: DataTypes.INTEGER,

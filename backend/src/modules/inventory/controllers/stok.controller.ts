@@ -58,6 +58,15 @@ class StokController {
         }
     }
 
+    async getFacilityInventory(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await stokService.getFacilityInventory(Number(req.params.buildingId));
+            res.json({ status: 'success', data: result });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async uploadDokumen(req: Request, res: Response, next: NextFunction) {
         try {
             const transaksi = await InvTransaksi.findByPk(Number(req.params.id));

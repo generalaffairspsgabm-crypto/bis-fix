@@ -289,6 +289,14 @@ router.get(
     (req, res, next) => employeeAssetController.downloadBeritaAcara(req, res, next)
 );
 
+// === Facility Inventory Routes ===
+
+router.get(
+    '/facility/:buildingId/inventory',
+    checkPermission(RESOURCES.INVENTORY_STOCK, ACTIONS.READ),
+    (req, res, next) => stokController.getFacilityInventory(req, res, next)
+);
+
 // === Label & QR Code Routes ===
 
 router.get(
