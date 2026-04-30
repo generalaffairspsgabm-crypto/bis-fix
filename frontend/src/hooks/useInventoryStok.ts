@@ -64,3 +64,11 @@ export const useKartuStok = (filters: KartuStokFilter) => {
         enabled: !!filters.produk_id,
     });
 };
+
+export const useFacilityInventory = (buildingId: number) => {
+    return useQuery({
+        queryKey: ['facilityInventory', buildingId],
+        queryFn: () => inventoryStokService.getFacilityInventory(buildingId),
+        enabled: !!buildingId,
+    });
+};
