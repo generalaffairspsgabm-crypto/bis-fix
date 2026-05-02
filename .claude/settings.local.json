@@ -85,7 +85,9 @@
       "Bash(findstr \":3000 :5173\")",
       "Bash(findstr *)",
       "Bash(timeout 8 bash *)",
-      "Bash(npx nodemon *)"
+      "Bash(npx nodemon *)",
+      "Bash(docker exec bebang-backend-dev *)",
+      "PowerShell(docker restart bebang-backend-dev *)"
     ]
   }
 }

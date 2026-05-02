@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDashboardStats, useEmployeeDistribution, useRecentActivities, useEmploymentStatus } from '../../hooks/useDashboard';
 import StatCard from '../../components/dashboard/StatCard';
@@ -19,9 +20,11 @@ const DashboardPage = () => {
     const { data: activities, isLoading: activitiesLoading } = useRecentActivities();
     const { data: empStatus, isLoading: statusLoading } = useEmploymentStatus();
 
-    if (statsError) {
-        toast.error('Gagal memuat data dashboard');
-    }
+    useEffect(() => {
+        if (statsError) {
+            toast.error('Gagal memuat data dashboard');
+        }
+    }, [statsError]);
 
     return (
         <div className="p-8 space-y-8 bg-gray-50 dark:bg-slate-900 min-h-screen">
