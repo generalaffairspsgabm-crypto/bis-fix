@@ -87,7 +87,8 @@
       "Bash(timeout 8 bash *)",
       "Bash(npx nodemon *)",
       "Bash(docker exec bebang-backend-dev *)",
-      "PowerShell(docker restart bebang-backend-dev *)"
+      "PowerShell(docker restart bebang-backend-dev *)",
+      "mcp__plugin_playwright_playwright__browser_navigate_back"
     ]
   }
 }
