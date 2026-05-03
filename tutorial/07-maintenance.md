@@ -22,8 +22,10 @@ Script akan menampilkan konfirmasi:
 Tabel yang DIPERTAHANKAN (5):
   users, roles, permissions, role_permissions, company_settings
 
-Tabel yang DIHAPUS (29):
+Tabel yang DIHAPUS (31):
+  facility_work_orders, facility_assets, facility_occupants, ...
   inv_serial_number, inv_transaksi_detail, inv_stok, ...
+  employees, department, divisi, ...
 
 Apakah Anda yakin? Ketik "yes" untuk melanjutkan:
 ```
@@ -38,17 +40,35 @@ Ketik `yes` untuk melanjutkan, atau apapun selain itu untuk membatalkan.
 **Yang dihapus:**
 - Semua data karyawan dan HR master data
 - Semua data inventory (produk, gudang, stok, transaksi, serial number)
+- Semua data facility (gedung, ruangan, penghuni, aset, work order)
 - Audit log dan notifikasi
 - Semua auto-increment ID reset ke 1
 
 ---
 
-## Re-Seed Data
+## Reset + Seed Ulang (Satu Perintah)
 
-Jika ingin mengisi ulang data demo setelah reset:
+Cara paling cepat untuk reset dan mengisi ulang data demo:
 
 ```bash
-# Seed lengkap (termasuk cleanup otomatis)
+cd backend
+npm run reset-and-seed
+```
+
+Script ini otomatis:
+1. Menghapus semua data kecuali credentials
+2. Menjalankan seed lengkap (HR + Inventory + Facility)
+
+Tidak perlu konfirmasi manual — langsung jalan.
+
+---
+
+## Re-Seed Data (Tanpa Reset)
+
+Jika ingin mengisi ulang data demo tanpa reset terlebih dahulu:
+
+```bash
+# Seed lengkap (cleanup non-credential + seed semua modul)
 npm run seed:complete
 
 # Seed RBAC + cleanup data non-credential
@@ -62,7 +82,7 @@ npm run seed
 
 ## Backup Database
 
-### Backup dengan pg_dump
+### Backup dengan pg_dump (Linux/Mac)
 
 ```bash
 # Backup seluruh database
@@ -72,14 +92,31 @@ pg_dump -h localhost -p 5432 -U postgres -d bebang_db > backup_$(date +%Y%m%d).s
 pg_dump -h localhost -p 5433 -U postgres -d bebang_db > backup_$(date +%Y%m%d).sql
 ```
 
+### Backup dengan pg_dump (Windows)
+
+```powershell
+# Backup seluruh database
+# pg_dump biasanya ada di C:\Program Files\PostgreSQL\15\bin\
+& "C:\Program Files\PostgreSQL\15\bin\pg_dump.exe" -h localhost -p 5432 -U postgres -d bebang_db -f "D:\backup\backup_bebang.sql"
+
+# Jika pg_dump sudah ada di PATH:
+pg_dump -h localhost -p 5432 -U postgres -d bebang_db -f "D:\backup\backup_%date:~-4%%date:~3,2%%date:~0,2%.sql"
+```
+
+> **Tips Windows:** Jika diminta password, tambahkan variabel environment `PGPASSWORD` atau buat file `%APPDATA%\postgresql\pgpass.conf` dengan format: `localhost:5432:bebang_db:postgres:password_anda`
+
 ### Restore dari Backup
 
 ```bash
-# Buat database baru (jika perlu)
+# Linux/Mac
 createdb -h localhost -p 5432 -U postgres bebang_db_restore
-
-# Restore
 psql -h localhost -p 5432 -U postgres -d bebang_db_restore < backup_20260101.sql
+```
+
+```powershell
+# Windows
+& "C:\Program Files\PostgreSQL\15\bin\createdb.exe" -h localhost -p 5432 -U postgres bebang_db_restore
+& "C:\Program Files\PostgreSQL\15\bin\psql.exe" -h localhost -p 5432 -U postgres -d bebang_db_restore -f "D:\backup\backup_bebang.sql"
 ```
 
 ### Backup via Docker
@@ -91,6 +128,27 @@ docker exec bebang-postgres pg_dump -U postgres bebang_db > backup.sql
 # Restore
 cat backup.sql | docker exec -i bebang-postgres psql -U postgres bebang_db
 ```
+
+### Backup Otomatis (Windows Task Scheduler)
+
+Untuk backup harian otomatis di Windows:
+
+1. Buat file `D:\backup\backup-bis.bat`:
+```bat
+@echo off
+set PGPASSWORD=password_anda
+set BACKUP_DIR=D:\backup
+set DATE=%date:~-4%%date:~3,2%%date:~0,2%
+"C:\Program Files\PostgreSQL\15\bin\pg_dump.exe" -h localhost -p 5432 -U postgres -d bebang_db -f "%BACKUP_DIR%\bebang_%DATE%.sql"
+echo Backup selesai: bebang_%DATE%.sql
+```
+
+2. Buka **Task Scheduler** (tekan `Win + R`, ketik `taskschd.msc`)
+3. Klik **Create Basic Task**
+4. Nama: `BIS Database Backup`
+5. Trigger: **Daily**, jam 02:00
+6. Action: **Start a program**, pilih `D:\backup\backup-bis.bat`
+7. Klik **Finish**
 
 ---
 
@@ -216,15 +274,87 @@ psql -U postgres -d bebang_db -c "SELECT nik, nama FROM users;"
 
 ---
 
+## Troubleshooting Khusus Windows
+
+### 10. "EPERM: operation not permitted" saat npm install
+
+**Penyebab:** File atau folder terkunci oleh proses lain (antivirus, editor, atau proses Node.js yang masih berjalan).
+
+**Solusi:**
+```powershell
+# Matikan semua proses Node.js
+taskkill /F /IM node.exe
+
+# Hapus node_modules dan install ulang
+Remove-Item -Recurse -Force node_modules
+Remove-Item package-lock.json
+npm install
+```
+
+> **Tips:** Tambahkan folder project ke exclusion list antivirus (Windows Defender > Virus & threat protection > Exclusions).
+
+### 11. "psql is not recognized" di Windows
+
+**Penyebab:** PostgreSQL belum ditambahkan ke PATH.
+
+**Solusi:**
+1. Buka **System Properties** > **Environment Variables**
+2. Edit variabel **Path** (System variables)
+3. Tambahkan: `C:\Program Files\PostgreSQL\15\bin`
+4. Klik **OK**, tutup dan buka ulang terminal
+
+### 12. Port 5432 sudah dipakai (PostgreSQL conflict)
+
+**Penyebab:** Ada instance PostgreSQL lain yang berjalan, atau Docker dan native PostgreSQL bentrok.
+
+**Solusi:**
+```powershell
+# Cek proses yang menggunakan port 5432
+netstat -ano | findstr :5432
+
+# Matikan proses berdasarkan PID
+taskkill /PID <nomor-PID> /F
+
+# Atau stop service PostgreSQL
+net stop postgresql-x64-15
+```
+
+### 13. "ENOENT: no such file or directory" untuk path dengan backslash
+
+**Penyebab:** Windows menggunakan backslash (`\`) untuk path, tapi beberapa library Node.js mengharapkan forward slash (`/`).
+
+**Solusi:** Pastikan `UPLOAD_DIR` di `.env` menggunakan forward slash:
+```env
+# Benar
+UPLOAD_DIR=./uploads
+
+# Salah (bisa bermasalah)
+UPLOAD_DIR=.\uploads
+```
+
+---
+
 ## Port Reference
 
 | Service | Port | Keterangan |
 |---------|------|------------|
 | Frontend (Vite) | 5173 | Development server |
-| Backend (Express) | 3000 | API server |
+| Backend (Express) | 3000 | API server (HR, Inventory, Facility) |
 | PostgreSQL (Docker) | 5433 | Host port (internal 5432) |
 | PostgreSQL (Native) | 5432 | Default port |
-| Redis | 6379 | Cache (saat ini di-mock) |
+| Redis | 6379 | Cache (opsional) |
 | pgAdmin | 5050 | Web database admin |
 | Nginx (Production) | 80 | Reverse proxy |
 | Swagger Docs | 3000 | http://localhost:3000/api-docs |
+
+## Daftar Perintah Maintenance
+
+| Perintah | Keterangan |
+|----------|------------|
+| `npm run reset-data` | Hapus semua data kecuali credentials (dengan konfirmasi) |
+| `npm run reset-and-seed` | Reset + seed ulang dalam satu perintah |
+| `npm run seed:complete` | Seed lengkap semua modul (HR, Inventory, Facility) |
+| `npm run seed:all` | Seed RBAC + cleanup data non-credential |
+| `npm run seed` | Seed minimal (RBAC + superadmin) |
+| `npm run migrate` | Jalankan database migration |
+| `npm run type-check` | Cek TypeScript tanpa compile |

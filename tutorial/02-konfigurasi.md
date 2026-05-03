@@ -1,20 +1,45 @@
 # 02 - Konfigurasi
 
-Panduan konfigurasi environment variables dan database.
+Panduan konfigurasi environment variables dan database. Langkah ini menghubungkan aplikasi BIS dengan database PostgreSQL.
 
 ---
 
-## Environment Variables
+## Mengapa Perlu Konfigurasi?
 
-### 1. Copy Template
+Aplikasi BIS perlu tahu:
+- Di mana database-nya? (alamat, port, nama database)
+- Apa password database-nya?
+- Di port berapa backend harus berjalan?
+- Apa secret key untuk enkripsi token login?
 
-Dari root project:
+Semua pengaturan ini disimpan di file **`.env`** (environment variables). File ini **tidak di-upload ke repository** (ada di `.gitignore`) karena berisi informasi sensitif seperti password.
 
+---
+
+## Langkah 1: Buat File .env
+
+### 1.1 Copy Template
+
+Dari folder root project (`bis-fix/`), jalankan perintah berikut:
+
+**Windows (Command Prompt):**
+```bash
+copy .env.example .env
+```
+
+**Windows (PowerShell):**
+```powershell
+Copy-Item .env.example .env
+```
+
+**Linux/Mac:**
 ```bash
 cp .env.example .env
 ```
 
-### 2. Isi File `.env`
+### 1.2 Buka dan Edit File .env
+
+Buka file `.env` dengan text editor (VS Code, Notepad++, atau editor lainnya). Isi seperti berikut:
 
 ```env
 # ── Aplikasi ──────────────────────────────────────
@@ -23,10 +48,10 @@ PORT=3000
 
 # ── Database PostgreSQL ───────────────────────────
 DB_HOST=localhost
-DB_PORT=5432                  # Ganti 5433 jika pakai Docker
+DB_PORT=5433
 DB_NAME=bebang_db
 DB_USER=postgres
-DB_PASSWORD=123456789         # Ganti dengan password PostgreSQL Anda
+DB_PASSWORD=123456789
 
 # ── Authentication ────────────────────────────────
 JWT_SECRET=your-secret-key-change-in-production
@@ -49,110 +74,257 @@ REDIS_DB=0
 REDIS_KEY_PREFIX=bebang:
 ```
 
-### Penjelasan Variabel
+---
 
-| Variabel | Default | Keterangan |
-|----------|---------|------------|
-| `NODE_ENV` | `development` | Mode aplikasi (`development`, `production`, `test`) |
-| `PORT` | `3000` | Port backend API server |
-| `DB_HOST` | `localhost` | Host database PostgreSQL |
-| `DB_PORT` | `5432` | Port database (**5433 jika Docker**) |
-| `DB_NAME` | `bebang_db` | Nama database |
-| `DB_USER` | `postgres` | Username database |
-| `DB_PASSWORD` | `123456789` | Password database |
-| `JWT_SECRET` | - | Secret key untuk JWT token (wajib diganti di production) |
-| `UPLOAD_DIR` | `./uploads` | Direktori penyimpanan file upload |
-| `CORS_ORIGIN` | `http://localhost:5173` | URL frontend yang diizinkan |
-| `VITE_API_URL` | `/api` | Base URL API untuk frontend |
-| `REDIS_*` | - | Konfigurasi Redis (opsional, saat ini di-mock) |
+## Langkah 2: Pahami Setiap Variabel
+
+Berikut penjelasan setiap variabel dalam bahasa sederhana:
+
+### Pengaturan Aplikasi
+
+| Variabel | Contoh Nilai | Penjelasan Sederhana |
+|----------|-------------|----------------------|
+| `NODE_ENV` | `development` | Mode aplikasi. `development` = mode pengembangan (ada log detail, error lengkap). Jangan ubah kecuali untuk production. |
+| `PORT` | `3000` | Port tempat backend API berjalan. Artinya backend bisa diakses di `http://localhost:3000`. |
+
+### Pengaturan Database
+
+| Variabel | Contoh Nilai | Penjelasan Sederhana |
+|----------|-------------|----------------------|
+| `DB_HOST` | `localhost` | Alamat komputer tempat database berjalan. `localhost` artinya di komputer Anda sendiri. |
+| `DB_PORT` | `5433` atau `5432` | "Pintu" untuk mengakses database. **Pakai `5433` jika Docker**, **pakai `5432` jika PostgreSQL native**. |
+| `DB_NAME` | `bebang_db` | Nama database yang akan digunakan. Akan dibuat otomatis oleh Docker, atau perlu dibuat manual jika PostgreSQL native. |
+| `DB_USER` | `postgres` | Username untuk login ke database. Default PostgreSQL adalah `postgres`. |
+| `DB_PASSWORD` | `123456789` | Password database. **Jika pakai Docker**, biarkan `123456789` (sesuai docker-compose). **Jika PostgreSQL native**, ganti dengan password yang Anda buat saat instal PostgreSQL. |
+
+### Pengaturan Autentikasi
+
+| Variabel | Contoh Nilai | Penjelasan Sederhana |
+|----------|-------------|----------------------|
+| `JWT_SECRET` | `your-secret-key...` | Kunci rahasia untuk membuat token login (JWT). Seperti "password" untuk mengenkripsi token. Untuk development, bisa pakai nilai default. **Wajib diganti di production** dengan string acak yang panjang. |
+
+### Pengaturan File & CORS
+
+| Variabel | Contoh Nilai | Penjelasan Sederhana |
+|----------|-------------|----------------------|
+| `UPLOAD_DIR` | `./uploads` | Folder tempat menyimpan file yang di-upload (foto karyawan, dokumen, dll). |
+| `CORS_ORIGIN` | `http://localhost:5173` | URL frontend yang diizinkan mengakses backend. Ini mencegah website lain mengakses API Anda. Harus sesuai dengan URL frontend. |
+
+### Pengaturan Frontend
+
+| Variabel | Contoh Nilai | Penjelasan Sederhana |
+|----------|-------------|----------------------|
+| `VITE_API_URL` | `http://localhost:3000/api` | Alamat backend API yang digunakan frontend. Frontend akan mengirim request ke URL ini. |
+| `VITE_APP_NAME` | `Bebang Sistem Informasi` | Nama aplikasi yang ditampilkan di browser (judul tab, header, dll). |
+
+### Pengaturan Redis
+
+| Variabel | Contoh Nilai | Penjelasan Sederhana |
+|----------|-------------|----------------------|
+| `REDIS_HOST` | `localhost` | Alamat server Redis (cache). |
+| `REDIS_PORT` | `6379` | Port Redis (default). |
+| `REDIS_PASSWORD` | *(kosong)* | Password Redis. Kosongkan jika tidak ada password. |
+| `REDIS_DB` | `0` | Nomor database Redis (0-15). |
+| `REDIS_KEY_PREFIX` | `bebang:` | Prefix untuk semua key di Redis, agar tidak bentrok dengan aplikasi lain. |
+
+> **Catatan tentang Redis:** Saat ini Redis **di-mock** (disimulasikan) dalam kode aplikasi, sehingga **tidak wajib** dijalankan. Aplikasi tetap berjalan normal tanpa Redis. Jika Anda menggunakan Docker, Redis sudah otomatis berjalan.
 
 ---
 
-## Setup Database
+## Langkah 3: Setup Database
 
-Ada dua cara menjalankan PostgreSQL:
+Ada dua cara menjalankan PostgreSQL. Pilih sesuai yang Anda instal di langkah sebelumnya.
 
 ### Opsi A: Menggunakan Docker (Direkomendasikan)
 
-Docker akan menjalankan PostgreSQL, Redis, dan pgAdmin sekaligus.
+Docker akan menjalankan 3 service sekaligus:
+- **PostgreSQL** — database utama
+- **Redis** — cache (opsional, di-mock)
+- **pgAdmin** — tampilan web untuk mengelola database
 
-```bash
-cd docker
-docker-compose up -d postgres redis pgadmin
-```
+#### Langkah-langkah:
 
-Tunggu hingga container siap:
-```bash
-docker-compose ps
-```
+1. **Pastikan Docker Desktop sudah berjalan** (buka dari Start Menu jika belum)
 
-**Penting:** Docker mengekspos PostgreSQL pada port **5433** (bukan 5432). Update `.env`:
+2. **Jalankan container database:**
+   ```bash
+   cd docker
+   docker-compose up -d postgres redis pgadmin
+   ```
+   
+   > Penjelasan perintah:
+   > - `docker-compose up` = jalankan service
+   > - `-d` = jalankan di background (tidak memblokir terminal)
+   > - `postgres redis pgadmin` = hanya jalankan 3 service ini
 
-```env
-DB_PORT=5433
-```
+3. **Tunggu sampai semua container siap** (sekitar 10-30 detik), lalu verifikasi:
+   ```bash
+   docker-compose ps
+   ```
+   
+   Output yang diharapkan:
+   ```
+   NAME              STATUS
+   bebang-postgres   Up (healthy)
+   bebang-redis      Up
+   bebang-pgadmin    Up
+   ```
+   
+   > **Jika status bukan "Up":** Tunggu beberapa detik lalu cek lagi. Jika tetap error, cek log dengan `docker-compose logs postgres`.
 
-#### Akses pgAdmin (Web Database Admin)
+4. **Pastikan `.env` menggunakan port Docker:**
+   ```env
+   DB_PORT=5433
+   DB_PASSWORD=123456789
+   ```
 
-| | |
-|---|---|
-| URL | http://localhost:5050 |
-| Email | `admin@admin.com` |
-| Password | `root` |
+#### Perbandingan Port Docker vs Native:
 
-Untuk menambahkan server di pgAdmin:
-1. Buka http://localhost:5050
-2. Login dengan credential di atas
-3. Klik kanan **Servers** > **Register** > **Server**
-4. Tab **General**: Name = `BIS Local`
-5. Tab **Connection**:
-   - Host: `bebang-postgres` (nama container, bukan localhost)
-   - Port: `5432` (port internal container)
-   - Database: `bebang_db`
-   - Username: `postgres`
-   - Password: `123456789`
+| | Docker | PostgreSQL Native |
+|---|---|---|
+| Port di `.env` | `5433` | `5432` |
+| Password default | `123456789` (dari docker-compose) | Yang Anda buat saat instal |
+| Database dibuat | Otomatis (`bebang_db`) | Perlu buat manual |
+| Redis | Sudah termasuk | Perlu instal terpisah (opsional) |
+| pgAdmin | Sudah termasuk (port 5050) | Perlu instal terpisah |
 
-### Opsi B: PostgreSQL Native (Instalasi Langsung)
+### Opsi B: PostgreSQL Native (Instal Langsung)
 
 Jika PostgreSQL sudah terinstal langsung di komputer:
 
-1. Buka terminal/psql:
-```bash
-psql -U postgres
-```
+1. **Buka terminal/Command Prompt dan masuk ke psql:**
+   ```bash
+   psql -U postgres
+   ```
+   Masukkan password PostgreSQL Anda saat diminta.
 
-2. Buat database:
-```sql
-CREATE DATABASE bebang_db;
-\q
-```
+2. **Buat database:**
+   ```sql
+   CREATE DATABASE bebang_db;
+   ```
+   
+   Verifikasi database sudah dibuat:
+   ```sql
+   \l
+   ```
+   Cari `bebang_db` di daftar yang muncul.
 
-3. Pastikan `.env` menggunakan port default:
-```env
-DB_PORT=5432
-```
+3. **Keluar dari psql:**
+   ```sql
+   \q
+   ```
+
+4. **Pastikan `.env` menggunakan port native:**
+   ```env
+   DB_PORT=5432
+   DB_PASSWORD=password_anda_saat_instal_postgresql
+   ```
 
 ---
 
-## Konfigurasi Frontend
+## Langkah 4: Akses pgAdmin (Web Database Admin)
 
-Frontend sudah memiliki file `.env` default di `frontend/.env`:
+pgAdmin adalah tampilan web untuk melihat dan mengelola database PostgreSQL. Berguna untuk melihat data di tabel, menjalankan query SQL, dan debugging.
+
+### Jika Menggunakan Docker:
+
+pgAdmin sudah berjalan otomatis di Docker.
+
+1. **Buka browser**, akses: **http://localhost:5050**
+
+2. **Login dengan credential berikut:**
+   | Field | Nilai |
+   |-------|-------|
+   | Email | `admin@admin.com` |
+   | Password | `root` |
+
+3. **Tambahkan koneksi ke database:**
+   - Klik kanan **Servers** di panel kiri
+   - Pilih **Register** > **Server...**
+   
+4. **Tab General:**
+   - Name: `BIS Local` (atau nama bebas)
+
+5. **Tab Connection:**
+   | Field | Nilai | Keterangan |
+   |-------|-------|------------|
+   | Host name/address | `bebang-postgres` | Nama container Docker, **bukan** `localhost` |
+   | Port | `5432` | Port **internal** container (bukan 5433) |
+   | Maintenance database | `bebang_db` | Nama database |
+   | Username | `postgres` | Username database |
+   | Password | `123456789` | Password database |
+   
+   > **Penting:** Host harus `bebang-postgres` (nama container), bukan `localhost`. Ini karena pgAdmin berjalan di dalam Docker network yang sama dengan PostgreSQL.
+
+6. **Centang "Save password?"** agar tidak perlu input ulang
+7. Klik **Save**
+
+Sekarang Anda bisa melihat database `bebang_db` di panel kiri. Setelah migration dijalankan (langkah berikutnya), tabel-tabel akan muncul di sini.
+
+### Jika Menggunakan PostgreSQL Native:
+
+pgAdmin biasanya sudah terinstal bersama PostgreSQL. Buka dari Start Menu: **pgAdmin 4**.
+
+---
+
+## Langkah 5: Konfigurasi Frontend
+
+Frontend sudah memiliki konfigurasi default yang bekerja untuk development. **Biasanya tidak perlu diubah.**
+
+File konfigurasi frontend ada di `frontend/.env`:
 
 ```env
 VITE_API_URL=/api
 VITE_APP_NAME=Bebang Sistem Informasi
 ```
 
-Dalam mode development, Vite akan proxy semua request `/api` ke `http://localhost:3000` secara otomatis (dikonfigurasi di `vite.config.ts`). Tidak perlu diubah.
+> **Mengapa `/api` dan bukan `http://localhost:3000/api`?**
+> Dalam mode development, Vite memiliki fitur **proxy** yang otomatis meneruskan semua request `/api` ke `http://localhost:3000`. Ini dikonfigurasi di `vite.config.ts`. Jadi Anda tidak perlu mengubah apa-apa.
 
 ---
 
-## Redis (Opsional)
+## Ringkasan Konfigurasi
 
-Redis saat ini **di-mock** dalam kode aplikasi, sehingga **tidak wajib** dijalankan. Jika menggunakan Docker, Redis sudah termasuk dalam `docker-compose up`.
+### Jika Pakai Docker:
+```env
+DB_PORT=5433
+DB_PASSWORD=123456789
+```
+
+### Jika Pakai PostgreSQL Native:
+```env
+DB_PORT=5432
+DB_PASSWORD=password_anda
+```
+
+### Yang Tidak Perlu Diubah (untuk development):
+- `NODE_ENV`, `PORT`, `DB_HOST`, `DB_NAME`, `DB_USER` — biarkan default
+- `JWT_SECRET` — biarkan default untuk development
+- `CORS_ORIGIN` — biarkan default
+- `REDIS_*` — biarkan default (di-mock)
+- Frontend `.env` — biarkan default
+
+---
+
+## Troubleshooting
+
+### "Connection refused" saat menjalankan aplikasi
+- Pastikan Docker Desktop sudah berjalan (jika pakai Docker)
+- Pastikan container PostgreSQL statusnya "Up": `docker-compose ps`
+- Pastikan `DB_PORT` di `.env` sesuai (5433 untuk Docker, 5432 untuk native)
+
+### "Password authentication failed"
+- Pastikan `DB_PASSWORD` di `.env` sesuai dengan password database
+- Jika Docker: password default adalah `123456789`
+- Jika native: gunakan password yang Anda buat saat instal PostgreSQL
+
+### pgAdmin tidak bisa connect
+- Jika Docker: pastikan Host adalah `bebang-postgres` (bukan `localhost`)
+- Jika Docker: pastikan Port adalah `5432` (port internal, bukan 5433)
+- Pastikan container PostgreSQL sudah berjalan
 
 ---
 
 ## Langkah Selanjutnya
 
-Lanjut ke **[03 - Menjalankan Aplikasi](./03-menjalankan-aplikasi.md)** untuk menjalankan migration, seeding, dan dev server.
+Lanjut ke **[03 - Menjalankan Aplikasi](./03-menjalankan-aplikasi.md)** untuk menjalankan migration, seeding data, dan dev server.

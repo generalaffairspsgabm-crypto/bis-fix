@@ -118,7 +118,7 @@ const WelcomePage = () => {
                         <h3 className="text-lg font-bold text-[#0d121b] dark:text-white">Daftar Modul Terintegrasi</h3>
                     </div>
                     {/* Main Module Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
                         {/* Human Resources Card */}
                         <div
                             onClick={() => navigate('/hr')}
@@ -181,26 +181,6 @@ const WelcomePage = () => {
                             <div className="mt-auto flex items-center justify-between">
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-teal-600 bg-teal-50 dark:bg-teal-900/20 px-2 py-1 rounded">
                                     Active
-                                </span>
-                                <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">
-                                    arrow_forward
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="module-card group flex flex-col bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer hover:shadow-xl hover:border-primary/30 transition-all opacity-70">
-                            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 group-hover:scale-110 transition-transform">
-                                <span className="material-symbols-outlined text-[32px]">domain</span>
-                            </div>
-                            <div className="flex flex-col gap-1 mb-4">
-                                <p className="text-[#0d121b] dark:text-white text-lg font-bold leading-tight">Building Mgmt</p>
-                                <p className="text-[#4c669a] dark:text-slate-400 text-sm font-medium leading-relaxed">
-                                    Pemeliharaan & Aset Gedung Kantor
-                                </p>
-                            </div>
-                            <div className="mt-auto flex items-center justify-between">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 dark:bg-purple-900/20 px-2 py-1 rounded">
-                                    Coming Soon
                                 </span>
                                 <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">
                                     arrow_forward

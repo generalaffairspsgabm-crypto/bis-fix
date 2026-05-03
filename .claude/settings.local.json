@@ -88,7 +88,10 @@
       "Bash(npx nodemon *)",
       "Bash(docker exec bebang-backend-dev *)",
       "PowerShell(docker restart bebang-backend-dev *)",
-      "mcp__plugin_playwright_playwright__browser_navigate_back"
+      "mcp__plugin_playwright_playwright__browser_navigate_back",
+      "Bash(Get-ChildItem -Path \"D:\\\\project-it\\\\bis-fix\" -Directory -Depth 0)",
+      "Bash(Select-Object Name, LastWriteTime)",
+      "Bash(Sort-Object Name)"
     ]
   }
 }

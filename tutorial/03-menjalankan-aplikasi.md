@@ -59,7 +59,7 @@ Pastikan service PostgreSQL sudah running dan database `bebang_db` sudah dibuat 
 
 ### 2. Jalankan Database Migration
 
-Migration membuat semua tabel yang diperlukan (50 migration files):
+Migration membuat semua tabel yang diperlukan (52 migration files):
 
 ```bash
 cd backend
@@ -73,7 +73,7 @@ Database connected.
 { event: 'migrated', name: '00_initial_schema.ts' }
 { event: 'migrating', name: '01_create_users_table.ts' }
 ...
-{ event: 'migrated', name: '49_add_uom_id_to_inv_produk.ts' }
+{ event: 'migrated', name: '51_...' }
 All migrations completed.
 ```
 
@@ -118,26 +118,46 @@ Gunakan ini untuk **reset data tanpa kehilangan user credentials**.
 npm run seed:complete
 ```
 
-Membuat semua data demo:
-- RBAC (35 permissions, 5 roles dengan permission masing-masing)
+Membuat semua data demo untuk 3 modul (HR, Inventory, Facility):
+- RBAC (35+ permissions, 5 roles dengan permission masing-masing)
 - 6 divisi, 12 departemen, 18 posisi jabatan
 - 10 master data HR lainnya (status, lokasi, golongan, dll)
 - 20 karyawan lengkap (personal info, HR info, family info)
 - 12 akun user dengan berbagai role
 - 5 kategori, 12 sub kategori, 15 brand, 6 UOM, 15 produk, 5 gudang
-- 53 serial number/asset tag
-- 8 transaksi inventaris (masuk, keluar, transfer, opname)
+- 53+ serial number/asset tag
+- 11 transaksi inventaris (masuk, keluar, transfer, opname, return, ke facility, ke departemen)
 - 16 stok records
+- 5 gedung, 16 ruangan, 5 tipe ruangan, 4 kategori maintenance
+- 10 penghuni (8 aktif, 2 historis), 5 aset fasilitas, 8 work order
 
 Gunakan ini untuk **melihat dan menguji semua fitur** sebelum input data real.
 
-#### Opsi D: Seed Ulang (Reset + Seed)
+> **Catatan:** `seed:complete` tidak menghapus data credentials (users, roles, permissions). Data credentials yang sudah ada akan dipertahankan.
 
-Jika ingin seed ulang dari awal:
+#### Opsi D: Reset + Seed Ulang (Satu Perintah)
+
+Jika ingin **menghapus semua data lalu seed ulang** dalam satu langkah:
+
 ```bash
-npm run seed:complete
+npm run reset-and-seed
 ```
-Script `seed:complete` sudah otomatis membersihkan semua data sebelum seeding ulang.
+
+Script ini akan:
+1. Menghapus semua data kecuali credentials (users, roles, permissions, role_permissions, company_settings)
+2. Menjalankan seed lengkap otomatis
+
+Gunakan ini untuk **reset cepat** tanpa perlu jalankan 2 perintah terpisah.
+
+#### Opsi E: Reset Data Saja (Tanpa Seed)
+
+Jika hanya ingin menghapus data tanpa mengisi ulang:
+
+```bash
+npm run reset-data
+```
+
+Script akan meminta konfirmasi sebelum menghapus. Ketik `yes` untuk melanjutkan.
 
 ---
 
@@ -203,8 +223,9 @@ Frontend akan berjalan di **http://localhost:5173** dengan hot-reload (Vite HMR)
 | `npm run migrate` | Jalankan database migration |
 | `npm run seed` | Seed minimal (RBAC + superadmin) |
 | `npm run seed:all` | Seed RBAC + cleanup data non-credential |
-| `npm run seed:complete` | Seed lengkap dengan data demo |
+| `npm run seed:complete` | Seed lengkap dengan data demo (3 modul) |
 | `npm run reset-data` | Hapus semua data kecuali credentials |
+| `npm run reset-and-seed` | Reset data + seed ulang (satu perintah) |
 | `npm run type-check` | Cek TypeScript tanpa compile |
 | `npm run lint` | Cek code style (ESLint) |
 | `npm run lint:fix` | Auto-fix code style |

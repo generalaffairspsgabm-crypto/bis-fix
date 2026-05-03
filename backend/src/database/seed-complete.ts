@@ -17,15 +17,19 @@ import {
     FacilityMaintenanceCategory, FacilityOccupant, FacilityAsset, FacilityWorkOrder,
 } from '../modules/facility/models';
 
-async function seedComplete() {
+export async function seedComplete() {
     try {
         await sequelize.authenticate();
         console.log('Database connected.\n');
 
         // ═══════════════════════════════════════════════════════════════
-        // CLEANUP
+        // CLEANUP (preserve credentials: users, roles, permissions, role_permissions, company_settings)
         // ═══════════════════════════════════════════════════════════════
         console.log('=== CLEANUP ===');
+
+        // Nullify cross-boundary FK (users.employee_id -> employees)
+        await sequelize.query('UPDATE "users" SET "employee_id" = NULL WHERE "employee_id" IS NOT NULL');
+
         await sequelize.query('SET session_replication_role = replica;');
 
         const tablesToClean = [
@@ -40,7 +44,6 @@ async function seedComplete() {
             'posisi_jabatan', 'department', 'divisi',
             'kategori_pangkat', 'golongan', 'sub_golongan',
             'jenis_hubungan_kerja', 'tag', 'lokasi_kerja', 'status_karyawan',
-            'role_permissions', 'permissions', 'users', 'roles',
         ];
 
         for (const table of tablesToClean) {
@@ -50,7 +53,7 @@ async function seedComplete() {
         }
 
         await sequelize.query('SET session_replication_role = DEFAULT;');
-        console.log('  Semua tabel dibersihkan.\n');
+        console.log('  Data tabel dibersihkan (credentials dipertahankan).\n');
 
         // ═══════════════════════════════════════════════════════════════
         // LAYER 1: RBAC — Permissions, Roles, Role-Permissions
@@ -882,27 +885,55 @@ async function seedComplete() {
         } as any);
         console.log('  TRX-008: Adjustment Opname');
 
+        // --- Return dari Karyawan ---
+        const trxReturn = await InvTransaksi.create({
+            code: 'TRX-009', tipe: 'Masuk', sub_tipe: 'Return Karyawan', tanggal: '2025-04-01',
+            gudang_id: invGudangMap['GDG-003'].id, karyawan_id: employeeMap['EMP-012'].id,
+            catatan: 'Pengembalian helm safety karena resign', created_by: createdBy,
+        } as any);
+        await InvTransaksiDetail.create({
+            transaksi_id: trxReturn.id, produk_id: invProdukMap['PRD-012'].id,
+            uom_id: invUomMap['UOM-001'].id, jumlah: 1,
+        } as any);
+        console.log('  TRX-009: Return dari Karyawan');
+
+        // --- Keluar ke Departemen ---
+        const trxDept = await InvTransaksi.create({
+            code: 'TRX-010', tipe: 'Keluar', sub_tipe: 'Ke Departemen', tanggal: '2025-04-05',
+            gudang_id: invGudangMap['GDG-001'].id,
+            catatan: 'ATK bulanan untuk departemen Finance', created_by: createdBy,
+        } as any);
+        await InvTransaksiDetail.create({
+            transaksi_id: trxDept.id, produk_id: invProdukMap['PRD-010'].id,
+            uom_id: invUomMap['UOM-002'].id, jumlah: 10,
+        } as any);
+        await InvTransaksiDetail.create({
+            transaksi_id: trxDept.id, produk_id: invProdukMap['PRD-011'].id,
+            uom_id: invUomMap['UOM-003'].id, jumlah: 2,
+        } as any);
+        console.log('  TRX-010: Keluar ke Departemen (ATK)');
+
         console.log('');
 
         // --- Stok aktual per gudang (cerminan akhir transaksi) ---
         console.log('  Menyiapkan stok...');
         const stokData = [
-            // GDG-001 (Gudang Utama Jakarta)
+            // GDG-001 (Gudang Utama Jakarta) — reflects TRX-001 in, TRX-006 transfer out, TRX-008 adj, TRX-010 dept out, TRX-011 facility out
             { gudang_code: 'GDG-001', produk_code: 'PRD-001', uom_code: 'UOM-001', jumlah: 10 },
             { gudang_code: 'GDG-001', produk_code: 'PRD-004', uom_code: 'UOM-001', jumlah: 10 },
             { gudang_code: 'GDG-001', produk_code: 'PRD-006', uom_code: 'UOM-001', jumlah: 5 },
             { gudang_code: 'GDG-001', produk_code: 'PRD-007', uom_code: 'UOM-001', jumlah: 15 },
             { gudang_code: 'GDG-001', produk_code: 'PRD-008', uom_code: 'UOM-001', jumlah: 15 },
-            { gudang_code: 'GDG-001', produk_code: 'PRD-010', uom_code: 'UOM-002', jumlah: 95 },
-            { gudang_code: 'GDG-001', produk_code: 'PRD-011', uom_code: 'UOM-003', jumlah: 10 },
+            { gudang_code: 'GDG-001', produk_code: 'PRD-010', uom_code: 'UOM-002', jumlah: 83 },
+            { gudang_code: 'GDG-001', produk_code: 'PRD-011', uom_code: 'UOM-003', jumlah: 7 },
             // GDG-002 (Gudang IT Jakarta)
             { gudang_code: 'GDG-002', produk_code: 'PRD-002', uom_code: 'UOM-001', jumlah: 8 },
             { gudang_code: 'GDG-002', produk_code: 'PRD-003', uom_code: 'UOM-001', jumlah: 5 },
             { gudang_code: 'GDG-002', produk_code: 'PRD-005', uom_code: 'UOM-001', jumlah: 15 },
             { gudang_code: 'GDG-002', produk_code: 'PRD-015', uom_code: 'UOM-001', jumlah: 5 },
-            // GDG-003 (Gudang Produksi Bekasi)
+            // GDG-003 (Gudang Produksi Bekasi) — reflects TRX-003 in, TRX-005 out, TRX-010 return
             { gudang_code: 'GDG-003', produk_code: 'PRD-009', uom_code: 'UOM-001', jumlah: 10 },
-            { gudang_code: 'GDG-003', produk_code: 'PRD-012', uom_code: 'UOM-001', jumlah: 49 },
+            { gudang_code: 'GDG-003', produk_code: 'PRD-012', uom_code: 'UOM-001', jumlah: 50 },
             { gudang_code: 'GDG-003', produk_code: 'PRD-013', uom_code: 'UOM-006', jumlah: 29 },
             // GDG-004 (Gudang Cabang Bandung)
             { gudang_code: 'GDG-004', produk_code: 'PRD-007', uom_code: 'UOM-001', jumlah: 5 },
@@ -1188,6 +1219,8 @@ async function seedComplete() {
             { code: 'WO-004', room_code: 'RM-003', cat_code: 'FMC-003', judul: 'Cat Dinding Mengelupas', deskripsi: 'Cat dinding kamar 201 mengelupas di beberapa bagian', prioritas: 'Low' as const, status: 'Closed' as const, reporter_nik: 'EMP-010', assignee_nik: 'EMP-016', tanggal_lapor: '2024-12-20', tanggal_selesai: '2024-12-28', estimasi: 300000, realisasi: 280000, catatan: 'Pengecatan ulang selesai' },
             { code: 'WO-005', room_code: 'RM-014', cat_code: 'FMC-001', judul: 'Stop Kontak Rusak', deskripsi: 'Stop kontak di kamar 1A tidak berfungsi', prioritas: 'Critical' as const, status: 'Open' as const, reporter_nik: 'EMP-017', assignee_nik: null, tanggal_lapor: '2025-01-14', tanggal_selesai: null, estimasi: 100000, realisasi: null, catatan: null },
             { code: 'WO-006', room_code: 'RM-012', cat_code: 'FMC-004', judul: 'Perawatan Rutin AC Meeting Room', deskripsi: 'Jadwal perawatan rutin AC ruang meeting', prioritas: 'Low' as const, status: 'In Progress' as const, reporter_nik: 'EMP-002', assignee_nik: 'EMP-016', tanggal_lapor: '2025-01-08', tanggal_selesai: null, estimasi: 250000, realisasi: null, catatan: null },
+            { code: 'WO-007', room_code: 'RM-010', cat_code: 'FMC-003', judul: 'Pengecatan Ulang Kamar B2', deskripsi: 'Dinding kamar B2 perlu dicat ulang karena lembab', prioritas: 'Low' as const, status: 'Cancelled' as const, reporter_nik: 'EMP-005', assignee_nik: null, tanggal_lapor: '2025-01-02', tanggal_selesai: null, estimasi: 350000, realisasi: null, catatan: 'Dibatalkan — kamar akan direnovasi total' },
+            { code: 'WO-008', room_code: 'RM-009', cat_code: 'FMC-002', judul: 'Saluran Air Tersumbat', deskripsi: 'Saluran air kamar mandi kamar B1 tersumbat', prioritas: 'Critical' as const, status: 'Resolved' as const, reporter_nik: 'EMP-016', assignee_nik: 'EMP-016', tanggal_lapor: '2025-01-15', tanggal_selesai: '2025-01-15', estimasi: 100000, realisasi: 75000, catatan: 'Pipa dibersihkan, lancar kembali' },
         ];
         for (const d of workOrderData) {
             await FacilityWorkOrder.create({
@@ -1211,13 +1244,35 @@ async function seedComplete() {
         console.log(`  ${workOrderData.length} work orders\n`);
 
         // ═══════════════════════════════════════════════════════════════
+        // LAYER 8: CROSS-MODULE — Inventory → Facility transactions
+        // ═══════════════════════════════════════════════════════════════
+        console.log('=== LAYER 8: CROSS-MODULE TRANSACTIONS ===');
+
+        const trxFacility = await InvTransaksi.create({
+            code: 'TRX-011', tipe: 'Keluar', sub_tipe: 'Ke Facility', tanggal: '2025-03-20',
+            gudang_id: invGudangMap['GDG-001'].id,
+            facility_building_id: buildingMap['BLD-001']?.id || null,
+            facility_room_id: roomMap['RM-001']?.id || null,
+            catatan: 'Perlengkapan untuk mess Jakarta kamar 101', created_by: createdBy,
+        } as any);
+        await InvTransaksiDetail.create({
+            transaksi_id: trxFacility.id, produk_id: invProdukMap['PRD-010'].id,
+            uom_id: invUomMap['UOM-002'].id, jumlah: 2,
+        } as any);
+        await InvTransaksiDetail.create({
+            transaksi_id: trxFacility.id, produk_id: invProdukMap['PRD-011'].id,
+            uom_id: invUomMap['UOM-003'].id, jumlah: 1,
+        } as any);
+        console.log('  TRX-011: Keluar ke Facility (mess Jakarta)\n');
+
+        // ═══════════════════════════════════════════════════════════════
         // DONE
         // ═══════════════════════════════════════════════════════════════
         console.log('╔══════════════════════════════════════════════════╗');
         console.log('║          SEED COMPLETED SUCCESSFULLY!           ║');
         console.log('╠══════════════════════════════════════════════════╣');
         console.log('║  RBAC:                                          ║');
-        console.log('║    35 permissions, 5 roles                      ║');
+        console.log('║    35+ permissions, 5 roles                     ║');
         console.log('║  HR Master Data:                                ║');
         console.log('║    6 divisi, 12 department, 18 posisi jabatan   ║');
         console.log('║    5 status, 5 lokasi, 4 kat.pangkat            ║');
@@ -1230,11 +1285,11 @@ async function seedComplete() {
         console.log('║  Inventory:                                     ║');
         console.log('║    5 kategori, 12 sub kategori, 15 brand        ║');
         console.log('║    6 UOM, 15 produk, 5 gudang                   ║');
-        console.log('║    8 transaksi, 16 stok, 53 serial numbers      ║');
+        console.log('║    11 transaksi, 16 stok, 53+ serial numbers    ║');
         console.log('║  Facility:                                      ║');
         console.log('║    5 room types, 4 maint. categories            ║');
         console.log('║    5 buildings, 16 rooms                        ║');
-        console.log('║    10 occupants, 5 assets, 6 work orders        ║');
+        console.log('║    10 occupants, 5 assets, 8 work orders        ║');
         console.log('╠══════════════════════════════════════════════════╣');
         console.log('║  Login credentials (semua password: password123) ║');
         console.log('║  Superadmin : NIK 111111                        ║');
@@ -1258,4 +1313,6 @@ async function seedComplete() {
     }
 }
 
-seedComplete();
+if (require.main === module) {
+    seedComplete();
+}

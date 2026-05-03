@@ -58,25 +58,28 @@ Tersedia 12 akun dengan berbagai role:
 Aplikasi menggunakan RBAC (Role-Based Access Control) dengan 5 role:
 
 ### Superadmin
-- Akses **penuh** ke seluruh fitur
+- Akses **penuh** ke seluruh fitur (HR, Inventory, Facility, Admin)
 - Dapat mengelola user, role, dan permission
 - Dapat mengubah company settings
 
 ### Admin
 - Mengelola data karyawan (CRUD)
-- Mengelola master data HR dan inventory
+- Mengelola master data HR, Inventory, dan Facility
+- Mengelola work order dan data fasilitas
 - Melihat audit log
 - Import/export data
 
 ### Manager
-- Melihat data karyawan
+- Melihat data karyawan (departemen sendiri)
 - Melihat dashboard dan laporan
+- Melihat data fasilitas dan work order
 - Approve/review data bawahan
 
 ### Staff
 - Melihat data karyawan (terbatas)
 - Mengelola data inventaris
 - Input transaksi stok
+- Membuat dan mengelola work order fasilitas
 
 ### Employee
 - Melihat data diri sendiri

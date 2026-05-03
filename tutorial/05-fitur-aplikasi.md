@@ -6,13 +6,14 @@ Overview lengkap semua modul dan fitur yang tersedia di BIS.
 
 ## Module Overview
 
-BIS terdiri dari 3 modul utama:
+BIS terdiri dari 3 modul utama + modul admin:
 
 ```
 BIS (Bebang Sistem Informasi)
-  ├── HR Module           — Manajemen karyawan & data kepegawaian
-  ├── Inventory Module    — Manajemen inventaris & aset
-  └── Admin Module        — Pengaturan sistem, user, dan role
+  ├── HR Module              — Manajemen karyawan & data kepegawaian
+  ├── Inventory Module       — Manajemen inventaris & aset
+  ├── Facility Module        — Manajemen gedung, ruangan, akomodasi & work order
+  └── Admin Module           — Pengaturan sistem, user, dan role
 ```
 
 ---
@@ -134,7 +135,69 @@ BIS (Bebang Sistem Informasi)
 
 ---
 
-## 3. Admin Module
+## 3. Facility Module
+
+Modul untuk mengelola gedung, ruangan, akomodasi karyawan (mess), aset fasilitas, dan work order pemeliharaan.
+
+### Dashboard Facility
+- Ringkasan jumlah gedung, ruangan, penghuni
+- Statistik work order per status
+- Tingkat hunian (occupancy rate)
+- Work order terbaru
+
+### Master Data Facility (4 Entitas)
+
+| Menu | Keterangan | Fitur |
+|------|------------|-------|
+| **Gedung (Building)** | Data gedung/mess/workshop | CRUD, tipe (Mess/Kantor/Workshop), kapasitas, penanggung jawab, lokasi kerja |
+| **Tipe Ruangan** | Jenis ruangan (kamar single, double, kantor, meeting, gudang) | CRUD, status aktif/nonaktif |
+| **Ruangan (Room)** | Data ruangan per gedung | CRUD, lantai, kapasitas, status (Tersedia/Penuh/Maintenance) |
+| **Kategori Maintenance** | Jenis pemeliharaan (listrik, plumbing, sipil, AC) | CRUD, status aktif/nonaktif |
+
+### Manajemen Penghuni (Occupant)
+
+| Fitur | Keterangan |
+|-------|------------|
+| **Daftar Penghuni** | Tabel penghuni aktif per gedung/ruangan |
+| **Check-in** | Mendaftarkan karyawan sebagai penghuni ruangan |
+| **Check-out** | Mengeluarkan penghuni dari ruangan |
+| **Riwayat** | Histori penghuni per ruangan (aktif dan selesai) |
+
+### Manajemen Aset Fasilitas
+
+| Fitur | Keterangan |
+|-------|------------|
+| **Daftar Aset** | Aset yang ditempatkan di ruangan |
+| **Penempatan Aset** | Link serial number dari Inventory ke ruangan |
+| **Penarikan Aset** | Menarik aset dari ruangan |
+
+> **Integrasi dengan Inventory:** Aset fasilitas terhubung langsung dengan serial number di modul Inventory. Saat menempatkan aset di ruangan, Anda memilih dari serial number yang tersedia di gudang.
+
+### Work Order (Perintah Kerja Pemeliharaan)
+
+| Fitur | Keterangan |
+|-------|------------|
+| **Buat Work Order** | Laporan kerusakan/pemeliharaan per ruangan |
+| **Assign Teknisi** | Menugaskan karyawan untuk menangani |
+| **Update Status** | Open → In Progress → Resolved → Closed |
+| **Pembatalan** | Status Cancelled untuk work order yang dibatalkan |
+| **Estimasi & Realisasi Biaya** | Tracking biaya pemeliharaan |
+
+**Status Work Order:**
+
+| Status | Keterangan |
+|--------|------------|
+| **Open** | Baru dilaporkan, belum ditangani |
+| **In Progress** | Sedang dikerjakan oleh teknisi |
+| **Resolved** | Pekerjaan selesai, menunggu verifikasi |
+| **Closed** | Terverifikasi dan ditutup |
+| **Cancelled** | Dibatalkan |
+
+**Prioritas:** Critical, High, Medium, Low
+
+---
+
+## 4. Admin Module
 
 ### Manajemen User
 - Daftar semua user sistem
@@ -146,7 +209,7 @@ BIS (Bebang Sistem Informasi)
 - Daftar role yang tersedia
 - Buat role baru dengan permission custom
 - Edit permission per role (checklist per resource + action)
-- 35 permission tersedia (7 resource x 5 action)
+- 35+ permission tersedia (HR, Inventory, Facility, Admin)
 
 ### Company Settings
 - **Nama perusahaan** — tampil di header, login page, label
@@ -199,6 +262,27 @@ Dashboard
 │   ├── Label & QR Code
 │   └── Import Data
 └── Laporan
+```
+
+### Sidebar Menu (Facility)
+```
+Halaman Utama
+Dashboard
+├── Master Data Facility
+│   ├── Gedung
+│   ├── Tipe Ruangan
+│   ├── Ruangan
+│   └── Kategori Maintenance
+├── Penghuni (Occupant)
+├── Aset Fasilitas
+└── Work Order
+```
+
+### Sidebar Menu (Admin/Settings)
+```
+├── Manajemen User
+├── Manajemen Role
+└── Company Settings
 ```
 
 ---
