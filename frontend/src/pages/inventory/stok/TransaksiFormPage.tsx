@@ -62,6 +62,9 @@ const TransaksiFormPage = () => {
     const [karyawanNama, setKaryawanNama] = useState('');
     const karyawanDropdownRef = useRef<HTMLDivElement>(null);
 
+    const [beritaAcaraModal, setBeritaAcaraModal] = useState<{ show: boolean; employeeId: number; transaksiId: number; employeeName: string } | null>(null);
+    const [downloadingBA, setDownloadingBA] = useState(false);
+
     const searchKaryawan = useCallback(async (query: string) => {
         if (query.length < 2) { setKaryawanOptions([]); return; }
         try {
@@ -166,8 +169,18 @@ const TransaksiFormPage = () => {
                         toast.error('Transaksi berhasil, tapi gagal upload dokumen');
                     }
                 }
-                toast.success('Transaksi berhasil dibuat');
-                navigate('/inventory/transaksi');
+
+                if (subTipe === 'Ke Karyawan' && karyawanId && result.data?.id) {
+                    setBeritaAcaraModal({
+                        show: true,
+                        employeeId: karyawanId,
+                        transaksiId: result.data.id,
+                        employeeName: karyawanNama,
+                    });
+                } else {
+                    toast.success('Transaksi berhasil dibuat');
+                    navigate('/inventory/transaksi');
+                }
             },
             onError: (err: AxiosError<any>) => {
                 const msg = err.response?.data?.message || 'Gagal membuat transaksi';
@@ -461,6 +474,72 @@ const TransaksiFormPage = () => {
                     <Button type="submit" isLoading={createMutation.isPending}>Simpan Transaksi</Button>
                 </div>
             </form>
+
+            {/* Berita Acara Confirmation Modal */}
+            {beritaAcaraModal?.show && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4 space-y-4">
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-100">
+                                <span className="material-symbols-outlined text-green-600 text-2xl">check_circle</span>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Transaksi Berhasil</h3>
+                                <p className="text-sm text-gray-500">Barang telah diserahkan ke {beritaAcaraModal.employeeName}</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
+                            <p className="text-sm text-blue-800 dark:text-blue-300">
+                                Cetak Berita Acara Serah Terima sebagai bukti penyerahan barang?
+                            </p>
+                        </div>
+
+                        <div className="flex gap-3 justify-end">
+                            <button
+                                onClick={() => {
+                                    toast.success('Transaksi berhasil dibuat');
+                                    navigate('/inventory/transaksi');
+                                }}
+                                className="px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all"
+                            >
+                                Lewati
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    setDownloadingBA(true);
+                                    try {
+                                        const blob = await inventoryEmployeeService.downloadBeritaAcara(
+                                            beritaAcaraModal.employeeId,
+                                            beritaAcaraModal.transaksiId
+                                        );
+                                        const url = window.URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.style.display = 'none';
+                                        a.href = url;
+                                        a.download = `Berita-Acara-Serah-Terima-${beritaAcaraModal.transaksiId}.pdf`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 2000);
+                                        toast.success('Transaksi berhasil dibuat & berita acara diunduh');
+                                    } catch {
+                                        toast.error('Gagal mengunduh berita acara');
+                                        toast.success('Transaksi berhasil dibuat');
+                                    } finally {
+                                        setDownloadingBA(false);
+                                        navigate('/inventory/transaksi');
+                                    }
+                                }}
+                                disabled={downloadingBA}
+                                className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-primary rounded-xl hover:bg-blue-700 transition-all disabled:opacity-50 shadow-sm"
+                            >
+                                <span className="material-symbols-outlined text-[18px]">description</span>
+                                {downloadingBA ? 'Mengunduh...' : 'Cetak Berita Acara'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

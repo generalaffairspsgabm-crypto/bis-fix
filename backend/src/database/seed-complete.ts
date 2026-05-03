@@ -704,8 +704,8 @@ export async function seedComplete() {
             { code: 'PRD-009', nama: 'Lemari Arsip 4 Laci', brand_code: 'IBR-009', has_serial_number: false, has_tag_number: true, stok_minimum: 3, keterangan: 'Lemari arsip besi' },
             { code: 'PRD-010', nama: 'Kertas HVS A4 80gsm', brand_code: 'IBR-010', has_serial_number: false, has_tag_number: false, stok_minimum: 50, keterangan: 'Kertas HVS A4' },
             { code: 'PRD-011', nama: 'Pulpen Pilot G2', brand_code: 'IBR-011', has_serial_number: false, has_tag_number: false, stok_minimum: 24, keterangan: 'Pulpen gel 0.7mm' },
-            { code: 'PRD-012', nama: 'Helm Safety Kuning', brand_code: 'IBR-012', has_serial_number: false, has_tag_number: false, stok_minimum: 20, keterangan: 'Helm safety warna kuning' },
-            { code: 'PRD-013', nama: 'Sepatu Safety Hitam', brand_code: 'IBR-013', has_serial_number: false, has_tag_number: false, stok_minimum: 15, keterangan: 'Sepatu safety steel toe' },
+            { code: 'PRD-012', nama: 'Helm Safety Kuning', brand_code: 'IBR-012', has_serial_number: true, has_tag_number: false, stok_minimum: 20, keterangan: 'Helm safety warna kuning' },
+            { code: 'PRD-013', nama: 'Sepatu Safety Hitam', brand_code: 'IBR-013', has_serial_number: true, has_tag_number: false, stok_minimum: 15, keterangan: 'Sepatu safety steel toe' },
             { code: 'PRD-014', nama: 'Toyota Avanza', brand_code: 'IBR-014', has_serial_number: true, has_tag_number: true, stok_minimum: 1, keterangan: 'Mobil operasional' },
             { code: 'PRD-015', nama: 'ASUS ZenBook 14', brand_code: 'IBR-015', has_serial_number: true, has_tag_number: true, stok_minimum: 3, keterangan: 'Laptop ultrabook' },
         ];
@@ -817,7 +817,7 @@ export async function seedComplete() {
         // --- Transaksi Keluar ke Karyawan ---
         const trxKeluar1 = await InvTransaksi.create({
             code: 'TRX-004', tipe: 'Keluar', sub_tipe: 'Ke Karyawan', tanggal: '2025-02-10',
-            gudang_id: invGudangMap['GDG-002'].id, karyawan_id: employeeMap['EMP-009'].id,
+            gudang_id: invGudangMap['GDG-001'].id, karyawan_id: employeeMap['EMP-009'].id,
             catatan: 'Laptop untuk developer baru', created_by: createdBy,
         } as any);
         await InvTransaksiDetail.create({
@@ -918,8 +918,8 @@ export async function seedComplete() {
         // --- Stok aktual per gudang (cerminan akhir transaksi) ---
         console.log('  Menyiapkan stok...');
         const stokData = [
-            // GDG-001 (Gudang Utama Jakarta) — reflects TRX-001 in, TRX-006 transfer out, TRX-008 adj, TRX-010 dept out, TRX-011 facility out
-            { gudang_code: 'GDG-001', produk_code: 'PRD-001', uom_code: 'UOM-001', jumlah: 10 },
+            // GDG-001 (Gudang Utama Jakarta) — reflects TRX-001 in, TRX-004 ke karyawan, TRX-006 transfer out, TRX-008 adj, TRX-010 disposal, TRX-011 facility out
+            { gudang_code: 'GDG-001', produk_code: 'PRD-001', uom_code: 'UOM-001', jumlah: 9 },
             { gudang_code: 'GDG-001', produk_code: 'PRD-004', uom_code: 'UOM-001', jumlah: 10 },
             { gudang_code: 'GDG-001', produk_code: 'PRD-006', uom_code: 'UOM-001', jumlah: 5 },
             { gudang_code: 'GDG-001', produk_code: 'PRD-007', uom_code: 'UOM-001', jumlah: 15 },
@@ -931,10 +931,10 @@ export async function seedComplete() {
             { gudang_code: 'GDG-002', produk_code: 'PRD-003', uom_code: 'UOM-001', jumlah: 5 },
             { gudang_code: 'GDG-002', produk_code: 'PRD-005', uom_code: 'UOM-001', jumlah: 15 },
             { gudang_code: 'GDG-002', produk_code: 'PRD-015', uom_code: 'UOM-001', jumlah: 5 },
-            // GDG-003 (Gudang Produksi Bekasi) — reflects TRX-003 in, TRX-005 out, TRX-010 return
+            // GDG-003 (Gudang Produksi Bekasi) — reflects TRX-003 in, TRX-005 ke karyawan, TRX-009 retur
             { gudang_code: 'GDG-003', produk_code: 'PRD-009', uom_code: 'UOM-001', jumlah: 10 },
             { gudang_code: 'GDG-003', produk_code: 'PRD-012', uom_code: 'UOM-001', jumlah: 50 },
-            { gudang_code: 'GDG-003', produk_code: 'PRD-013', uom_code: 'UOM-006', jumlah: 29 },
+            { gudang_code: 'GDG-003', produk_code: 'PRD-013', uom_code: 'UOM-006', jumlah: 28 },
             // GDG-004 (Gudang Cabang Bandung)
             { gudang_code: 'GDG-004', produk_code: 'PRD-007', uom_code: 'UOM-001', jumlah: 5 },
             { gudang_code: 'GDG-004', produk_code: 'PRD-008', uom_code: 'UOM-001', jumlah: 5 },
@@ -1024,6 +1024,18 @@ export async function seedComplete() {
                 tag_number: `LMR-BKS-${String(i + 1).padStart(4, '0')}`,
                 gudang_code: 'GDG-003', status: 'Tersedia' as const, trx_masuk_code: 'TRX-003',
             })),
+            // Helm Safety (GDG-003 Bekasi, 50 unit dari TRX-003)
+            ...Array.from({ length: 50 }, (_, i) => ({
+                produk_code: 'PRD-012', serial_number: `HLM-SFT-2025-${String(i + 1).padStart(4, '0')}`,
+                tag_number: null,
+                gudang_code: 'GDG-003', status: 'Tersedia' as const, trx_masuk_code: 'TRX-003',
+            })),
+            // Sepatu Safety (GDG-003 Bekasi, 29 unit dari TRX-003)
+            ...Array.from({ length: 29 }, (_, i) => ({
+                produk_code: 'PRD-013', serial_number: `SPT-SFT-2025-${String(i + 1).padStart(4, '0')}`,
+                tag_number: null,
+                gudang_code: 'GDG-003', status: 'Tersedia' as const, trx_masuk_code: 'TRX-003',
+            })),
             // Toyota Avanza (tidak ada stok di gudang — contoh kendaraan operasional)
         ];
 
@@ -1042,7 +1054,29 @@ export async function seedComplete() {
                 transaksi_terakhir_id: trxCodeToId[sn.trx_masuk_code],
             } as any);
         }
-        console.log(`  ${serialData.length} serial numbers\n`);
+        console.log(`  ${serialData.length} serial numbers`);
+
+        // --- Update serial number ownership for "Ke Karyawan" transactions ---
+        console.log('  Updating serial number ownership...');
+
+        // TRX-004: Laptop Lenovo ke EMP-009 (Dian Permata Sari) dari GDG-001
+        await InvSerialNumber.update(
+            { karyawan_id: employeeMap['EMP-009'].id, gudang_id: null, status: 'Digunakan', transaksi_terakhir_id: trxKeluar1.id },
+            { where: { produk_id: invProdukMap['PRD-001'].id, serial_number: 'LNV-T14-2025-0001' } }
+        );
+
+        // TRX-005: Helm + Sepatu ke EMP-012 (Wahyu Hidayat) dari GDG-003
+        // Helm (PRD-012) — diberikan di TRX-005, dikembalikan di TRX-009, jadi final state: kembali di gudang
+        await InvSerialNumber.update(
+            { transaksi_terakhir_id: trxReturn.id },
+            { where: { produk_id: invProdukMap['PRD-012'].id, serial_number: 'HLM-SFT-2025-0001' } }
+        );
+        // Sepatu (PRD-013) — diberikan di TRX-005, belum dikembalikan, masih di karyawan
+        await InvSerialNumber.update(
+            { karyawan_id: employeeMap['EMP-012'].id, gudang_id: null, status: 'Digunakan', transaksi_terakhir_id: trxKeluar2.id },
+            { where: { produk_id: invProdukMap['PRD-013'].id, serial_number: 'SPT-SFT-2025-0001' } }
+        );
+        console.log('  Serial number ownership updated\n');
 
         // ═══════════════════════════════════════════════════════════════
         // LAYER 7: FACILITY MANAGEMENT
