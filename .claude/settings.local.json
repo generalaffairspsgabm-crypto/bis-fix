@@ -91,7 +91,15 @@
       "mcp__plugin_playwright_playwright__browser_navigate_back",
       "Bash(Get-ChildItem -Path \"D:\\\\project-it\\\\bis-fix\" -Directory -Depth 0)",
       "Bash(Select-Object Name, LastWriteTime)",
-      "Bash(Sort-Object Name)"
+      "Bash(Sort-Object Name)",
+      "PowerShell(Set-Location \"D:\\\\project-it\\\\bis-fix\\\\backend\"; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'D:\\\\project-it\\\\bis-fix\\\\backend'; npm run dev\" -WindowStyle Normal)",
+      "PowerShell(Set-Location \"D:\\\\project-it\\\\bis-fix\\\\frontend\"; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'D:\\\\project-it\\\\bis-fix\\\\frontend'; npm run dev\" -WindowStyle Normal)",
+      "PowerShell(Start-Sleep -Seconds 8; Start-Process \"http://localhost:5173\")",
+      "PowerShell(Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd D:\\\\project-it\\\\bis-fix\\\\backend; npm run dev\" -WindowStyle Normal)",
+      "PowerShell(Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd D:\\\\project-it\\\\bis-fix\\\\frontend; npm run dev\" -WindowStyle Normal)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000/api/auth/health\" -UseBasicParsing -TimeoutSec 5; \"Backend: $\\($r.StatusCode\\)\" } catch { try { $r2 = Invoke-WebRequest -Uri \"http://localhost:3000/\" -UseBasicParsing -TimeoutSec 5; \"Backend responding: $\\($r2.StatusCode\\)\" } catch { \"Backend: $\\($_.Exception.Message\\)\" } })",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:5173/\" -UseBasicParsing -TimeoutSec 5; \"Frontend: $\\($r.StatusCode\\)\" } catch { \"Frontend: $\\($_.Exception.Message\\)\" })",
+      "PowerShell(Start-Process \"http://localhost:5173\")"
     ]
   }
 }

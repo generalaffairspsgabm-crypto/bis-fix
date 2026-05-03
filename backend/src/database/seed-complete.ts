@@ -887,7 +887,7 @@ export async function seedComplete() {
 
         // --- Return dari Karyawan ---
         const trxReturn = await InvTransaksi.create({
-            code: 'TRX-009', tipe: 'Masuk', sub_tipe: 'Return Karyawan', tanggal: '2025-04-01',
+            code: 'TRX-009', tipe: 'Masuk', sub_tipe: 'Retur Karyawan', tanggal: '2025-04-01',
             gudang_id: invGudangMap['GDG-003'].id, karyawan_id: employeeMap['EMP-012'].id,
             catatan: 'Pengembalian helm safety karena resign', created_by: createdBy,
         } as any);
@@ -897,11 +897,11 @@ export async function seedComplete() {
         } as any);
         console.log('  TRX-009: Return dari Karyawan');
 
-        // --- Keluar ke Departemen ---
+        // --- Disposal (Barang Rusak) ---
         const trxDept = await InvTransaksi.create({
-            code: 'TRX-010', tipe: 'Keluar', sub_tipe: 'Ke Departemen', tanggal: '2025-04-05',
+            code: 'TRX-010', tipe: 'Keluar', sub_tipe: 'Disposal', tanggal: '2025-04-05',
             gudang_id: invGudangMap['GDG-001'].id,
-            catatan: 'ATK bulanan untuk departemen Finance', created_by: createdBy,
+            catatan: 'ATK rusak/expired dari departemen Finance', created_by: createdBy,
         } as any);
         await InvTransaksiDetail.create({
             transaksi_id: trxDept.id, produk_id: invProdukMap['PRD-010'].id,
@@ -911,7 +911,7 @@ export async function seedComplete() {
             transaksi_id: trxDept.id, produk_id: invProdukMap['PRD-011'].id,
             uom_id: invUomMap['UOM-003'].id, jumlah: 2,
         } as any);
-        console.log('  TRX-010: Keluar ke Departemen (ATK)');
+        console.log('  TRX-010: Disposal (ATK rusak)');
 
         console.log('');
 
@@ -1219,7 +1219,7 @@ export async function seedComplete() {
             { code: 'WO-004', room_code: 'RM-003', cat_code: 'FMC-003', judul: 'Cat Dinding Mengelupas', deskripsi: 'Cat dinding kamar 201 mengelupas di beberapa bagian', prioritas: 'Low' as const, status: 'Closed' as const, reporter_nik: 'EMP-010', assignee_nik: 'EMP-016', tanggal_lapor: '2024-12-20', tanggal_selesai: '2024-12-28', estimasi: 300000, realisasi: 280000, catatan: 'Pengecatan ulang selesai' },
             { code: 'WO-005', room_code: 'RM-014', cat_code: 'FMC-001', judul: 'Stop Kontak Rusak', deskripsi: 'Stop kontak di kamar 1A tidak berfungsi', prioritas: 'Critical' as const, status: 'Open' as const, reporter_nik: 'EMP-017', assignee_nik: null, tanggal_lapor: '2025-01-14', tanggal_selesai: null, estimasi: 100000, realisasi: null, catatan: null },
             { code: 'WO-006', room_code: 'RM-012', cat_code: 'FMC-004', judul: 'Perawatan Rutin AC Meeting Room', deskripsi: 'Jadwal perawatan rutin AC ruang meeting', prioritas: 'Low' as const, status: 'In Progress' as const, reporter_nik: 'EMP-002', assignee_nik: 'EMP-016', tanggal_lapor: '2025-01-08', tanggal_selesai: null, estimasi: 250000, realisasi: null, catatan: null },
-            { code: 'WO-007', room_code: 'RM-010', cat_code: 'FMC-003', judul: 'Pengecatan Ulang Kamar B2', deskripsi: 'Dinding kamar B2 perlu dicat ulang karena lembab', prioritas: 'Low' as const, status: 'Cancelled' as const, reporter_nik: 'EMP-005', assignee_nik: null, tanggal_lapor: '2025-01-02', tanggal_selesai: null, estimasi: 350000, realisasi: null, catatan: 'Dibatalkan — kamar akan direnovasi total' },
+            { code: 'WO-007', room_code: 'RM-010', cat_code: 'FMC-003', judul: 'Pengecatan Ulang Kamar B2', deskripsi: 'Dinding kamar B2 perlu dicat ulang karena lembab', prioritas: 'Low' as const, status: 'Closed' as const, reporter_nik: 'EMP-005', assignee_nik: null, tanggal_lapor: '2025-01-02', tanggal_selesai: '2025-01-05', estimasi: 350000, realisasi: null, catatan: 'Dibatalkan — kamar akan direnovasi total' },
             { code: 'WO-008', room_code: 'RM-009', cat_code: 'FMC-002', judul: 'Saluran Air Tersumbat', deskripsi: 'Saluran air kamar mandi kamar B1 tersumbat', prioritas: 'Critical' as const, status: 'Resolved' as const, reporter_nik: 'EMP-016', assignee_nik: 'EMP-016', tanggal_lapor: '2025-01-15', tanggal_selesai: '2025-01-15', estimasi: 100000, realisasi: 75000, catatan: 'Pipa dibersihkan, lancar kembali' },
         ];
         for (const d of workOrderData) {
@@ -1249,7 +1249,7 @@ export async function seedComplete() {
         console.log('=== LAYER 8: CROSS-MODULE TRANSACTIONS ===');
 
         const trxFacility = await InvTransaksi.create({
-            code: 'TRX-011', tipe: 'Keluar', sub_tipe: 'Ke Facility', tanggal: '2025-03-20',
+            code: 'TRX-011', tipe: 'Keluar', sub_tipe: 'Ke Gedung/Mess', tanggal: '2025-03-20',
             gudang_id: invGudangMap['GDG-001'].id,
             facility_building_id: buildingMap['BLD-001']?.id || null,
             facility_room_id: roomMap['RM-001']?.id || null,
