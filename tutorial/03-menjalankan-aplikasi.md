@@ -24,6 +24,12 @@ cd frontend
 npm run dev
 ```
 
+> **Catatan:** File `frontend/.env` sudah termasuk dalam repository. Jika karena suatu hal file ini hilang, buat manual dengan isi:
+> ```
+> VITE_API_URL=/api
+> VITE_APP_NAME=Bebang Sistem Informasi
+> ```
+
 Buka browser: **http://localhost:5173**
 Login: NIK `1234567890123456`, Password `password123`
 

@@ -62,10 +62,6 @@ UPLOAD_DIR=./uploads
 # ── CORS ──────────────────────────────────────────
 CORS_ORIGIN=http://localhost:5173
 
-# ── Frontend ──────────────────────────────────────
-VITE_API_URL=http://localhost:3000/api
-VITE_APP_NAME=Bebang Sistem Informasi
-
 # ── Redis (opsional, saat ini di-mock) ────────────
 REDIS_HOST=localhost
 REDIS_PORT=6379
@@ -109,13 +105,6 @@ Berikut penjelasan setiap variabel dalam bahasa sederhana:
 |----------|-------------|----------------------|
 | `UPLOAD_DIR` | `./uploads` | Folder tempat menyimpan file yang di-upload (foto karyawan, dokumen, dll). |
 | `CORS_ORIGIN` | `http://localhost:5173` | URL frontend yang diizinkan mengakses backend. Ini mencegah website lain mengakses API Anda. Harus sesuai dengan URL frontend. |
-
-### Pengaturan Frontend
-
-| Variabel | Contoh Nilai | Penjelasan Sederhana |
-|----------|-------------|----------------------|
-| `VITE_API_URL` | `http://localhost:3000/api` | Alamat backend API yang digunakan frontend. Frontend akan mengirim request ke URL ini. |
-| `VITE_APP_NAME` | `Bebang Sistem Informasi` | Nama aplikasi yang ditampilkan di browser (judul tab, header, dll). |
 
 ### Pengaturan Redis
 
@@ -269,9 +258,9 @@ pgAdmin biasanya sudah terinstal bersama PostgreSQL. Buka dari Start Menu: **pgA
 
 ## Langkah 5: Konfigurasi Frontend
 
-Frontend sudah memiliki konfigurasi default yang bekerja untuk development. **Biasanya tidak perlu diubah.**
+Frontend sudah memiliki konfigurasi default yang **sudah termasuk dalam repository**. File `frontend/.env` sudah di-track oleh git, sehingga **tidak perlu dibuat manual**.
 
-File konfigurasi frontend ada di `frontend/.env`:
+File konfigurasi frontend (`frontend/.env`):
 
 ```env
 VITE_API_URL=/api
@@ -280,6 +269,8 @@ VITE_APP_NAME=Bebang Sistem Informasi
 
 > **Mengapa `/api` dan bukan `http://localhost:3000/api`?**
 > Dalam mode development, Vite memiliki fitur **proxy** yang otomatis meneruskan semua request `/api` ke `http://localhost:3000`. Ini dikonfigurasi di `vite.config.ts`. Jadi Anda tidak perlu mengubah apa-apa.
+
+> **Penting:** Jangan hapus file `frontend/.env`. Jika file ini tidak ada, frontend akan error 404 saat login karena request tidak diarahkan ke backend.
 
 ---
 
@@ -302,7 +293,7 @@ DB_PASSWORD=password_anda
 - `JWT_SECRET` — biarkan default untuk development
 - `CORS_ORIGIN` — biarkan default
 - `REDIS_*` — biarkan default (di-mock)
-- Frontend `.env` — biarkan default
+- `frontend/.env` — sudah termasuk dalam repository, tidak perlu diubah
 
 ---
 
@@ -322,6 +313,16 @@ DB_PASSWORD=password_anda
 - Jika Docker: pastikan Host adalah `bebang-postgres` (bukan `localhost`)
 - Jika Docker: pastikan Port adalah `5432` (port internal, bukan 5433)
 - Pastikan container PostgreSQL sudah berjalan
+
+### Frontend error 404 saat login (`POST http://localhost:5173/auth/login 404`)
+- Penyebab: file `frontend/.env` tidak ada atau `VITE_API_URL` tidak terdefinisi
+- Pastikan file `frontend/.env` ada dan berisi `VITE_API_URL=/api`
+- Jika file hilang, buat manual:
+  ```env
+  VITE_API_URL=/api
+  VITE_APP_NAME=Bebang Sistem Informasi
+  ```
+- Restart frontend dev server setelah membuat/mengubah file `.env`
 
 ---
 

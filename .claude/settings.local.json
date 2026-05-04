@@ -100,7 +100,8 @@
       "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000/api/auth/health\" -UseBasicParsing -TimeoutSec 5; \"Backend: $\\($r.StatusCode\\)\" } catch { try { $r2 = Invoke-WebRequest -Uri \"http://localhost:3000/\" -UseBasicParsing -TimeoutSec 5; \"Backend responding: $\\($r2.StatusCode\\)\" } catch { \"Backend: $\\($_.Exception.Message\\)\" } })",
       "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:5173/\" -UseBasicParsing -TimeoutSec 5; \"Frontend: $\\($r.StatusCode\\)\" } catch { \"Frontend: $\\($_.Exception.Message\\)\" })",
       "PowerShell(Start-Process \"http://localhost:5173\")",
-      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000/\" -UseBasicParsing -TimeoutSec 5; \"Backend: $\\($r.StatusCode\\)\" } catch { \"Backend: $\\($_.Exception.Message\\)\" })"
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000/\" -UseBasicParsing -TimeoutSec 5; \"Backend: $\\($r.StatusCode\\)\" } catch { \"Backend: $\\($_.Exception.Message\\)\" })",
+      "PowerShell(git *)"
     ]
   }
 }
