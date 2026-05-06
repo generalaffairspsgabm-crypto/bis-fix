@@ -84,7 +84,7 @@ const BuildingForm = ({
             alamat: data.alamat || null,
             kapasitas_total: data.kapasitas_total ? Number(data.kapasitas_total) : null,
             keterangan: data.keterangan || null,
-            status: data.status,
+            status: data.status ? 'Aktif' : 'Tidak Aktif',
         });
     };
 

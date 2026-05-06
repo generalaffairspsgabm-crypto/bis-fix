@@ -12,10 +12,11 @@ const statusSchema = z.union([z.boolean(), z.string()])
 
 const buildingSchema = z.object({
     nama: z.string().min(1, 'Nama gedung tidak boleh kosong'),
+    tipe: z.enum(['Mess', 'Kantor', 'Workshop', 'Lainnya']).optional().default('Mess'),
     alamat: z.string().optional().nullable(),
-    jumlah_lantai: z.number().int().positive().optional().nullable(),
     lokasi_kerja_id: z.number().int().optional().nullable(),
     penanggung_jawab_id: z.number().int().optional().nullable(),
+    kapasitas_total: z.number().int().optional().nullable(),
     keterangan: z.string().optional().nullable(),
     status: statusSchema,
 });
