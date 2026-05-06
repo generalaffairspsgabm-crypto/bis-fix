@@ -348,6 +348,35 @@ class StokService {
 
                 await snRecord.update(updateData, { transaction: t });
             }
+        } else if (produk.has_tag_number && !produk.has_serial_number && detail.serial_numbers?.length) {
+            for (const tn of detail.serial_numbers) {
+                const snRecord = await InvSerialNumber.findOne({
+                    where: { produk_id: detail.produk_id, tag_number: tn, gudang_id: gudangId },
+                    transaction: t,
+                });
+                if (!snRecord) throw new AppError(`Tag number ${tn} tidak ditemukan di gudang ini`, 400);
+
+                const updateData: any = { transaksi_terakhir_id: transaksi.id };
+
+                if (payload.sub_tipe === 'Ke Karyawan') {
+                    updateData.gudang_id = null;
+                    updateData.karyawan_id = payload.karyawan_id;
+                    updateData.status = 'Digunakan';
+                } else if (payload.sub_tipe === 'Ke Gedung/Mess') {
+                    updateData.gudang_id = null;
+                    updateData.status = 'Digunakan';
+                } else if (payload.sub_tipe === 'Disposal') {
+                    updateData.gudang_id = null;
+                    updateData.status = 'Disposed';
+                } else if (payload.sub_tipe === 'Rusak/Terbuang') {
+                    updateData.gudang_id = null;
+                    updateData.status = 'Rusak';
+                } else if (payload.sub_tipe === 'Transfer Gudang') {
+                    updateData.gudang_id = payload.gudang_tujuan_id;
+                }
+
+                await snRecord.update(updateData, { transaction: t });
+            }
         }
     }
 

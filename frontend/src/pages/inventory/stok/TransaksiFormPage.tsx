@@ -5,8 +5,9 @@ import { AxiosError } from 'axios';
 import { useCreateTransaksi } from '../../../hooks/useInventoryStok';
 import { useInvGudangList, useInvProdukList, useInvUomList } from '../../../hooks/useInventoryMasterData';
 import { useFacBuildingList, useFacRoomList } from '../../../hooks/useFacilityMasterData';
-import { TransaksiPayload, TransaksiTipe, TransaksiSubTipe, TransaksiDetailPayload } from '../../../types/inventory';
+import { TransaksiPayload, TransaksiTipe, TransaksiSubTipe, TransaksiDetailPayload, InvSerialNumber } from '../../../types/inventory';
 import Button from '../../../components/common/Button';
+import { SearchableSelect } from '../../../components/common/SearchableSelect';
 import inventoryStokService from '../../../services/api/inventory-stok.service';
 import inventoryEmployeeService from '../../../services/api/inventory-employee.service';
 
@@ -64,6 +65,8 @@ const TransaksiFormPage = () => {
 
     const [beritaAcaraModal, setBeritaAcaraModal] = useState<{ show: boolean; employeeId: number; transaksiId: number; employeeName: string } | null>(null);
     const [downloadingBA, setDownloadingBA] = useState(false);
+    const [availableSNs, setAvailableSNs] = useState<Record<string, InvSerialNumber[]>>({});
+    const [snSearchTerms, setSnSearchTerms] = useState<Record<string, string>>({});
 
     const searchKaryawan = useCallback(async (query: string) => {
         if (query.length < 2) { setKaryawanOptions([]); return; }
@@ -93,6 +96,14 @@ const TransaksiFormPage = () => {
         { _key: '1', produk_id: 0, uom_id: 0, jumlah: 1, catatan: '', serial_numbers: [] },
     ]);
 
+    useEffect(() => {
+        if (tipe === 'Masuk' || gudangId === 0) return;
+        details.forEach(d => {
+            if (d.produk_id > 0) fetchAvailableSNs(d._key, d.produk_id, gudangId);
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gudangId, tipe]);
+
     const handleTipeChange = (newTipe: TransaksiTipe) => {
         setTipe(newTipe);
         setSubTipe(SUB_TIPE_MAP[newTipe][0].value);
@@ -114,8 +125,35 @@ const TransaksiFormPage = () => {
             if (field === 'produk_id') {
                 const produk = produkData?.data?.find(p => p.id === Number(value));
                 if (produk?.uom_id) updated.uom_id = produk.uom_id;
+                updated.serial_numbers = [];
             }
             return updated;
+        }));
+        if (field === 'produk_id' && Number(value) > 0 && gudangId > 0 && tipe !== 'Masuk') {
+            fetchAvailableSNs(key, Number(value), gudangId);
+        }
+    };
+
+    const fetchAvailableSNs = async (key: string, produkId: number, gId: number) => {
+        try {
+            const res = await inventoryStokService.getSerialNumbers({
+                produk_id: produkId, gudang_id: gId, status: 'Tersedia', limit: 200,
+            });
+            setAvailableSNs(prev => ({ ...prev, [key]: res.data || [] }));
+        } catch {
+            setAvailableSNs(prev => ({ ...prev, [key]: [] }));
+        }
+    };
+
+    const toggleSNSelection = (key: string, identifier: string) => {
+        setDetails(prev => prev.map(d => {
+            if (d._key !== key) return d;
+            const current = d.serial_numbers || [];
+            const isSelected = current.includes(identifier);
+            const updated = isSelected
+                ? current.filter(s => s !== identifier)
+                : [...current, identifier];
+            return { ...d, serial_numbers: updated };
         }));
     };
 
@@ -366,22 +404,28 @@ const TransaksiFormPage = () => {
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                         <div className="flex flex-col gap-1.5">
                                             <label className="text-xs font-medium text-gray-500">Produk *</label>
-                                            <select value={detail.produk_id} onChange={(e) => updateDetail(detail._key, 'produk_id', Number(e.target.value))} className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
-                                                <option value={0}>-- Pilih Produk --</option>
-                                                {produkData?.data?.map((p) => (
-                                                    <option key={p.id} value={p.id}>{p.code} - {p.nama}</option>
-                                                ))}
-                                            </select>
+                                            <SearchableSelect
+                                                options={(produkData?.data || []).map(p => ({ value: p.id, label: `${p.code} - ${p.nama}` }))}
+                                                value={detail.produk_id || null}
+                                                onChange={(val) => updateDetail(detail._key, 'produk_id', Number(val))}
+                                                placeholder="-- Pilih Produk --"
+                                            />
                                         </div>
 
                                         <div className="flex flex-col gap-1.5">
                                             <label className="text-xs font-medium text-gray-500">UOM *</label>
-                                            <select value={detail.uom_id} onChange={(e) => updateDetail(detail._key, 'uom_id', Number(e.target.value))} className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
-                                                <option value={0}>-- Pilih UOM --</option>
-                                                {uomData?.data?.map((u) => (
-                                                    <option key={u.id} value={u.id}>{u.nama}</option>
-                                                ))}
-                                            </select>
+                                            {selectedProduk?.uom_id ? (
+                                                <div className="flex h-9 w-full items-center rounded-md border border-gray-200 bg-gray-50 px-2 py-1 text-sm text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
+                                                    {uomData?.data?.find(u => u.id === selectedProduk.uom_id)?.nama || '-'}
+                                                </div>
+                                            ) : (
+                                                <select value={detail.uom_id} onChange={(e) => updateDetail(detail._key, 'uom_id', Number(e.target.value))} className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+                                                    <option value={0}>-- Pilih UOM --</option>
+                                                    {uomData?.data?.map((u) => (
+                                                        <option key={u.id} value={u.id}>{u.nama}</option>
+                                                    ))}
+                                                </select>
+                                            )}
                                         </div>
 
                                         <div className="flex flex-col gap-1.5">
@@ -396,7 +440,7 @@ const TransaksiFormPage = () => {
                                         </div>
                                     </div>
 
-                                    {selectedProduk?.has_serial_number && (
+                                    {selectedProduk?.has_serial_number && tipe === 'Masuk' && (
                                         <div className="flex flex-col gap-1.5">
                                             <label className="text-xs font-medium text-gray-500">
                                                 Serial Numbers (satu per baris)
@@ -411,6 +455,61 @@ const TransaksiFormPage = () => {
                                                 placeholder={Array.from({length: Math.min(detail.jumlah, 5)}, (_, i) => `SN-${String(i+1).padStart(3,'0')}`).join('\n')}
                                                 className="flex w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
                                             />
+                                        </div>
+                                    )}
+
+                                    {(selectedProduk?.has_serial_number || selectedProduk?.has_tag_number) && tipe !== 'Masuk' && gudangId > 0 && (
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-xs font-medium text-gray-500">
+                                                Pilih {selectedProduk.has_serial_number ? 'Serial Number' : 'Tag Number'}
+                                                <span className="ml-2 text-gray-400">
+                                                    {detail.serial_numbers?.length || 0} / {detail.jumlah} dipilih
+                                                </span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                placeholder="Cari serial/tag number..."
+                                                value={snSearchTerms[detail._key] || ''}
+                                                onChange={(e) => setSnSearchTerms(prev => ({ ...prev, [detail._key]: e.target.value }))}
+                                                className="flex h-8 w-full rounded-md border border-gray-200 bg-gray-50 px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                                            />
+                                            <div className="max-h-40 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-md">
+                                                {(availableSNs[detail._key] || [])
+                                                    .filter(sn => {
+                                                        const term = (snSearchTerms[detail._key] || '').toLowerCase();
+                                                        if (!term) return true;
+                                                        return (sn.serial_number || '').toLowerCase().includes(term) ||
+                                                               (sn.tag_number || '').toLowerCase().includes(term);
+                                                    })
+                                                    .map((sn) => {
+                                                        const identifier = selectedProduk.has_serial_number
+                                                            ? (sn.serial_number || '')
+                                                            : (sn.tag_number || '');
+                                                        if (!identifier) return null;
+                                                        const isChecked = (detail.serial_numbers || []).includes(identifier);
+                                                        return (
+                                                            <label key={sn.id} className={`flex items-center gap-2 px-3 py-1.5 text-xs cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 border-b border-gray-100 dark:border-gray-700 last:border-b-0 ${isChecked ? 'bg-primary/5' : ''}`}>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={isChecked}
+                                                                    onChange={() => toggleSNSelection(detail._key, identifier)}
+                                                                    className="rounded border-gray-300 text-primary focus:ring-primary"
+                                                                />
+                                                                <span className="font-mono text-gray-700 dark:text-gray-300">
+                                                                    {sn.serial_number || '-'}
+                                                                </span>
+                                                                {sn.tag_number && (
+                                                                    <span className="text-gray-400 ml-auto">{sn.tag_number}</span>
+                                                                )}
+                                                            </label>
+                                                        );
+                                                    })}
+                                                {(availableSNs[detail._key] || []).length === 0 && (
+                                                    <div className="px-3 py-2 text-xs text-gray-400 italic">
+                                                        {detail.produk_id ? 'Tidak ada item tersedia di gudang ini' : 'Pilih produk terlebih dahulu'}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     )}
 
