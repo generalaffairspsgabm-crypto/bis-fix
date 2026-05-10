@@ -103,6 +103,14 @@ async function seedAll() {
             { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.READ },
             { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.UPDATE },
             { resource: RESOURCES.INVENTORY_STOCK, action: ACTIONS.DELETE },
+            { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.CREATE },
+            { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.READ },
+            { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.FACILITY_MASTER_DATA, action: ACTIONS.DELETE },
+            { resource: RESOURCES.FACILITY_WORK_ORDER, action: ACTIONS.CREATE },
+            { resource: RESOURCES.FACILITY_WORK_ORDER, action: ACTIONS.READ },
+            { resource: RESOURCES.FACILITY_WORK_ORDER, action: ACTIONS.UPDATE },
+            { resource: RESOURCES.FACILITY_WORK_ORDER, action: ACTIONS.DELETE },
         ];
 
         for (const p of permissionsData) {
@@ -136,6 +144,7 @@ async function seedAll() {
                 ...findPerms(RESOURCES.USERS, [ACTIONS.READ, ACTIONS.UPDATE]),
                 ...findPerms(RESOURCES.ROLES, [ACTIONS.READ]),
                 ...findPerms(RESOURCES.INVENTORY_MASTER_DATA), ...findPerms(RESOURCES.INVENTORY_STOCK),
+                ...findPerms(RESOURCES.FACILITY_MASTER_DATA), ...findPerms(RESOURCES.FACILITY_WORK_ORDER),
             ];
             await adminRole.setPermissions(adminPerms);
         }
@@ -188,8 +197,13 @@ async function seedAll() {
         console.log('\n--- Layer 2: Users ---');
 
         if (superadminRole) {
-            await User.findOrCreate({ where: { nik: '111111' }, defaults: { nama: 'Superadmin', nik: '111111', password: 'password123', role_id: superadminRole.id, is_active: true } as any });
-            await User.findOrCreate({ where: { nik: '1234567890123456' }, defaults: { nama: 'Superadmin Full', nik: '1234567890123456', password: 'password123', role_id: superadminRole.id, is_active: true } as any });
+            // Delete all non-superadmin users first (they may have broken references after truncate)
+            await User.destroy({ where: {}, force: true });
+            console.log('  Cleared existing users');
+
+            // Create fresh superadmin accounts (password will be hashed by beforeCreate hook)
+            await User.create({ nama: 'Superadmin', nik: '111111', password: 'password123', role_id: superadminRole.id, is_active: true } as any);
+            await User.create({ nama: 'Superadmin Full', nik: '1234567890123456', password: 'password123', role_id: superadminRole.id, is_active: true } as any);
         }
         console.log('  Users: 2 (superadmin)');
 
